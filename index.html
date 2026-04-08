@@ -995,9 +995,10 @@
           </div>
           <div id="budget-tmpl-credit" style="display:flex;flex-direction:column;gap:2px;"></div>
         </div>
-        <div class="btn-row">
+        <div class="btn-row" style="align-items:center;flex-wrap:wrap;gap:12px;">
           <button class="save-btn" onclick="saveBudgetTemplateData()">Save template</button>
           <span class="save-status" id="budget-tmpl-save-status">✓ Saved</span>
+          <span style="font-size:11px;color:var(--text-dim);font-family:'DM Mono',monospace;" id="budget-tmpl-sync-hint"></span>
         </div>
       </div>
     </div><!-- end page-budget -->
@@ -2410,15 +2411,16 @@ function renderBudgetSectionTable(sec) {
   items.forEach((item, idx) => {
     const hasSubs       = item.subs && item.subs.length > 0;
     const subBudgetSum  = hasSubs ? item.subs.reduce((s, sub) => s + (parseFloat(sub.budget) || 0), 0) : 0;
-    const itemBudget    = subBudgetSum > 0 ? subBudgetSum : (parseFloat(item.budget) || 0);
+    const itemBudget    = hasSubs && subBudgetSum > 0 ? subBudgetSum : (parseFloat(item.budget) || 0);
     const itemActual    = sectionActuals[item.name] || 0;
     const itemLeft      = itemBudget - itemActual;
     const safeItemName  = item.name.replace(/'/g,"\\'");
+    const pct           = itemBudget > 0 ? Math.round((itemActual / itemBudget) * 100) : 0;
     html += `<tr>
-      <td>${hasSubs ? `<span style="cursor:pointer;user-select:none;color:var(--accent-dim);" onclick="toggleBudgetSubs(this,'${sec}',${idx})">▼ ${item.name}</span>` : item.name}</td>
+      <td>${hasSubs ? `<span style="cursor:pointer;user-select:none;color:var(--accent-dim);font-weight:500;" onclick="toggleBudgetSubs(this,'${sec}',${idx})">▼ ${item.name}</span>${subBudgetSum > 0 ? '' : ''}` : item.name}</td>
       <td>${fmtR(itemBudget)}</td>
-      <td>${fmtR(itemActual)}</td>
-      <td class="${itemLeft < 0 ? 'amt-red' : 'amt-green'}">${fmtR(itemLeft)}</td>
+      <td>${fmtR(itemActual)}${itemBudget > 0 ? `<span style="font-size:10px;color:var(--text-dim);margin-left:6px;">${pct}%</span>` : ''}</td>
+      <td class="${itemLeft < 0 ? 'amt-red' : itemLeft === 0 ? '' : 'amt-green'}">${fmtR(itemLeft)}</td>
       <td style="text-align:right;"><button class="log-btn" onclick="openTxnModal('${sec}','${safeItemName}',null)">+ log</button></td>
     </tr>`;
     if (hasSubs) {
@@ -2798,81 +2800,140 @@ function renderBudgetTemplate() {
   const d   = budgetTemplateMonth;
   const lbl = document.getElementById('budget-template-month-label');
   if (lbl) lbl.textContent = `${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
-  tmplWorkingCopy = JSON.parse(JSON.stringify(getBudgetTemplate(d)));
-  renderBudgetTemplateSections();
-}
-function renderBudgetTemplateSections() {
-  const tmpl = getTmplWorkingCopy();
+  // Hint if template month differs from monthly view month
+  const hintEl = document.getElementById('budget-tmpl-sync-hint');
+  if (hintEl) {
+    const bm = budgetCurrentMonth;
+    const sameMonth = d.getFullYear() === bm.getFullYear() && d.getMonth() === bm.getMonth();
+    hintEl.textContent = sameMonth ? '' : `Monthly view is on ${months[bm.getMonth()]} ${bm.getFullYear()}`;
+  }
+  const tmpl = getBudgetTemplate(d);
   renderBudgetTemplateSection('debit',  tmpl.debit  || []);
   renderBudgetTemplateSection('credit', tmpl.credit || []);
 }
 function getTmplWorkingCopy() {
+  // Legacy — kept for compatibility; new code reads from DOM directly
   if (!tmplWorkingCopy) {
     tmplWorkingCopy = JSON.parse(JSON.stringify(getBudgetTemplate(budgetTemplateMonth)));
   }
   return tmplWorkingCopy;
 }
+function renderBudgetTemplateSections() {
+  const tmpl = getBudgetTemplate(budgetTemplateMonth);
+  renderBudgetTemplateSection('debit',  tmpl.debit  || []);
+  renderBudgetTemplateSection('credit', tmpl.credit || []);
+}
+// ── Template: collect current state from DOM (reliable, no oninput fragility) ──
+function collectTmplSectionFromDOM(sec) {
+  const items = [];
+  const container = document.getElementById('budget-tmpl-' + sec);
+  if (!container) return items;
+  container.querySelectorAll('.tmpl-item-wrap').forEach(wrap => {
+    const nameEl   = wrap.querySelector('.tmpl-row .tmpl-name');
+    const amtEl    = wrap.querySelector('.tmpl-row .tmpl-amount');
+    const name     = nameEl ? nameEl.value.trim() : '';
+    const subs     = [];
+    wrap.querySelectorAll('.tmpl-sub-row').forEach(subRow => {
+      const sn = subRow.querySelector('.tmpl-name');
+      const sa = subRow.querySelector('.tmpl-amount');
+      subs.push({ name: sn ? sn.value.trim() : '', budget: parseFloat(sa?.value) || 0 });
+    });
+    const subTotal = subs.reduce((s, sub) => s + sub.budget, 0);
+    const budget   = subs.length > 0 && subTotal > 0 ? subTotal : (parseFloat(amtEl?.value) || 0);
+    items.push({ name, budget, subs });
+  });
+  return items;
+}
+
+// Update parent amount field to show live sub-total when subs exist
+function updateTmplParentTotal(sec, idx) {
+  const wrap = document.querySelector(`.tmpl-item-wrap[data-sec="${sec}"][data-idx="${idx}"]`);
+  if (!wrap) return;
+  const subInputs = wrap.querySelectorAll('.tmpl-sub-row .tmpl-amount');
+  if (!subInputs.length) return;
+  const total = Array.from(subInputs).reduce((s, inp) => s + (parseFloat(inp.value) || 0), 0);
+  const parentAmt = wrap.querySelector('.tmpl-row .tmpl-amount');
+  if (parentAmt) {
+    parentAmt.value    = total;
+    parentAmt.readOnly = true;
+    parentAmt.style.opacity = '0.55';
+    parentAmt.title    = 'Auto-total of subcategories';
+  }
+}
+
 function renderBudgetTemplateSection(sec, items) {
   const container = document.getElementById('budget-tmpl-' + sec);
   if (!container) return;
   container.innerHTML = items.map((item, i) => {
-    const safeIcon = (item.icon || '').replace(/"/g,'&quot;');
-    const safeName = (item.name || '').replace(/"/g,'&quot;');
-    return `<div data-sec="${sec}" data-idx="${i}">
+    const safeName  = (item.name || '').replace(/"/g,'&quot;');
+    const hasSubs   = item.subs && item.subs.length > 0;
+    const subTotal  = hasSubs ? item.subs.reduce((s, sub) => s + (parseFloat(sub.budget) || 0), 0) : 0;
+    const dispAmt   = hasSubs && subTotal > 0 ? subTotal : (item.budget || 0);
+    const amtAttr   = hasSubs && subTotal > 0 ? 'readonly style="opacity:0.55;cursor:default;" title="Auto-total of subcategories"' : '';
+    return `<div class="tmpl-item-wrap" data-sec="${sec}" data-idx="${i}">
       <div class="tmpl-row">
-        <input class="tmpl-name" type="text" value="${safeName}" placeholder="Item name" oninput="updateTmplField('${sec}',${i},'name',this.value)">
-        <input class="tmpl-amount" type="number" value="${item.budget || 0}" min="0" step="10" oninput="updateTmplField('${sec}',${i},'budget',this.value)" placeholder="0">
-        <button class="tmpl-btn" onclick="addTmplSub('${sec}',${i})" title="Add sub-category">+sub</button>
+        <input class="tmpl-name" type="text" value="${safeName}" placeholder="Category name">
+        <input class="tmpl-amount" type="number" value="${dispAmt}" min="0" step="10" placeholder="0" ${amtAttr}>
+        ${hasSubs && subTotal > 0 ? '<span style="font-size:10px;color:var(--text-dim);font-family:\'DM Mono\',monospace;white-space:nowrap;flex-shrink:0;">Σ auto</span>' : ''}
+        <button class="tmpl-btn" onclick="addTmplSub('${sec}',${i})" title="Add sub-category">+ sub</button>
         <button class="tmpl-btn del" onclick="delTmplItem('${sec}',${i})" title="Delete">✕</button>
       </div>
       ${(item.subs || []).map((sub, si) => {
-        const subSafeName = (sub.name || '').replace(/"/g,'&quot;');
-        return `<div class="tmpl-sub-row" data-sub="${si}">
-          <input class="tmpl-name" type="text" value="${subSafeName}" placeholder="Sub name" oninput="updateTmplSubField('${sec}',${i},${si},'name',this.value)">
-          <input class="tmpl-amount" type="number" value="${sub.budget || 0}" min="0" step="10" oninput="updateTmplSubField('${sec}',${i},${si},'budget',this.value)" placeholder="0">
+        const subSafe = (sub.name || '').replace(/"/g,'&quot;');
+        return `<div class="tmpl-sub-row">
+          <input class="tmpl-name" type="text" value="${subSafe}" placeholder="Sub-category name">
+          <input class="tmpl-amount" type="number" value="${sub.budget || 0}" min="0" step="10" placeholder="0"
+            oninput="updateTmplParentTotal('${sec}',${i})">
           <button class="tmpl-btn del" onclick="delTmplSub('${sec}',${i},${si})" title="Delete sub">✕</button>
         </div>`;
       }).join('')}
     </div>`;
   }).join('');
 }
-function updateTmplField(sec, idx, field, val) {
-  const tmpl = getTmplWorkingCopy();
-  if (!tmpl[sec] || !tmpl[sec][idx]) return;
-  tmpl[sec][idx][field] = field === 'budget' ? (parseFloat(val) || 0) : val;
-}
-function updateTmplSubField(sec, idx, si, field, val) {
-  const tmpl = getTmplWorkingCopy();
-  if (!tmpl[sec] || !tmpl[sec][idx] || !tmpl[sec][idx].subs) return;
-  tmpl[sec][idx].subs[si][field] = field === 'budget' ? (parseFloat(val) || 0) : val;
-}
+
 function addTmplSub(sec, idx) {
-  const tmpl = getTmplWorkingCopy();
-  if (!tmpl[sec] || !tmpl[sec][idx]) return;
-  if (!tmpl[sec][idx].subs) tmpl[sec][idx].subs = [];
-  tmpl[sec][idx].subs.push({ name: 'Sub-category', budget: 0 });
-  renderBudgetTemplateSection(sec, tmpl[sec]);
+  const items = collectTmplSectionFromDOM(sec);
+  if (!items[idx]) return;
+  if (!items[idx].subs) items[idx].subs = [];
+  items[idx].subs.push({ name: '', budget: 0 });
+  renderBudgetTemplateSection(sec, items);
+  // Focus the new sub name input
+  const container = document.getElementById('budget-tmpl-' + sec);
+  if (container) {
+    const subNames = container.querySelectorAll(`.tmpl-item-wrap[data-idx="${idx}"] .tmpl-sub-row .tmpl-name`);
+    if (subNames.length) subNames[subNames.length - 1].focus();
+  }
 }
 function delTmplItem(sec, idx) {
-  const tmpl = getTmplWorkingCopy();
-  if (!tmpl[sec]) return;
-  tmpl[sec].splice(idx, 1);
-  renderBudgetTemplateSection(sec, tmpl[sec]);
+  const items = collectTmplSectionFromDOM(sec);
+  items.splice(idx, 1);
+  renderBudgetTemplateSection(sec, items);
 }
 function delTmplSub(sec, idx, si) {
-  const tmpl = getTmplWorkingCopy();
-  if (!tmpl[sec] || !tmpl[sec][idx] || !tmpl[sec][idx].subs) return;
-  tmpl[sec][idx].subs.splice(si, 1);
-  renderBudgetTemplateSection(sec, tmpl[sec]);
+  const items = collectTmplSectionFromDOM(sec);
+  if (!items[idx] || !items[idx].subs) return;
+  items[idx].subs.splice(si, 1);
+  renderBudgetTemplateSection(sec, items);
 }
 function addTmplItem(sec) {
-  const tmpl = getTmplWorkingCopy();
-  if (!tmpl[sec]) tmpl[sec] = [];
-  tmpl[sec].push({ name: 'New Item', budget: 0, subs: [] });
-  renderBudgetTemplateSection(sec, tmpl[sec]);
+  const items = collectTmplSectionFromDOM(sec);
+  items.push({ name: '', budget: 0, subs: [] });
+  renderBudgetTemplateSection(sec, items);
+  // Focus the new name input
+  const container = document.getElementById('budget-tmpl-' + sec);
+  if (container) {
+    const wraps = container.querySelectorAll('.tmpl-item-wrap');
+    if (wraps.length) {
+      const last = wraps[wraps.length - 1].querySelector('.tmpl-name');
+      if (last) last.focus();
+    }
+  }
 }
 function saveBudgetTemplateData() {
-  const tmpl = getTmplWorkingCopy();
+  const tmpl = {
+    debit:  collectTmplSectionFromDOM('debit'),
+    credit: collectTmplSectionFromDOM('credit')
+  };
   saveBudgetTemplate(budgetTemplateMonth, tmpl);
   tmplWorkingCopy = null;
   const s = document.getElementById('budget-tmpl-save-status');
