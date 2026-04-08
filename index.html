@@ -905,7 +905,7 @@
         <div style="margin-bottom:12px;">
           <div class="budget-section-header open" id="budget-debit-header" onclick="toggleBudgetSection('debit')">
             <span style="font-size:15px;">🏦</span>
-            <span class="budget-section-title">Debit Orders / Debit Card</span>
+            <span class="budget-section-title">Debit Orders</span>
             <span class="bsec-pill bsec-budget-debit"></span>
             <span class="bsec-pill bsec-confirmed-debit"></span>
             <span class="budget-section-chevron">▼</span>
@@ -950,18 +950,18 @@
         <div class="card" style="margin-bottom:16px;">
           <div class="card-title">12-Month Summary</div>
           <table class="hist-table">
-            <thead><tr><th>Month</th><th>Income</th><th>Budgeted</th><th>Spent</th><th>Diff</th><th>%</th></tr></thead>
+            <thead><tr><th>Month</th><th>Income</th><th>Budgeted</th><th>Spent</th><th>Under / Over</th><th>% Used</th></tr></thead>
             <tbody id="budget-history-table"></tbody>
           </table>
         </div>
-        <div class="grid-2" style="margin-bottom:16px;">
-          <div class="card">
-            <div class="card-title">Budgeted vs Spent</div>
-            <div class="chart-wrap" style="height:200px;"><canvas id="budget-hist-chart-1"></canvas></div>
+        <div style="margin-bottom:16px;">
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">Budgeted vs Spent — Last 12 Months</div>
+            <div class="chart-wrap" style="height:300px;"><canvas id="budget-hist-chart-1"></canvas></div>
           </div>
           <div class="card">
-            <div class="card-title">Income &amp; Remaining Trend</div>
-            <div class="chart-wrap" style="height:200px;"><canvas id="budget-hist-chart-2"></canvas></div>
+            <div class="card-title">Income &amp; Remaining Cash — Last 12 Months</div>
+            <div class="chart-wrap" style="height:300px;"><canvas id="budget-hist-chart-2"></canvas></div>
           </div>
         </div>
       </div>
@@ -977,12 +977,12 @@
           <button class="btn-secondary" onclick="copyTemplateFromPrev()">Copy prev month</button>
         </div>
         <div style="margin-bottom:16px;padding:10px 14px;background:var(--surface2);border-radius:var(--radius-sm);border-left:2px solid var(--accent-dim);">
-          <p style="font-size:12px;color:var(--text-muted);line-height:1.5;">Each month has its own template. Changes here only affect the selected month.</p>
+          <p style="font-size:12px;color:var(--text-muted);line-height:1.5;">Each month has its own template. New months automatically load the previous month's template as a starting point. Edit amounts and categories, then save. Changes only affect the selected month.</p>
         </div>
         <!-- Debit template -->
         <div class="card" style="margin-bottom:16px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <div class="card-title" style="margin-bottom:0;">🏦 Debit Orders / Debit Card</div>
+            <div class="card-title" style="margin-bottom:0;">🏦 Debit Orders</div>
             <button class="budget-add-btn" onclick="addTmplItem('debit')">+ Add item</button>
           </div>
           <div id="budget-tmpl-debit" style="display:flex;flex-direction:column;gap:2px;"></div>
@@ -1126,8 +1126,8 @@
       <div class="form-group">
         <label>Section</label>
         <select id="txn-section" onchange="updateTxnLineItems()">
-          <option value="debit">🏦 Debit Orders</option>
-          <option value="credit">💳 Credit Card</option>
+          <option value="debit">🏦 Debit Orders (debit card)</option>
+          <option value="credit">💳 Credit Card (all other spend)</option>
         </select>
       </div>
       <div class="form-group"><label>Line Item</label><select id="txn-line-item" onchange="updateTxnSubItems()"></select></div>
@@ -2262,6 +2262,12 @@ function budgetTemplateKey(d) { return `budget_template_${d.getFullYear()}_${Str
 function getBudgetTemplate(d) {
   const stored = getData(budgetTemplateKey(d), null);
   if (stored) return stored;
+  // Auto-pull from previous month if this month has no template yet
+  for (let i = 1; i <= 12; i++) {
+    const prev = new Date(d.getFullYear(), d.getMonth() - i, 1);
+    const prevStored = getData(budgetTemplateKey(prev), null);
+    if (prevStored) return JSON.parse(JSON.stringify(prevStored));
+  }
   const global = getData('budget_template', null);
   if (global) return global;
   return JSON.parse(JSON.stringify(DEFAULT_BUDGET_TEMPLATE));
@@ -2367,12 +2373,13 @@ function renderBudgetMonthlyStats() {
   const remainingCash = income ? income - totalSpend : null;
   const statsEl = document.getElementById('budget-stats');
   if (!statsEl) return;
+  const spendPct = income > 0 ? Math.round((totalSpend / income) * 100) : null;
   statsEl.innerHTML = `
     <div class="stat-box"><div class="stat-label">Income</div><div class="stat-value accent" style="font-size:20px;">${income ? fmtR(income) : '—'}</div><div class="stat-sub">This month</div></div>
-    <div class="stat-box"><div class="stat-label">Total Budgeted</div><div class="stat-value" style="font-size:20px;">${fmtR(totalBudgeted)}</div><div class="stat-sub">Planned spend</div></div>
-    <div class="stat-box"><div class="stat-label">Avail to Budget</div><div class="stat-value ${availToBudget !== null && availToBudget < 0 ? 'red' : ''}" style="font-size:20px;">${availToBudget !== null ? fmtR(availToBudget) : '—'}</div><div class="stat-sub">Income – budgeted</div></div>
-    <div class="stat-box"><div class="stat-label">Total Spend</div><div class="stat-value" style="font-size:20px;">${fmtR(totalSpend)}</div><div class="stat-sub">Actual</div></div>
-    <div class="stat-box"><div class="stat-label">Remaining Cash</div><div class="stat-value ${remainingCash !== null && remainingCash < 0 ? 'red' : 'green'}" style="font-size:20px;">${remainingCash !== null ? fmtR(remainingCash) : '—'}</div><div class="stat-sub">Income – spend</div></div>
+    <div class="stat-box"><div class="stat-label">Total Budgeted</div><div class="stat-value" style="font-size:20px;">${fmtR(totalBudgeted)}</div><div class="stat-sub">${availToBudget !== null ? (availToBudget >= 0 ? fmtR(availToBudget) + ' unallocated' : fmtR(Math.abs(availToBudget)) + ' over plan') : 'Set income above'}</div></div>
+    <div class="stat-box"><div class="stat-label">Spent So Far</div><div class="stat-value" style="font-size:20px;">${fmtR(totalSpend)}</div><div class="stat-sub">${spendPct !== null ? spendPct + '% of income' : 'Log transactions to track'}</div></div>
+    <div class="stat-box"><div class="stat-label">Budget Left</div><div class="stat-value ${totalBudgeted - totalSpend < 0 ? 'red' : 'green'}" style="font-size:20px;">${fmtR(totalBudgeted - totalSpend)}</div><div class="stat-sub">Budgeted – spent</div></div>
+    <div class="stat-box"><div class="stat-label">Cash Remaining</div><div class="stat-value ${remainingCash !== null && remainingCash < 0 ? 'red' : 'green'}" style="font-size:20px;">${remainingCash !== null ? fmtR(remainingCash) : '—'}</div><div class="stat-sub">Income – all spend</div></div>
   `;
 }
 function renderBudgetSectionTable(sec) {
@@ -2408,10 +2415,10 @@ function renderBudgetSectionTable(sec) {
     const itemLeft      = itemBudget - itemActual;
     const safeItemName  = item.name.replace(/'/g,"\\'");
     html += `<tr>
-      <td>${hasSubs ? `<span style="cursor:pointer;user-select:none;color:var(--accent-dim);" onclick="toggleBudgetSubs(this,'${sec}',${idx})">▶ ${item.name}</span>` : item.name}</td>
+      <td>${hasSubs ? `<span style="cursor:pointer;user-select:none;color:var(--accent-dim);" onclick="toggleBudgetSubs(this,'${sec}',${idx})">▼ ${item.name}</span>` : item.name}</td>
       <td>${fmtR(itemBudget)}</td>
       <td>${fmtR(itemActual)}</td>
-      <td class="${itemLeft < 0 ? 'amt-red' : ''}">${fmtR(itemLeft)}</td>
+      <td class="${itemLeft < 0 ? 'amt-red' : 'amt-green'}">${fmtR(itemLeft)}</td>
       <td style="text-align:right;"><button class="log-btn" onclick="openTxnModal('${sec}','${safeItemName}',null)">+ log</button></td>
     </tr>`;
     if (hasSubs) {
@@ -2421,11 +2428,11 @@ function renderBudgetSectionTable(sec) {
         const subBudget = parseFloat(sub.budget) || 0;
         const subLeft   = subBudget - subActual;
         const safeSub   = sub.name.replace(/'/g,"\\'");
-        html += `<tr class="budget-sub-${sec}-${idx}" style="display:none;">
+        html += `<tr class="budget-sub-${sec}-${idx}">
           <td style="padding-left:28px;font-size:12px;color:var(--text-muted);">↳ ${sub.name}</td>
           <td>${fmtR(subBudget)}</td>
           <td>${fmtR(subActual)}</td>
-          <td class="${subLeft < 0 ? 'amt-red' : ''}">${fmtR(subLeft)}</td>
+          <td class="${subLeft < 0 ? 'amt-red' : 'amt-green'}">${fmtR(subLeft)}</td>
           <td style="text-align:right;"><button class="log-btn" onclick="openTxnModal('${sec}','${safeItemName}','${safeSub}')">+ log</button></td>
         </tr>`;
       });
@@ -2449,10 +2456,10 @@ function toggleBudgetSection(sec) {
 }
 function toggleBudgetSubs(btn, sec, idx) {
   const rows   = document.querySelectorAll(`.budget-sub-${sec}-${idx}`);
-  const hidden = rows.length && rows[0].style.display === 'none';
-  rows.forEach(r => r.style.display = hidden ? '' : 'none');
+  const isOpen = btn.textContent.startsWith('▼');
+  rows.forEach(r => r.style.display = isOpen ? 'none' : '');
   const name = btn.textContent.slice(2);
-  btn.textContent = (hidden ? '▼ ' : '▶ ') + name;
+  btn.textContent = (isOpen ? '▶ ' : '▼ ') + name;
 }
 
 // ── Transactions tab ──
@@ -2654,8 +2661,8 @@ function renderBudgetHistory() {
       <td>${r.income ? fmtR(r.income) : '—'}</td>
       <td>${fmtR(r.budgeted)}</td>
       <td>${fmtR(r.spent)}</td>
-      <td class="${r.diff > 0 ? 'diff-neg' : r.diff < 0 ? 'diff-pos' : ''}">${fmtR(Math.abs(r.diff))}</td>
-      <td>${r.pct !== null ? r.pct + '%' : '—'}</td>
+      <td class="${r.diff > 0 ? 'diff-pos' : r.diff < 0 ? 'diff-neg' : ''}">${r.diff > 0 ? '↓ ' + fmtR(r.diff) : r.diff < 0 ? '↑ ' + fmtR(Math.abs(r.diff)) : '—'}</td>
+      <td class="${r.pct !== null && r.pct > 100 ? 'diff-neg' : ''}">${r.pct !== null ? r.pct + '%' : '—'}</td>
     </tr>`).join('');
   }
   const labels   = rows.map(r => r.label);
@@ -2681,27 +2688,95 @@ function buildBudgetChart(id, labels, datasets, isBar) {
     type: isBar ? 'bar' : 'line',
     data: {
       labels,
-      datasets: datasets.map(ds => ({
-        label: ds.label, data: ds.data,
+      datasets: datasets.map((ds, i) => ({
+        label: ds.label,
+        data: ds.data,
         borderColor: ds.color,
-        backgroundColor: isBar ? ds.color + '99' : ds.color + '33',
-        borderWidth: 1.5,
-        borderRadius: isBar ? 4 : 0,
+        backgroundColor: isBar
+          ? ds.color + 'bb'
+          : (function() {
+              const c = canvas.getContext('2d');
+              const grad = c.createLinearGradient(0, 0, 0, 300);
+              grad.addColorStop(0, ds.color + '55');
+              grad.addColorStop(1, ds.color + '08');
+              return grad;
+            })(),
+        borderWidth: isBar ? 0 : 2.5,
+        borderRadius: isBar ? 6 : 0,
+        borderSkipped: false,
         fill: !isBar,
-        tension: 0.3,
+        tension: 0.4,
         spanGaps: true,
-        pointRadius: 3
+        pointRadius: isBar ? 0 : 4,
+        pointHoverRadius: isBar ? 0 : 6,
+        pointBackgroundColor: ds.color,
+        pointBorderColor: '#0f0f0d',
+        pointBorderWidth: 2,
+        hoverBackgroundColor: isBar ? ds.color : undefined,
+        hoverBorderWidth: 0,
+        barPercentage: 0.7,
+        categoryPercentage: 0.8
       }))
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { display: true, labels: { color: '#7a7870', font: { family: 'DM Sans', size: 11 }, boxWidth: 12 } },
-        tooltip: { backgroundColor: '#1a1a17', borderColor: '#333330', borderWidth: 1, titleColor: '#7a7870', bodyColor: '#e8e6df', titleFont: { family: 'DM Mono', size: 10 }, bodyFont: { family: 'DM Sans', size: 12 }, callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtR(ctx.parsed.y) } }
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: {
+            color: '#a8a698',
+            font: { family: 'DM Sans', size: 12, weight: '500' },
+            boxWidth: 10,
+            boxHeight: 10,
+            borderRadius: 3,
+            usePointStyle: true,
+            pointStyle: isBar ? 'rect' : 'circle',
+            padding: 20
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1a1a17',
+          borderColor: '#333330',
+          borderWidth: 1,
+          titleColor: '#a8a698',
+          bodyColor: '#e8e6df',
+          titleFont: { family: 'DM Mono', size: 11, weight: '400' },
+          bodyFont: { family: 'DM Sans', size: 13 },
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: ctx => '  ' + ctx.dataset.label + ':  ' + fmtR(ctx.parsed.y)
+          }
+        }
       },
       scales: {
-        x: { grid: { color: '#2e2e2a' }, ticks: { color: '#4a4a45', font: { family: 'DM Mono', size: 9 }, maxTicksLimit: 12 } },
-        y: { grid: { color: '#2e2e2a' }, ticks: { color: '#4a4a45', font: { family: 'DM Mono', size: 9 }, maxTicksLimit: 5, callback: v => fmtR(v) } }
+        x: {
+          grid: { color: '#222220', drawBorder: false },
+          border: { display: false },
+          ticks: {
+            color: '#5a5a55',
+            font: { family: 'DM Mono', size: 10 },
+            maxTicksLimit: 12,
+            maxRotation: 0,
+            padding: 8
+          }
+        },
+        y: {
+          grid: { color: '#222220', drawBorder: false },
+          border: { display: false },
+          ticks: {
+            color: '#5a5a55',
+            font: { family: 'DM Mono', size: 10 },
+            maxTicksLimit: 6,
+            padding: 10,
+            callback: v => v === 0 ? '0' : fmtR(v)
+          },
+          beginAtZero: true
+        }
       }
     }
   });
