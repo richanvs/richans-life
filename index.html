@@ -463,14 +463,24 @@
   }
   .tmpl-sub-row:last-child { margin-bottom: 4px; border-radius: 0 0 4px 4px; }
   .tmpl-name {
-    flex: 1; background: var(--surface3); border: 1px solid var(--border);
+    flex: 1; min-width: 0; width: auto !important;
+    background: var(--surface); border: 1px solid #444440;
     border-radius: 6px; color: var(--text); font-family: 'DM Sans', sans-serif;
-    font-size: 13px; padding: 6px 10px;
+    font-size: 13px; padding: 7px 10px;
   }
+  .tmpl-name:focus { border-color: var(--accent); outline: none; background: var(--surface2); }
+  .tmpl-name::placeholder { color: var(--text-dim); font-style: italic; }
   .tmpl-amount {
-    width: 90px; background: var(--surface3); border: 1px solid var(--border);
-    border-radius: 6px; color: var(--text); font-family: 'DM Mono', monospace;
-    font-size: 13px; padding: 6px 10px; text-align: right;
+    width: 110px !important; flex-shrink: 0;
+    background: var(--surface); border: 1px solid #444440;
+    border-radius: 6px; color: var(--accent); font-family: 'DM Mono', monospace;
+    font-size: 13px; padding: 7px 10px; text-align: right;
+  }
+  .tmpl-amount:focus { border-color: var(--accent); outline: none; }
+  .tmpl-col-headers {
+    display: flex; align-items: center; gap: 8px; padding: 0 12px 8px;
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-dim);
   }
   .tmpl-btn {
     background: none; border: 1px solid var(--border); border-radius: 5px;
@@ -981,22 +991,33 @@
         </div>
         <!-- Debit template -->
         <div class="card" style="margin-bottom:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div class="card-title" style="margin-bottom:0;">🏦 Debit Orders</div>
-            <button class="budget-add-btn" onclick="addTmplItem('debit')">+ Add item</button>
+            <button class="budget-add-btn" onclick="addTmplItem('debit')">+ Add category</button>
           </div>
-          <div id="budget-tmpl-debit" style="display:flex;flex-direction:column;gap:2px;"></div>
+          <div class="tmpl-col-headers">
+            <span style="flex:1;">Category name — click to edit</span>
+            <span style="width:110px;text-align:right;">Budget (R)</span>
+            <span style="width:80px;"></span>
+          </div>
+          <div id="budget-tmpl-debit" style="display:flex;flex-direction:column;gap:4px;"></div>
         </div>
         <!-- Credit template -->
         <div class="card" style="margin-bottom:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div class="card-title" style="margin-bottom:0;">💳 Credit Card</div>
-            <button class="budget-add-btn" onclick="addTmplItem('credit')">+ Add item</button>
+            <button class="budget-add-btn" onclick="addTmplItem('credit')">+ Add category</button>
           </div>
-          <div id="budget-tmpl-credit" style="display:flex;flex-direction:column;gap:2px;"></div>
+          <div class="tmpl-col-headers">
+            <span style="flex:1;">Category name — click to edit</span>
+            <span style="width:110px;text-align:right;">Budget (R)</span>
+            <span style="width:80px;"></span>
+          </div>
+          <div id="budget-tmpl-credit" style="display:flex;flex-direction:column;gap:4px;"></div>
         </div>
         <div class="btn-row" style="align-items:center;flex-wrap:wrap;gap:12px;">
           <button class="save-btn" onclick="saveBudgetTemplateData()">Save template</button>
+          <button class="btn-secondary" onclick="resetTmplToDefaults()" title="Wipe current template and restore default categories">Reset to defaults</button>
           <span class="save-status" id="budget-tmpl-save-status">✓ Saved</span>
           <span style="font-size:11px;color:var(--text-dim);font-family:'DM Mono',monospace;" id="budget-tmpl-sync-hint"></span>
         </div>
@@ -2654,7 +2675,9 @@ function renderBudgetHistory() {
     const diff     = budgeted - spent;
     const pct      = budgeted > 0 ? Math.round((spent / budgeted) * 100) : null;
     const isCurrent = d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-    rows.push({ label: `${shortMonths[d.getMonth()]} ${d.getFullYear()}`, income, budgeted, spent, diff, pct, isCurrent });
+    // % of budget used; fall back to % of income if no budget set
+    const pctFinal = pct !== null ? pct : (income && income > 0 ? Math.round((spent / income) * 100) : null);
+    rows.push({ label: `${shortMonths[d.getMonth()]} ${d.getFullYear()}`, income, budgeted, spent, diff, pct: pctFinal, isCurrent });
   }
   const histEl = document.getElementById('budget-history-table');
   if (histEl) {
@@ -2931,14 +2954,22 @@ function addTmplItem(sec) {
 }
 function saveBudgetTemplateData() {
   const tmpl = {
-    debit:  collectTmplSectionFromDOM('debit'),
-    credit: collectTmplSectionFromDOM('credit')
+    debit:  collectTmplSectionFromDOM('debit').filter(i => i.name),
+    credit: collectTmplSectionFromDOM('credit').filter(i => i.name)
   };
   saveBudgetTemplate(budgetTemplateMonth, tmpl);
   tmplWorkingCopy = null;
   const s = document.getElementById('budget-tmpl-save-status');
   if (s) { s.classList.add('show'); setTimeout(() => s.classList.remove('show'), 2000); }
   renderBudgetTemplate();
+}
+function resetTmplToDefaults() {
+  if (!confirm('Reset this month\'s template to the default categories? This cannot be undone.')) return;
+  saveBudgetTemplate(budgetTemplateMonth, JSON.parse(JSON.stringify(DEFAULT_BUDGET_TEMPLATE)));
+  tmplWorkingCopy = null;
+  renderBudgetTemplate();
+  const s = document.getElementById('budget-tmpl-save-status');
+  if (s) { s.textContent = '✓ Reset to defaults'; s.classList.add('show'); setTimeout(() => { s.textContent = '✓ Saved'; s.classList.remove('show'); }, 2500); }
 }
 
 // ══════════════════════════════════════
