@@ -2458,7 +2458,13 @@ function getBudgetTemplate(d) {
 function saveBudgetTemplate(d, tmpl) { setData(budgetTemplateKey(d), tmpl); }
 function getBudgetMonthData(d) { return getData(budgetMonthKey(d), {}); }
 function saveBudgetMonthData(d, data) { setData(budgetMonthKey(d), data); }
-function getBudgetTxns(d) { return getData(budgetTxnKey(d), []); }
+function getBudgetTxns(d) {
+  const val = getData(budgetTxnKey(d), []);
+  if (!val) return [];
+  if (Array.isArray(val)) return val;
+  // Firebase sometimes returns arrays as objects with integer keys
+  return Object.values(val).filter(Boolean);
+}
 function saveBudgetTxns(d, txns) { setData(budgetTxnKey(d), txns); }
 
 // ── Formatting ──
@@ -2702,14 +2708,14 @@ function renderBudgetTxnsByLine(txns, container) {
 }
 function txnRowHtml(t) {
   const meta = [t.lineItem, t.subItem].filter(Boolean).join(' / ');
-  return `<div class="txn-row" onclick="if(!event.target.closest('.txn-delete'))openTxnModalEdit(${t.id})">
+  return `<div class="txn-row" onclick="openTxnModalEdit(${t.id})">
     <div class="txn-icon ${t.section || 'credit'}">${t.section === 'debit' ? '🏦' : '💳'}</div>
     <div class="txn-body">
       <div class="txn-name">${t.description || t.lineItem || '—'}</div>
       <div class="txn-meta">${meta}${t.date ? ' · ' + t.date : ''}</div>
     </div>
     <div class="txn-amount">${fmtR(t.amount)}</div>
-    <button class="txn-delete" onclick="deleteTxn(${t.id})" title="Delete">✕</button>
+    <button class="txn-delete" onclick="event.stopImmediatePropagation();deleteTxn(${t.id})" title="Delete">✕</button>
   </div>`;
 }
 
