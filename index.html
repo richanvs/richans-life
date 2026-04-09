@@ -2744,7 +2744,7 @@ function openTxnModal(section, lineItem, subItem) {
 function openTxnModalEdit(id) {
   const d    = budgetTxnMonth;
   const txns = getBudgetTxns(d);
-  const t    = txns.find(t => t.id === id);
+  const t    = txns.find(t => Number(t.id) === Number(id));
   if (!t) return;
   document.getElementById('txn-modal-title').textContent = 'Edit Transaction';
   document.getElementById('txn-edit-id').value  = id;
