@@ -2672,7 +2672,11 @@ function renderBudgetTxns() {
   const d   = budgetTxnMonth;
   const lbl = document.getElementById('budget-txn-label');
   if (lbl) lbl.textContent = `${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
-  const txns      = getBudgetTxns(d);
+  let txns      = getBudgetTxns(d);
+  // Ensure every transaction has a unique ID — old data may be missing one
+  let needsSave = false;
+  txns.forEach(t => { if (t.id == null) { t.id = Date.now() + Math.floor(Math.random() * 9999); needsSave = true; } });
+  if (needsSave) saveBudgetTxns(d, txns);
   const container = document.getElementById('budget-txn-list');
   if (!container) return;
   if (!txns.length) {
@@ -2708,14 +2712,15 @@ function renderBudgetTxnsByLine(txns, container) {
 }
 function txnRowHtml(t) {
   const meta = [t.lineItem, t.subItem].filter(Boolean).join(' / ');
-  return `<div class="txn-row" onclick="openTxnModalEdit(${t.id})">
+  const sid = String(t.id);
+  return `<div class="txn-row" onclick="openTxnModalEdit('${sid}')">
     <div class="txn-icon ${t.section || 'credit'}">${t.section === 'debit' ? '🏦' : '💳'}</div>
     <div class="txn-body">
       <div class="txn-name">${t.description || t.lineItem || '—'}</div>
       <div class="txn-meta">${meta}${t.date ? ' · ' + t.date : ''}</div>
     </div>
     <div class="txn-amount">${fmtR(t.amount)}</div>
-    <button class="txn-delete" onclick="event.stopImmediatePropagation();deleteTxn(${t.id})" title="Delete">✕</button>
+    <button class="txn-delete" onclick="event.stopImmediatePropagation();deleteTxn('${sid}')" title="Delete">✕</button>
   </div>`;
 }
 
@@ -2744,7 +2749,7 @@ function openTxnModal(section, lineItem, subItem) {
 function openTxnModalEdit(id) {
   const d    = budgetTxnMonth;
   const txns = getBudgetTxns(d);
-  const t    = txns.find(t => Number(t.id) === Number(id));
+  const t    = txns.find(t => String(t.id) === String(id));
   if (!t) return;
   document.getElementById('txn-modal-title').textContent = 'Edit Transaction';
   document.getElementById('txn-edit-id').value  = id;
@@ -2806,7 +2811,7 @@ function saveTxn() {
     lineItem:    document.getElementById('txn-line-item')?.value || '',
     subItem:     subVal || null
   };
-  if (editId) { const idx = txns.findIndex(t => t.id === editId); if (idx !== -1) txns[idx] = txnData; }
+  if (editId) { const idx = txns.findIndex(t => String(t.id) === String(editId)); if (idx !== -1) txns[idx] = txnData; }
   else txns.push(txnData);
   saveBudgetTxns(d, txns);
   closeTxnModal();
@@ -2814,9 +2819,9 @@ function saveTxn() {
   else renderBudgetTxns();
 }
 function deleteTxn(id) {
-  const numId = Number(id);
+  const sid = String(id);
   const d = budgetTxnMonth;
-  const updated = getBudgetTxns(d).filter(t => Number(t.id) !== numId);
+  const updated = getBudgetTxns(d).filter(t => String(t.id) !== sid);
   saveBudgetTxns(d, updated);
   renderBudgetTxns();
   // Also clear monthly view cache so stats update when user switches tabs
@@ -2825,10 +2830,10 @@ function deleteTxn(id) {
   })();
 }
 function deleteTxnFromModal() {
-  const id = parseInt(document.getElementById('txn-edit-id').value);
+  const id = document.getElementById('txn-edit-id').value;
   if (!id) return;
   const d = budgetView === 'monthly' ? budgetCurrentMonth : budgetTxnMonth;
-  saveBudgetTxns(d, getBudgetTxns(d).filter(t => t.id !== id));
+  saveBudgetTxns(d, getBudgetTxns(d).filter(t => String(t.id) !== String(id)));
   closeTxnModal();
   if (budgetView === 'monthly') renderBudgetMonthly();
   else renderBudgetTxns();
