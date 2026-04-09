@@ -292,7 +292,7 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
   /* ── MODAL ── */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; width: 480px; max-width: 90vw; max-height: 90vh; overflow-y: auto; }
   .modal h3 { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 20px; color: var(--text); }
@@ -2490,7 +2490,7 @@ function setBudgetTab(tab) {
     if (view) view.style.display = t === tab ? 'block' : 'none';
   });
   const addBtn = document.getElementById('budget-add-txn-btn');
-  if (addBtn) addBtn.style.display = (tab === 'transactions') ? 'block' : 'none';
+  if (addBtn) addBtn.style.display = (tab === 'monthly' || tab === 'transactions') ? 'block' : 'none';
   if (tab === 'monthly')      renderBudgetMonthly();
   if (tab === 'transactions') renderBudgetTxns();
   if (tab === 'history')      renderBudgetHistory();
