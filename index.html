@@ -352,7 +352,6 @@
   .task-check { width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.15s; cursor: pointer; }
   .task-check.done { background: var(--green); border-color: var(--green); color: white; }
   .task-check.inprogress { background: var(--yellow); border-color: var(--yellow); color: #1a1a17; }
-  .task-check.contacted { background: var(--blue); border-color: var(--blue); color: white; }
   .task-body { flex: 1; min-width: 0; }
   .task-name { font-size: 14px; color: var(--text); font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
   .task-row.done-task .task-name { text-decoration: line-through; color: var(--text-dim); }
@@ -742,10 +741,17 @@
     <div class="page" id="page-today">
       <div class="page-header">
         <div>
-          <h2>Today's Entry</h2>
+          <h2 id="today-heading">Today's Entry</h2>
           <p id="today-subtitle">Log your day</p>
         </div>
-        <div id="today-existing-badge"></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="month-nav">
+            <button onclick="changeViewDay(-1)">‹</button>
+            <button onclick="changeViewDay(1)" id="today-next-btn">›</button>
+          </div>
+          <button id="today-jump-btn" onclick="jumpToToday()" class="btn-secondary" style="display:none;font-size:12px;padding:7px 12px;">↩ Today</button>
+          <div id="today-existing-badge"></div>
+        </div>
       </div>
       <div class="grid-4" style="margin-bottom:20px;" id="today-stats"></div>
       <div class="grid-2" style="margin-bottom:16px;">
@@ -973,7 +979,6 @@
           <button class="task-filter-btn active-status" data-group="status" data-val="To Do" onclick="toggleTaskFilter(this)">To Do</button>
           <button class="task-filter-btn active-status" data-group="status" data-val="In Progress" onclick="toggleTaskFilter(this)">In Progress</button>
           <button class="task-filter-btn" data-group="status" data-val="Done" onclick="toggleTaskFilter(this)">Done</button>
-          <button class="task-filter-btn" data-group="status" data-val="Contacted" onclick="toggleTaskFilter(this)">Contacted</button>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
           <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;width:52px;">Cat.</span>
@@ -1248,7 +1253,7 @@
     <input type="hidden" id="task-edit-id">
     <div class="form-group" style="margin-bottom:12px;"><label>Task</label><input type="text" id="task-name" placeholder="What needs to be done?"></div>
     <div class="form-row" style="margin-bottom:12px;">
-      <div class="form-group"><label>Status</label><select id="task-status"><option>To Do</option><option>In Progress</option><option>Done</option><option>Contacted</option></select></div>
+      <div class="form-group"><label>Status</label><select id="task-status"><option>To Do</option><option>In Progress</option><option>Done</option></select></div>
       <div class="form-group"><label>Priority</label><select id="task-priority"><option>High</option><option selected>Medium</option><option>Low</option></select></div>
       <div class="form-group"><label>Category</label><select id="task-category"><option>✅ Personal</option><option>💼 Work</option><option>📞 Contact</option></select></div>
     </div>
@@ -1483,6 +1488,7 @@ function nav(page) {
 // ══════════════════════════════════════
 let sleepHourVal = 7, sleepMinVal = 0;
 let trainHourVal = 0, trainMinVal = 0;
+let viewingDate = null;
 
 function buildDrumPicker() {
   buildDrumCols('sleep', 0, 12, sleepHourVal, sleepMinVal);
@@ -1609,7 +1615,13 @@ function toggleHabit(el) {
   if (box) box.innerHTML = `${checked}<span style="font-size:14px;color:var(--text-dim)">/${total}</span>`;
 }
 function renderToday() {
-  const today = todayStr();
+  if (!viewingDate) viewingDate = todayStr();
+  const today = viewingDate;
+  const realToday = todayStr();
+  const isToday = today === realToday;
+  document.getElementById('today-heading').textContent = isToday ? "Today's Entry" : 'Past Entry';
+  document.getElementById('today-jump-btn').style.display = isToday ? 'none' : 'block';
+  document.getElementById('today-next-btn').disabled = isToday;
   const monthKey = monthKeyFromDate(today);
   const habits = getHabitsForMonth(monthKey);
   document.getElementById('today-subtitle').textContent = formatDate(today);
@@ -1711,7 +1723,7 @@ function renderToday() {
   `;
 }
 function saveEntry() {
-  const today = todayStr();
+  const today = viewingDate || todayStr();
   const entries = getEntries();
   const habits = {};
   document.querySelectorAll('.habit-toggle').forEach(el => { habits[el.dataset.habit] = el.classList.contains('checked'); });
@@ -1733,6 +1745,20 @@ function saveEntry() {
   const s = document.getElementById('save-status');
   s.classList.add('show'); setTimeout(() => s.classList.remove('show'), 2000);
   document.getElementById('today-existing-badge').innerHTML = `<span class="badge badge-green">✓ Entry saved</span>`;
+}
+
+function changeViewDay(delta) {
+  if (!viewingDate) viewingDate = todayStr();
+  const d = new Date(viewingDate + 'T00:00:00');
+  d.setDate(d.getDate() + delta);
+  const newDate = d.toISOString().split('T')[0];
+  if (newDate > todayStr()) return;
+  viewingDate = newDate;
+  renderToday();
+}
+function jumpToToday() {
+  viewingDate = todayStr();
+  renderToday();
 }
 
 // ══════════════════════════════════════
@@ -2209,7 +2235,7 @@ function renderTaskList() {
   const tasks = filterTasks(getTasks());
   const today = todayStr();
   const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
-  const statusOrder   = { 'To Do': 0, 'In Progress': 1, 'Contacted': 2, 'Done': 3 };
+  const statusOrder   = { 'To Do': 0, 'In Progress': 1, 'Done': 2 };
   const catOrder      = { '✅ Personal': 0, '💼 Work': 1, '📞 Contact': 2 };
   const sorted = [...tasks].sort((a, b) => {
     if (taskSort === 'category') { const cA = catOrder[a.category] ?? 3; const cB = catOrder[b.category] ?? 3; if (cA !== cB) return cA - cB; }
@@ -2226,13 +2252,12 @@ function renderTaskList() {
   const checkIcon = t => {
     if (t.status === 'Done')        return '<span class="task-check done">✓</span>';
     if (t.status === 'In Progress') return '<span class="task-check inprogress">…</span>';
-    if (t.status === 'Contacted')   return '<span class="task-check contacted">✓</span>';
     return '<span class="task-check"></span>';
   };
   const catCls = c => c === '💼 Work' ? 'cat-work' : c === '📞 Contact' ? 'cat-contact' : 'cat-personal';
   const dueBadge = t => {
     if (!t.due) return '';
-    if (t.status === 'Done' || t.status === 'Contacted') return `<span class="task-due-date">${t.due}</span>`;
+    if (t.status === 'Done') return `<span class="task-due-date">${t.due}</span>`;
     if (t.due < today) return `<span class="task-badge overdue">Overdue · ${t.due}</span>`;
     if (t.due === today) return `<span class="task-badge due-today">Due today</span>`;
     return `<span class="task-due-date">${t.due}</span>`;
@@ -2251,15 +2276,19 @@ function renderTaskList() {
   document.getElementById('task-list').innerHTML = html;
 }
 function taskRowHtml(t, checkIcon, catCls, dueBadge, priorityCls) {
-  return `<div class="task-row ${t.status === 'Done' || t.status === 'Contacted' ? 'done-task' : ''}" onclick="openTaskModal(${t.id})"><div onclick="event.stopPropagation();cycleTaskStatus(${t.id})">${checkIcon(t)}</div><div class="task-body"><div class="task-name">${t.name}</div><div class="task-meta"><span class="task-badge ${priorityCls(t.priority)}">${t.priority}</span><span class="task-badge ${catCls(t.category)}">${t.category}</span>${dueBadge(t)}${t.notes ? `<span class="task-due-date" title="${t.notes}">📝</span>` : ''}</div></div></div>`;
+  return `<div class="task-row ${t.status === 'Done' ? 'done-task' : ''}" onclick="openTaskModal(${t.id})"><div onclick="event.stopPropagation();cycleTaskStatus(${t.id})">${checkIcon(t)}</div><div class="task-body"><div class="task-name">${t.name}</div><div class="task-meta"><span class="task-badge ${priorityCls(t.priority)}">${t.priority}</span><span class="task-badge ${catCls(t.category)}">${t.category}</span>${dueBadge(t)}${t.notes ? `<span class="task-due-date" title="${t.notes}">📝</span>` : ''}</div></div></div>`;
 }
 function cycleTaskStatus(id) {
   const tasks = getTasks();
   const t = tasks.find(t => t.id === id);
   if (!t) return;
-  const cycle = { 'To Do': 'In Progress', 'In Progress': 'Done', 'Done': 'To Do', 'Contacted': 'Done' };
-  t.status = cycle[t.status] || 'To Do';
-  if (t.status === 'Done') t.completed = todayStr(); else t.completed = '';
+  if (t.status === 'Done') {
+    t.status = 'To Do';
+    t.completed = '';
+  } else {
+    t.status = 'Done';
+    t.completed = todayStr();
+  }
   saveTasks(tasks);
   renderTasks();
 }
@@ -2285,7 +2314,7 @@ function renderTaskCal() {
     const isWeekend = dow === 0 || dow === 6;
     const isToday = key === today;
     const dayTasks = allTasks.filter(t => t.due === key);
-    const taskItems = dayTasks.map(t => `<div class="task-cal-item ${catCls(t.category)} ${t.status === 'Done' || t.status === 'Contacted' ? 'done-task' : ''}" draggable="true" ondragstart="taskDragStart(event, ${t.id})" onclick="event.stopPropagation();openTaskModal(${t.id})" title="${t.name}">${t.name}</div>`).join('');
+    const taskItems = dayTasks.map(t => `<div class="task-cal-item ${catCls(t.category)} ${t.status === 'Done' ? 'done-task' : ''}" draggable="true" ondragstart="taskDragStart(event, ${t.id})" onclick="event.stopPropagation();openTaskModal(${t.id})" title="${t.name}">${t.name}</div>`).join('');
     html += `<div class="cal-day ${isToday ? 'is-today' : ''} ${isWeekend ? 'weekend' : ''} ${dayTasks.length ? 'has-entry' : 'no-entry'}" ondragover="event.preventDefault();this.classList.add('task-cal-drop-target')" ondragleave="this.classList.remove('task-cal-drop-target')" ondrop="taskDrop(event, '${key}');this.classList.remove('task-cal-drop-target')" onclick="openTaskModalWithDate('${key}')"><div class="cal-day-num">${d}</div>${taskItems}</div>`;
   }
   html += `</div>`;
