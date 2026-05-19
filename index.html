@@ -1828,7 +1828,7 @@ function renderDashboard() {
     document.getElementById('dash-subtitle').textContent = isCurrent ? 'This week at a glance' : `Week of ${fmtDate(currentWeekStart)}`;
     for (let i = 0; i < 7; i++) {
       const d = new Date(currentWeekStart.getTime() + i * 86400000);
-      const key = d.toISOString().split('T')[0];
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
       periodEntries.push({ date: key, label: `${dayNamesMonFirst[i]} ${d.getDate()}`, entry: entries[key] || null });
     }
     document.getElementById('period-next-btn').disabled = currentWeekStart > now;
@@ -2430,7 +2430,8 @@ function getLast(n) {
   const results = [];
   const d = new Date();
   for (let i = 0; i < n; i++) {
-    const key = new Date(d - i * 86400000).toISOString().split('T')[0];
+    const dx = new Date(d - i * 86400000);
+    const key = `${dx.getFullYear()}-${String(dx.getMonth()+1).padStart(2,'0')}-${String(dx.getDate()).padStart(2,'0')}`;
     if (entries[key]) results.push(entries[key]);
   }
   return results;
