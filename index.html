@@ -854,6 +854,7 @@
           <div class="mood-btn" onclick="setMood('😢 Sad')" data-mood="😢 Sad">😢<span>Sad</span></div>
           <div class="mood-btn" onclick="setMood('😐 Okay')" data-mood="😐 Okay">😐<span>Okay</span></div>
           <div class="mood-btn" onclick="setMood('😊 Happy')" data-mood="😊 Happy">😊<span>Happy</span></div>
+          <div class="mood-btn" onclick="setMood('🤩 Special')" data-mood="🤩 Special">🤩<span>Special</span></div>
         </div>
       </div>
       <div class="btn-row">
@@ -1839,7 +1840,8 @@ function renderDashboard() {
   const filled = periodEntries.filter(e => e.entry);
   const avgSleep = avg(filled.map(e => e.entry.sleepHours).filter(Boolean));
   const totalTrain = filled.reduce((s, e) => s + (e.entry.trainingHours || 0), 0);
-  const happyDays = filled.filter(e => e.entry.mood === '😊 Happy').length;
+  const happyDays = filled.filter(e => e.entry.mood === '😊 Happy' || e.entry.mood === '🤩 Special').length;
+  const specialDays = filled.filter(e => e.entry.mood === '🤩 Special').length;
   const fmtH = val => {
     if (!val) return '—';
     const h = Math.floor(val); const m = Math.round((val - h) * 60);
@@ -1848,10 +1850,11 @@ function renderDashboard() {
   document.getElementById('dash-stats').innerHTML = `
     <div class="stat-box"><div class="stat-label">Avg sleep</div><div class="stat-value accent" style="font-size:20px;">${fmtH(avgSleep)}</div></div>
     <div class="stat-box"><div class="stat-label">Total training</div><div class="stat-value" style="font-size:20px;">${fmtH(totalTrain)}</div></div>
-    <div class="stat-box"><div class="stat-label">😊 Happy days</div><div class="stat-value green">${happyDays}</div></div>
+    <div class="stat-box"><div class="stat-label">😊 Good days</div><div class="stat-value green">${happyDays}</div></div>
+    <div class="stat-box"><div class="stat-label">🤩 Special days</div><div class="stat-value accent">${specialDays}</div></div>
   `;
   const labels = periodEntries.map(e => e.label);
-  const moodMap = { '😊 Happy': 3, '😐 Okay': 2, '😢 Sad': 1 };
+  const moodMap = { '😢 Sad': 1, '😐 Okay': 2, '😊 Happy': 3, '🤩 Special': 4 };
   buildMoodChart('chart-mood', labels, periodEntries.map(e => e.entry ? (moodMap[e.entry.mood] || null) : null));
   buildSleepChart('chart-sleep', labels, periodEntries.map(e => e.entry ? (e.entry.sleepHours || null) : null));
   buildChart('chart-training', labels, periodEntries.map(e => e.entry ? (e.entry.trainingHours || null) : null), '#6ab87a', true);
@@ -1877,11 +1880,11 @@ function renderDashboard() {
 function buildMoodChart(id, labels, data) {
   const ctx = document.getElementById(id).getContext('2d');
   if (charts[id]) charts[id].destroy();
-  const moodLabels = { 1: '😢', 2: '😐', 3: '😊' };
+  const moodLabels = { 1: '😢', 2: '😐', 3: '😊', 4: '🤩' };
   charts[id] = new Chart(ctx, {
     type: 'line',
     data: { labels, datasets: [{ data, borderColor: '#c8a96e', backgroundColor: '#c8a96e22', fill: true, tension: 0.4, pointRadius: 3, pointHoverRadius: 5, borderWidth: 1.5, spanGaps: true, pointBackgroundColor: data.map(v => v === 3 ? '#6ab87a' : v === 2 ? '#c8b468' : v === 1 ? '#c86868' : 'transparent') }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1a17', borderColor: '#333330', borderWidth: 1, titleColor: '#7a7870', bodyColor: '#e8e6df', titleFont: { family: 'DM Mono', size: 10 }, bodyFont: { family: 'DM Sans', size: 14 }, callbacks: { label: ctx => moodLabels[ctx.parsed.y] || '' } } }, scales: { x: { grid: { color: '#2e2e2a' }, ticks: { color: '#4a4a45', font: { family: 'DM Mono', size: 9 }, maxTicksLimit: 10 } }, y: { min: 0.5, max: 3.5, grid: { color: '#2e2e2a' }, ticks: { color: '#7a7870', font: { size: 14 }, stepSize: 1, callback: val => moodLabels[val] || '' } } } }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1a17', borderColor: '#333330', borderWidth: 1, titleColor: '#7a7870', bodyColor: '#e8e6df', titleFont: { family: 'DM Mono', size: 10 }, bodyFont: { family: 'DM Sans', size: 14 }, callbacks: { label: ctx => moodLabels[ctx.parsed.y] || '' } } }, scales: { x: { grid: { color: '#2e2e2a' }, ticks: { color: '#4a4a45', font: { family: 'DM Mono', size: 9 }, maxTicksLimit: 10 } }, y: { min: 0.5, max: 4.5, grid: { color: '#2e2e2a' }, ticks: { color: '#7a7870', font: { size: 14 }, stepSize: 1, callback: val => moodLabels[val] || '' } } } }
   });
 }
 function buildSleepChart(id, labels, data) {
@@ -1922,7 +1925,7 @@ function renderHistory() {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDow = new Date(year, month, 1).getDay();
   const today = todayStr();
-  const moodEmoji = { '😊 Happy': '😊', '😐 Okay': '😐', '😢 Sad': '😢' };
+  const moodEmoji = { '😢 Sad': '😢', '😐 Okay': '😐', '😊 Happy': '😊', '🤩 Special': '🤩' };
   let html = `<div class="cal-weekdays"><div class="cal-weekday weekend-label">Sun</div><div class="cal-weekday">Mon</div><div class="cal-weekday">Tue</div><div class="cal-weekday">Wed</div><div class="cal-weekday">Thu</div><div class="cal-weekday">Fri</div><div class="cal-weekday weekend-label">Sat</div></div><div class="cal-days">`;
   for (let i = 0; i < firstDow; i++) html += `<div class="cal-day empty"></div>`;
   for (let d = 1; d <= daysInMonth; d++) {
