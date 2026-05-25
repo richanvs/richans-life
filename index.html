@@ -1025,10 +1025,13 @@
       <!-- ── Monthly view ── -->
       <div id="budget-view-monthly">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-          <div class="month-nav">
-            <button onclick="changeBudgetMonth(-1)">‹</button>
-            <span class="month-label" id="budget-monthly-label" style="min-width:130px;">—</span>
-            <button onclick="changeBudgetMonth(1)">›</button>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div class="month-nav">
+              <button onclick="changeBudgetMonth(-1)">‹</button>
+              <span class="month-label" id="budget-monthly-label" style="min-width:130px;">—</span>
+              <button onclick="changeBudgetMonth(1)">›</button>
+            </div>
+            <div id="budget-cycle-display" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);padding-left:4px;"></div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;">Salary</span>
@@ -1306,6 +1309,26 @@
         <button class="btn-secondary" onclick="closeTxnModal()">Cancel</button>
         <button class="save-btn" onclick="saveTxn()">Save</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- CYCLE START MODAL -->
+<div class="modal-overlay" id="cycle-modal">
+  <div class="modal" style="width:380px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+      <h3 id="cycle-modal-title" style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);">Set Cycle Start</h3>
+      <button onclick="closeCycleModal()" style="background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;line-height:1.6;">When does your pay cycle start for this budget month? Transactions from this date onwards will count against this month's budget.</p>
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Cycle Start Date</label>
+      <input type="date" id="cycle-start-input"
+        style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:9px 12px;outline:none;">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn-secondary" onclick="closeCycleModal()">Skip</button>
+      <button class="save-btn" onclick="saveCycleStartFromModal()">Save</button>
     </div>
   </div>
 </div>
@@ -2467,14 +2490,15 @@ function exportData() {
 // ══════════════════════════════════════
 
 // State
-let budgetView         = 'monthly';
-let budgetCurrentMonth = new Date();
-let budgetTxnMonth     = new Date();
-let budgetTemplateMonth= new Date();
-let budgetTxnSort      = 'date';
-let budgetSections     = { debit: true, credit: true };
-let budgetCharts       = {};
-let tmplWorkingCopy    = null;
+let budgetView              = 'monthly';
+let budgetCurrentMonth      = new Date();
+let budgetTxnMonth          = new Date();
+let budgetTemplateMonth     = new Date();
+let budgetTxnSort           = 'date';
+let budgetSections          = { debit: true, credit: true };
+let budgetCharts            = {};
+let tmplWorkingCopy         = null;
+let budgetMonthInitialized  = false;
 
 // Default template (pre-populated items from screenshots)
 const DEFAULT_BUDGET_TEMPLATE = {
@@ -2532,6 +2556,28 @@ function getBudgetTxns(d) {
 }
 function saveBudgetTxns(d, txns) { setData(budgetTxnKey(d), txns); }
 
+// ── Pay cycle helpers ──
+function getCycleStart(d) {
+  const data = getBudgetMonthData(d);
+  if (data.cycleStart) return data.cycleStart;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;
+}
+function saveCycleStart(d, dateStr) {
+  const data = getBudgetMonthData(d);
+  data.cycleStart = dateStr;
+  saveBudgetMonthData(d, data);
+}
+function getActiveBudgetMonth() {
+  const today = todayStr();
+  const now = new Date();
+  // Scan from 2 months ahead down to 1 month back — return the latest cycle that has already started
+  for (let offset = 2; offset >= -1; offset--) {
+    const d = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+    if (getCycleStart(d) <= today) return d;
+  }
+  return new Date(now.getFullYear(), now.getMonth(), 1);
+}
+
 // ── Formatting ──
 function fmtR(val) {
   if (val === null || val === undefined || isNaN(val)) return '—';
@@ -2587,11 +2633,47 @@ function setBudgetTab(tab) {
   if (tab === 'history')      renderBudgetHistory();
   if (tab === 'template')     renderBudgetTemplate();
 }
-function renderBudget() { setBudgetTab(budgetView); }
+function renderBudget() {
+  if (!budgetMonthInitialized) {
+    const active = getActiveBudgetMonth();
+    budgetCurrentMonth = active;
+    budgetTxnMonth = new Date(active.getFullYear(), active.getMonth(), 1);
+    budgetMonthInitialized = true;
+  }
+  setBudgetTab(budgetView);
+}
 
 // ── Monthly tab ──
 function changeBudgetMonth(dir) {
   budgetCurrentMonth = new Date(budgetCurrentMonth.getFullYear(), budgetCurrentMonth.getMonth() + dir, 1);
+  renderBudgetMonthly();
+  // When navigating forward to a month with no cycle start set, prompt the user
+  if (dir > 0 && !getBudgetMonthData(budgetCurrentMonth).cycleStart) {
+    promptCycleStart(budgetCurrentMonth);
+  }
+}
+// ── Cycle start modal ──
+function promptCycleStart(d) {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cycle-modal-title').textContent = `${months[d.getMonth()]} ${d.getFullYear()} — Cycle Start`;
+  // Default input: existing value or the 1st of the previous month
+  const existing = getBudgetMonthData(d).cycleStart;
+  if (existing) {
+    document.getElementById('cycle-start-input').value = existing;
+  } else {
+    const prev = new Date(d.getFullYear(), d.getMonth() - 1, 25);
+    document.getElementById('cycle-start-input').value = `${prev.getFullYear()}-${String(prev.getMonth()+1).padStart(2,'0')}-25`;
+  }
+  document.getElementById('cycle-modal').classList.add('open');
+}
+function closeCycleModal() {
+  document.getElementById('cycle-modal').classList.remove('open');
+}
+function saveCycleStartFromModal() {
+  const dateStr = document.getElementById('cycle-start-input').value;
+  if (!dateStr) { closeCycleModal(); return; }
+  saveCycleStart(budgetCurrentMonth, dateStr);
+  closeCycleModal();
   renderBudgetMonthly();
 }
 function saveBudgetIncome() {
@@ -2615,9 +2697,22 @@ function autoSaveBudgetIncome() {
 }
 function renderBudgetMonthly() {
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const shortMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const d = budgetCurrentMonth;
   const lbl = document.getElementById('budget-monthly-label');
   if (lbl) lbl.textContent = `${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
+  // Update cycle start display
+  const cycleEl = document.getElementById('budget-cycle-display');
+  if (cycleEl) {
+    const cs = getBudgetMonthData(d).cycleStart;
+    if (cs) {
+      const p = cs.split('-');
+      const csDate = new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+      cycleEl.innerHTML = `<span style="cursor:pointer;" onclick="promptCycleStart(budgetCurrentMonth)" title="Edit cycle start">📅 Cycle: ${csDate.getDate()} ${shortMonths[csDate.getMonth()]} ${csDate.getFullYear()} <span style="color:var(--accent-dim);">✎</span></span>`;
+    } else {
+      cycleEl.innerHTML = `<span style="cursor:pointer;color:var(--accent-dim);" onclick="promptCycleStart(budgetCurrentMonth)">+ Set cycle start date</span>`;
+    }
+  }
   const data = getBudgetMonthData(d);
   const incEl = document.getElementById('budget-income-input');
   if (incEl) incEl.value = data.income != null ? data.income : '';
