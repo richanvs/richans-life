@@ -657,6 +657,12 @@
   .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
   .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
   .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+  /* The real bug: .section-items has overflow:hidden and was a flex item of
+     .sidebar. Flex items shrink by default, so when the sidebar ran out of
+     room the sections were squashed and clipped their own nav items. Nothing
+     inside the scroll region may shrink. */
+  .sidebar-scroll > * { flex-shrink: 0; }
+  .section-items:not(.collapsed) { max-height: none; }
   /* Trim the vertical space so most screens never need to scroll at all. */
   .nav-item { padding: 8px 20px; }
   .sidebar-section { padding: 12px 20px 4px; }
