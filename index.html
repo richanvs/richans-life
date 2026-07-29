@@ -649,7 +649,8 @@
   .sidebar-logo { flex-shrink: 0; }
   .sidebar-footer { flex-shrink: 0; margin-top: 0 !important; }
   .sidebar-scroll {
-    flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    flex: 1 1 0% !important; min-height: 0 !important; height: 0;
+    overflow-y: auto !important; overflow-x: hidden;
     scrollbar-width: thin; scrollbar-color: var(--surface3) transparent;
     -webkit-overflow-scrolling: touch;
   }
@@ -657,12 +658,14 @@
   .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
   .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
   .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
-  /* The real bug: .section-items has overflow:hidden and was a flex item of
-     .sidebar. Flex items shrink by default, so when the sidebar ran out of
-     room the sections were squashed and clipped their own nav items. Nothing
-     inside the scroll region may shrink. */
-  .sidebar-scroll > * { flex-shrink: 0; }
-  .section-items:not(.collapsed) { max-height: none; }
+  /* THE BUG: line 311 sets .section-items { overflow:hidden; max-height:300px }.
+     That clipping stays active no matter how much room the sidebar has, so any
+     section taller than its computed box silently loses its last items. An
+     expanded section must never clip. Only a collapsed one may. */
+  .section-items { overflow: visible !important; max-height: none !important; flex-shrink: 0 !important; }
+  .section-items.collapsed { overflow: hidden !important; max-height: 0 !important; }
+  .sidebar-scroll > * { flex-shrink: 0 !important; }
+  .sidebar > * { flex-shrink: 0; }
   /* Trim the vertical space so most screens never need to scroll at all. */
   .nav-item { padding: 8px 20px; }
   .sidebar-section { padding: 12px 20px 4px; }
