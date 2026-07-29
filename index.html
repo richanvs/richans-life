@@ -794,6 +794,29 @@
   .sh-bar { height:12px; background:var(--surface3); border-radius:6px; overflow:hidden; margin:10px 0 6px; }
   .sh-bar i { display:block; height:100%; background:var(--green); transition:width .3s; }
   .sh-bar i.over { background:var(--red); }
+  /* shop trip cards */
+  .sh-trip { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    margin-bottom:10px; overflow:hidden; transition:border-color .15s; }
+  .sh-trip:hover { border-color:var(--accent-dim); }
+  .sh-trip.is-today { border-color:var(--accent); }
+  .sh-trip.done { opacity:.72; }
+  .sh-trip-head { display:flex; align-items:center; gap:14px; padding:14px 16px; cursor:pointer; }
+  .sh-trip-date { width:46px; min-width:46px; text-align:center; background:var(--surface2);
+    border:1px solid var(--border); border-radius:var(--radius-sm); padding:5px 0; }
+  .sh-trip-date b { display:block; font-family:'DM Mono',monospace; font-size:17px; color:var(--accent); line-height:1.1; }
+  .sh-trip-date span { display:block; font-family:'DM Mono',monospace; font-size:9px; color:var(--text-dim);
+    text-transform:uppercase; letter-spacing:.06em; }
+  .sh-trip-date.late { border-color:var(--red); }
+  .sh-trip-date.late b { color:var(--red); }
+  .sh-trip.done .sh-trip-date b { color:var(--green); }
+  .sh-trip-title { font-size:14.5px; font-weight:600; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .sh-trip-sub { font-size:11.5px; color:var(--text-muted); margin-top:2px; }
+  .sh-chev { color:var(--text-dim); font-size:12px; }
+  .sh-trip-body { padding:0 16px 16px; border-top:1px solid var(--border); }
+  .sh-trip-note { font-size:11.5px; color:var(--text-muted); line-height:1.55; padding:12px 0 6px;
+    border-left:2px solid var(--accent-dim); padding-left:10px; margin-bottom:6px; }
+  .mc-cart { position:absolute; top:5px; right:5px; font-size:9px; opacity:.85; }
+  .mc-day { position:relative; }
   .mp-warn { background:rgba(200,180,104,.09); border-left:3px solid var(--yellow); border-radius:6px;
     padding:11px 14px; font-size:12.5px; color:var(--text-muted); line-height:1.55; margin-top:14px; }
   .mp-tip { background:rgba(104,146,200,.09); border-left:3px solid var(--blue); border-radius:6px;
@@ -1447,6 +1470,7 @@
           <span><i style="background:var(--accent-dim)"></i>Supper</span>
           <span><i style="background:var(--green)"></i>Eaten</span>
           <span><i style="background:var(--yellow)"></i>Skipped or takeout</span>
+          <span>&#128722; Shop day</span>
           <span style="color:var(--text-dim)">Lunch is always the night before's supper</span>
         </div>
       </div>
@@ -1485,32 +1509,59 @@
       <div class="page-header">
         <div>
           <h2>Shopping</h2>
-          <p>Meat from Woolworths, everything else from Checkers. Type in what the till actually said.</p>
+          <p>What to buy, where to buy it, and which day. Built from your plan start date.</p>
         </div>
       </div>
 
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-title">Monthly food budget</div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <span style="font-size:30px;font-weight:600;" id="sh-total">R0</span>
-          <span style="font-size:12px;color:var(--text-muted);">of R4 100</span>
-        </div>
-        <div class="sh-bar"><i id="sh-bar" style="width:0"></i></div>
-        <div style="font-size:12.5px;" id="sh-left"></div>
-        <p style="font-size:11.5px;color:var(--text-dim);margin-top:10px;line-height:1.5;">
-          Prices are July 2026 estimates and will drift. Tap any price to correct it. Weekly fresh is counted at 4.35 weeks.
-        </p>
-        <div class="btn-row">
-          <button class="btn-secondary" onclick="mealResetShop()">Reset ticks and prices</button>
+      <div class="grid-2" style="align-items:start;margin-bottom:16px;">
+        <div class="card" id="sh-next"></div>
+        <div class="card">
+          <div class="card-title">One 4 week cycle</div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-size:30px;font-weight:600;" id="sh-total">R0</span>
+            <span style="font-size:12px;color:var(--text-muted);">of R4 100</span>
+          </div>
+          <div class="sh-bar"><i id="sh-bar" style="width:0"></i></div>
+          <div style="font-size:12.5px;" id="sh-left"></div>
+          <p style="font-size:11.5px;color:var(--text-dim);margin-top:12px;line-height:1.55;" id="sh-avg"></p>
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="mealResetShop()">Reset every tick and price</button>
+          </div>
         </div>
       </div>
 
-      <div class="sh-tabs">
-        <button class="on" id="st-ww" onclick="mealShopTab('ww')">Woolworths meat</button>
-        <button id="st-ch" onclick="mealShopTab('ch')">Checkers bulk</button>
-        <button id="st-tu" onclick="mealShopTab('tu')">Weekly fresh</button>
+      <div class="mc-bar">
+        <button class="mc-navbtn" onclick="mealShopMonthShift(-1)">&#9664;</button>
+        <div class="mc-monthlabel" id="sh-monthlabel"></div>
+        <button class="mc-navbtn" onclick="mealShopMonthShift(1)">&#9654;</button>
+        <button class="mc-navbtn" onclick="mealShopMonthToday()">Today</button>
+        <span style="font-size:11.5px;color:var(--text-dim);margin-left:6px;">Tap a shop to open its list</span>
       </div>
-      <div class="card" id="sh-card"></div>
+
+      <div id="sh-schedule"></div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">How the schedule is built</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <tr><td style="padding:7px 0;border-bottom:1px solid var(--border);color:var(--text-muted);">Weekly fresh, Checkers</td>
+              <td style="padding:7px 0;border-bottom:1px solid var(--border);text-align:right;font-family:'DM Mono',monospace;">every 7 days from your start date</td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid var(--border);color:var(--text-muted);">Bulk meat, Woolworths</td>
+              <td style="padding:7px 0;border-bottom:1px solid var(--border);text-align:right;font-family:'DM Mono',monospace;">every 28 days</td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid var(--border);color:var(--text-muted);">Bulk non perishables, Checkers</td>
+              <td style="padding:7px 0;border-bottom:1px solid var(--border);text-align:right;font-family:'DM Mono',monospace;">every 28 days</td></tr>
+          <tr><td style="padding:7px 0;color:var(--text-muted);">Cost per serving, 4 servings a day</td>
+              <td style="padding:7px 0;text-align:right;font-family:'DM Mono',monospace;">R32.02</td></tr>
+        </table>
+        <div class="mp-tip">
+          28 days is the same four week cycle the braai rotation runs on, so a bulk shop always lands on the week
+          the rotation resets. Move your start date and the whole schedule moves with it.
+        </div>
+        <div class="mp-warn">
+          Sunflower oil is R6.06 per 1 000 kcal, olive oil R15.91, butter R22.22. That is why butter is for bread only
+          and there is no olive oil on the list. Prices are July 2026 estimates. Correct them at the till and the
+          totals follow.
+        </div>
+      </div>
 
       <div class="card" style="margin-top:16px;">
         <div class="card-title">Targets this plan is built to</div>
@@ -1524,10 +1575,6 @@
           <tr><td style="padding:7px 0;color:var(--text-muted);">Shake, budgeted separately</td>
               <td style="padding:7px 0;text-align:right;font-family:'DM Mono',monospace;">40 g each &middot; you water, her milk</td></tr>
         </table>
-        <div class="mp-warn">
-          Sunflower oil is R6.06 per 1 000 kcal, olive oil R15.91, butter R22.22. That is why butter is for bread only
-          and there is no olive oil on the list. If you go over budget, the fastest single cut is the lamb, which is R184.
-        </div>
       </div>
     </div>
 
@@ -1868,7 +1915,7 @@ function nav(page) {
   if (page === 'fuel')       calcFuel();
   if (page === 'mealcal')    renderMealCal();
   if (page === 'recipes')    renderRecipesPage();
-  if (page === 'mealshop')   { mealShopTab(mealShopCur); }
+  if (page === 'mealshop')   renderMealShop();
   // Close sidebar on mobile after navigation
   if (isMobile()) closeMobileSidebar();
   // Hide FAB when not on budget page
@@ -4011,7 +4058,6 @@ const MEAL_SHOP = {
 // ══════════════════════════════════════════════════════════════
 
 let mealMonth   = new Date();
-let mealShopCur = "ww";
 let mealRecTab  = "sup";
 
 function mealStart()      { return getData("meal_start", null) || todayStr().slice(0,8) + "01"; }
@@ -4072,6 +4118,7 @@ function renderMealCal() {
   let html = '<div class="cal-weekdays"><div class="cal-weekday weekend-label">Sun</div><div class="cal-weekday">Mon</div><div class="cal-weekday">Tue</div><div class="cal-weekday">Wed</div><div class="cal-weekday">Thu</div><div class="cal-weekday">Fri</div><div class="cal-weekday weekend-label">Sat</div></div><div class="cal-days">';
   for (let i = 0; i < firstDow; i++) html += '<div class="mc-day empty"></div>';
 
+  const shopDays = mealShopDates(year, month);
   let cooked = 0, skipped = 0, planned = 0, notes = 0;
   for (let d = 1; d <= daysInMonth; d++) {
     const key = year + "-" + String(month+1).padStart(2,"0") + "-" + String(d).padStart(2,"0");
@@ -4089,6 +4136,7 @@ function renderMealCal() {
     const lShort = lc ? (lc === "L6" ? "Cold braai" : MEAL_L[lc].short) : "";
     const dShort = dc ? (dc === "6" ? "Braai " + MEAL_BRAAI[mealWeekIdx(key)].split(" ")[0].toLowerCase() : MEAL_R[dc].short) : "";
     html += '<div class="mc-day ' + (isToday ? "is-today" : "") + '" onclick="mealOpenDay(\'' + key + '\')">' +
+      (shopDays[key] ? '<span class="mc-cart" title="Shop day">&#128722;</span>' : "") +
       '<div class="num">' + d + (e.note ? ' <span style="color:var(--blue)">&bull;</span>' : "") + '</div>' +
       (lc ? '<div class="mc-slot lunch ' + (e.l||"") + '"><b>L</b>' + lShort + '</div>' : "") +
       (dc ? '<div class="mc-slot dinner ' + (e.d||"") + '"><b>S</b>' + dShort + '</div>' : "") +
@@ -4306,51 +4354,213 @@ function ckBeep() {
 }
 
 // ── SHOPPING ─────────────────────────────────────────────────
+// Trips are generated from your start date. Weekly fresh every 7 days,
+// both bulk shops every 28 days, which is the same 4 week cycle the
+// braai rotation runs on. So the schedule always lines up with the plan.
+let mealShopMonth = new Date();
+let mealOpenTrip  = null;
+let mealShopInit  = false;
+
 function mealPrices() { return getData("meal_prices", {}); }
 function mealChecks() { return getData("meal_checks", {}); }
 function mealPrice(list, i) { const p = mealPrices()[list+i]; return (p !== undefined && p !== null) ? p : MEAL_SHOP[list].items[i][3]; }
 function mealSub(list) { let s = 0; const it = MEAL_SHOP[list].items; for (let i = 0; i < it.length; i++) s += it[i][2] * mealPrice(list, i); return s; }
-function mealMonthlyTotal() { return mealSub("ww") + mealSub("ch") + mealSub("tu") * 4.35; }
-function mealShopTab(l) {
-  mealShopCur = l;
-  ["ww","ch","tu"].forEach(function(x){ document.getElementById("st-"+x).classList.toggle("on", x === l); });
-  renderMealShop();
-}
-function renderMealShop() {
-  const data = MEAL_SHOP[mealShopCur], it = data.items, chk = mealChecks();
-  let rows = "", got = 0, n = 0;
-  for (let i = 0; i < it.length; i++) {
-    const k = mealShopCur + i, on = !!chk[k], p = mealPrice(mealShopCur, i), line = it[i][2] * p;
-    if (on) { got += line; n++; }
-    rows += '<div class="sh-row ' + (on?"on":"") + '">' +
-      '<div class="ck-box" style="cursor:pointer;' + (on?"background:var(--green);border-color:var(--green);color:var(--bg);":"") + '" onclick="mealTick(' + i + ')">&#10003;</div>' +
-      '<div class="nm" onclick="mealTick(' + i + ')" style="cursor:pointer;">' + it[i][0] + "<small>" + it[i][1] + " &times; " + it[i][2] + "</small></div>" +
-      '<input class="pi" type="number" step="0.01" inputmode="decimal" value="' + p.toFixed(2) + '" onchange="mealSetPrice(' + i + ',this.value)">' +
-      '<div class="ln">R' + line.toFixed(2) + "</div></div>";
+
+function mealTripsBetween(fromKey, toKey) {
+  const start = new Date(mealStart()+"T00:00:00");
+  const end   = new Date(toKey+"T00:00:00");
+  const out = [];
+  for (let n = 0; n < 3000; n += 7) {
+    const d = new Date(start); d.setDate(d.getDate()+n);
+    if (d > end) break;
+    const key = mealDateStr(d);
+    if (key < fromKey) continue;
+    if (n % 28 === 0) {
+      out.push({ id:"ww@"+key, date:key, list:"ww", store:"Woolworths", label:"Bulk meat for the freezer",
+                 sub:"Portion into weekly bags the day you buy it. Week one to the fridge, the rest to the freezer.", cyc:n/28+1 });
+      out.push({ id:"ch@"+key, date:key, list:"ch", store:"Checkers",   label:"Bulk non perishables",
+                 sub:"Mozzarella and pizza bases go straight into the freezer.", cyc:n/28+1 });
+    }
+    out.push({ id:"tu@"+key, date:key, list:"tu", store:"Checkers", label:"Weekly fresh top up",
+               sub:"Fresh only. Buy produce loose where you can, not pre packed.", wk:n/7+1 });
   }
-  const sub = mealSub(mealShopCur);
-  const extra = data.weekly ? (' <span style="color:var(--text-dim);font-weight:400;">&times; 4.35 = R' + (sub*4.35).toFixed(2) + " a month</span>") : "";
-  document.getElementById("sh-card").innerHTML =
-    '<div class="card-title">' + data.label + "</div>" +
-    '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">' + n + " of " + it.length + " in the trolley &middot; R" + got.toFixed(2) + " ticked</div>" +
-    rows + '<div class="sh-total"><span>Subtotal</span><span>R' + sub.toFixed(2) + extra + "</span></div>";
-  const t = mealMonthlyTotal();
-  document.getElementById("sh-total").textContent = "R" + t.toFixed(2);
-  const bar = document.getElementById("sh-bar");
-  bar.style.width = Math.min(100, t / MEAL_BUDGET * 100) + "%";
-  bar.classList.toggle("over", t > MEAL_BUDGET);
-  document.getElementById("sh-left").innerHTML = (t <= MEAL_BUDGET)
-    ? '<span style="color:var(--green);font-weight:600;">R' + (MEAL_BUDGET-t).toFixed(2) + " left over</span>"
-    : '<span style="color:var(--red);font-weight:600;">R' + (t-MEAL_BUDGET).toFixed(2) + " over budget.</span> Fastest fix is dropping the lamb, which is R184 back.";
+  return out;
 }
-function mealTick(i) { const c = mealChecks(); const k = mealShopCur + i; if (c[k]) delete c[k]; else c[k] = true; setData("meal_checks", c); renderMealShop(); }
-function mealSetPrice(i, v) {
+function mealTripsForMonth(y, m) {
+  const first = y + "-" + String(m+1).padStart(2,"0") + "-01";
+  const last  = mealDateStr(new Date(y, m+1, 0));
+  return mealTripsBetween(first, last);
+}
+function mealTripTotal(t) {
+  const it = MEAL_SHOP[t.list].items;
+  let s = 0; for (let i = 0; i < it.length; i++) s += it[i][2] * mealPrice(t.list, i);
+  return s;
+}
+function mealTripDone(t) {
+  const c = mealChecks(), it = MEAL_SHOP[t.list].items;
+  let n = 0; for (let i = 0; i < it.length; i++) if (c[t.id+":"+i]) n++;
+  return { n:n, of:it.length, all:(n === it.length) };
+}
+function mealNextTrips() {
+  const today = todayStr();
+  const far = mealDateStr(new Date(new Date(today+"T00:00:00").getTime() + 90*86400000));
+  const all = mealTripsBetween(today, far);
+  if (!all.length) return [];
+  const d = all[0].date;
+  return all.filter(function(t){ return t.date === d; });
+}
+function mealShopDates(y, m) {
+  const s = {}; mealTripsForMonth(y, m).forEach(function(t){ s[t.date] = true; }); return s;
+}
+function mealYearAverage() {
+  const start = mealStart();
+  const end = mealDateStr(new Date(new Date(start+"T00:00:00").getTime() + 363*86400000));
+  const trips = mealTripsBetween(start, end);
+  let s = 0; trips.forEach(function(t){ s += mealTripTotal(t); });
+  return s / 12;
+}
+function mealDayName(key) {
+  return new Date(key+"T00:00:00").toLocaleDateString("en-ZA", { weekday:"long", day:"numeric", month:"long" });
+}
+function mealDaysAway(key) {
+  const n = Math.round((new Date(key+"T00:00:00") - new Date(todayStr()+"T00:00:00")) / 86400000);
+  if (n === 0) return "today";
+  if (n === 1) return "tomorrow";
+  if (n < 0)   return Math.abs(n) + " days ago";
+  return "in " + n + " days";
+}
+
+function mealShopMonthShift(n) { mealShopMonth.setMonth(mealShopMonth.getMonth()+n); renderMealShop(); }
+function mealShopMonthToday() { mealShopMonth = new Date(); renderMealShop(); }
+function mealToggleTrip(id) { mealOpenTrip = (mealOpenTrip === id) ? null : id; renderMealShop(); }
+
+// One full 4 week cycle: both bulk shops plus four fresh top ups. This is the
+// number that matters, because the plan runs on 28 days, not on calendar months.
+function mealCycleCost() { return mealSub("ww") + mealSub("ch") + 4 * mealSub("tu"); }
+
+function renderMealShop() {
+  // First open: land on a month that actually has shops in it.
+  if (!mealShopInit) {
+    mealShopInit = true;
+    const t = new Date(todayStr()+"T00:00:00");
+    mealShopMonth = new Date(t.getFullYear(), t.getMonth(), 1);
+    if (!mealTripsForMonth(t.getFullYear(), t.getMonth()).length) {
+      const n = mealNextTrips();
+      if (n.length) { const d = new Date(n[0].date+"T00:00:00"); mealShopMonth = new Date(d.getFullYear(), d.getMonth(), 1); }
+    }
+  }
+  const y = mealShopMonth.getFullYear(), m = mealShopMonth.getMonth();
+  const MN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("sh-monthlabel").textContent = MN[m] + " " + y;
+
+  // ── next shop ──
+  const nxt = mealNextTrips();
+  let nh = "";
+  if (!nxt.length) {
+    nh = '<div style="color:var(--text-muted);font-size:13px;">Set a plan start date on the Meal Calendar and the shop schedule builds itself.</div>';
+  } else {
+    const dn = mealDayName(nxt[0].date), away = mealDaysAway(nxt[0].date);
+    let tot = 0; nxt.forEach(function(t){ tot += mealTripTotal(t); });
+    nh = '<div style="font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;">Next shop</div>' +
+      '<div style="font-size:22px;font-family:\'DM Serif Display\',serif;">' + dn + '</div>' +
+      '<div style="font-size:13px;color:var(--accent);margin-top:2px;">' + away + '  ·  R' + tot.toFixed(2) + ' across ' + nxt.length + ' stop' + (nxt.length>1?"s":"") + '</div>' +
+      '<div style="margin-top:12px;">';
+    nxt.forEach(function(t){
+      const d = mealTripDone(t);
+      nh += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">' +
+        '<div><div style="font-size:14px;font-weight:600;">' + t.store + '</div>' +
+        '<div style="font-size:11.5px;color:var(--text-muted);">' + t.label + '</div></div>' +
+        '<div style="text-align:right;"><div style="font-family:\'DM Mono\',monospace;font-size:13px;">R' + mealTripTotal(t).toFixed(2) + '</div>' +
+        '<div style="font-size:10.5px;color:' + (d.all?"var(--green)":"var(--text-dim)") + ';">' + (d.all?"done":(d.n + " of " + d.of)) + '</div></div></div>';
+    });
+    nh += "</div>";
+  }
+  document.getElementById("sh-next").innerHTML = nh;
+
+  // ── month schedule ──
+  const trips = mealTripsForMonth(y, m);
+  let monthTotal = 0; trips.forEach(function(t){ monthTotal += mealTripTotal(t); });
+  const today = todayStr();
+  let th = "";
+  if (!trips.length) {
+    th = '<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No shops fall in this month. Either the plan starts later, or you are looking before your start date.</div>';
+  }
+  trips.forEach(function(t){
+    const open = (mealOpenTrip === t.id), d = mealTripDone(t), tot = mealTripTotal(t);
+    const past = t.date < today, isToday = t.date === today;
+    th += '<div class="sh-trip ' + (open?"open":"") + (isToday?" is-today":"") + (d.all?" done":"") + '">' +
+      '<div class="sh-trip-head" onclick="mealToggleTrip(\'' + t.id + '\')">' +
+        '<div class="sh-trip-date' + (past && !d.all ? " late":"") + '">' +
+          '<b>' + new Date(t.date+"T00:00:00").getDate() + '</b>' +
+          '<span>' + new Date(t.date+"T00:00:00").toLocaleDateString("en-ZA",{weekday:"short"}) + '</span></div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div class="sh-trip-title">' + t.store + '  <span class="rc-pill' + (t.list==="tu"?"":" acc") + '">' + (t.list==="tu" ? ("Week " + t.wk) : ("Cycle " + t.cyc + " bulk")) + '</span></div>' +
+          '<div class="sh-trip-sub">' + t.label + '</div></div>' +
+        '<div style="text-align:right;white-space:nowrap;">' +
+          '<div style="font-family:\'DM Mono\',monospace;font-size:13.5px;">R' + tot.toFixed(2) + '</div>' +
+          '<div style="font-size:10.5px;color:' + (d.all?"var(--green)":"var(--text-dim)") + ';">' + (d.all?"✓ done":(d.n + " of " + d.of)) + '</div></div>' +
+        '<div class="sh-chev">' + (open?"▴":"▾") + '</div>' +
+      '</div>';
+    if (open) {
+      const it = MEAL_SHOP[t.list].items, chk = mealChecks();
+      let rows = "";
+      for (let i = 0; i < it.length; i++) {
+        const k = t.id + ":" + i, on = !!chk[k], p = mealPrice(t.list, i), line = it[i][2] * p;
+        rows += '<div class="sh-row ' + (on?"on":"") + '">' +
+          '<div class="ck-box" style="cursor:pointer;' + (on?"background:var(--green);border-color:var(--green);color:var(--bg);":"") + '" onclick="mealTick(\'' + t.id + '\',' + i + ')">&#10003;</div>' +
+          '<div class="nm" onclick="mealTick(\'' + t.id + '\',' + i + ')" style="cursor:pointer;">' + it[i][0] + "<small>" + it[i][1] + " &times; " + it[i][2] + "</small></div>" +
+          '<input class="pi" type="number" step="0.01" inputmode="decimal" value="' + p.toFixed(2) + '" onchange="mealSetPrice(\'' + t.list + '\',' + i + ',this.value)">' +
+          '<div class="ln">R' + line.toFixed(2) + "</div></div>";
+      }
+      th += '<div class="sh-trip-body"><div class="sh-trip-note">' + t.sub + '</div>' + rows +
+        '<div class="sh-total"><span>' + t.store + ' total</span><span>R' + tot.toFixed(2) + '</span></div>' +
+        '<div class="btn-row" style="margin-top:12px;"><button class="btn-secondary" onclick="mealTickAll(\'' + t.id + '\',\'' + t.list + '\')">' +
+        (d.all ? "Untick everything" : "Tick everything, shop done") + '</button></div></div>';
+    }
+    th += "</div>";
+  });
+  document.getElementById("sh-schedule").innerHTML = th;
+
+  // ── budget: measured on the 4 week cycle, not the calendar month ──
+  const cycle = mealCycleCost(), avg = mealYearAverage();
+  document.getElementById("sh-total").textContent = "R" + cycle.toFixed(2);
+  const bar = document.getElementById("sh-bar");
+  bar.style.width = Math.min(100, cycle / MEAL_BUDGET * 100) + "%";
+  bar.classList.toggle("over", cycle > MEAL_BUDGET);
+  document.getElementById("sh-left").innerHTML = (cycle <= MEAL_BUDGET)
+    ? '<span style="color:var(--green);font-weight:600;">R' + (MEAL_BUDGET-cycle).toFixed(2) + " left over per cycle</span>"
+    : '<span style="color:var(--red);font-weight:600;">R' + (cycle-MEAL_BUDGET).toFixed(2) + " over.</span> Fastest fix is dropping the lamb, R184 back.";
+
+  const bulkCount = trips.filter(function(t){ return t.list !== "tu"; }).length / 2;
+  const freshCount = trips.filter(function(t){ return t.list === "tu"; }).length;
+  let why = "";
+  if (bulkCount >= 2) why = " Two bulk shops land in this calendar month, which is why it reads high. It evens out next month.";
+  else if (bulkCount === 0) why = " No bulk shop falls in this calendar month, which is why it reads low.";
+  document.getElementById("sh-avg").innerHTML =
+    "<b>" + MN[m] + ":</b> R" + monthTotal.toFixed(2) + " across " + bulkCount + " bulk shop" + (bulkCount===1?"":"s") +
+    " and " + freshCount + " fresh top up" + (freshCount===1?"":"s") + "." + why +
+    "<br><b>Twelve month average: R" + avg.toFixed(2) + " a month.</b> The plan runs on 28 day cycles, which do not line up with calendar months, " +
+    "so judge yourself on the cycle figure above and the yearly average, not on a single month.";
+}
+
+function mealTick(tripId, i) {
+  const c = mealChecks(), k = tripId + ":" + i;
+  if (c[k]) delete c[k]; else c[k] = true;
+  setData("meal_checks", c); renderMealShop();
+}
+function mealTickAll(tripId, list) {
+  const c = mealChecks(), it = MEAL_SHOP[list].items;
+  let all = true; for (let i = 0; i < it.length; i++) if (!c[tripId+":"+i]) { all = false; break; }
+  for (let i = 0; i < it.length; i++) { if (all) delete c[tripId+":"+i]; else c[tripId+":"+i] = true; }
+  setData("meal_checks", c); renderMealShop();
+}
+function mealSetPrice(list, i, v) {
   const n = parseFloat(v);
   if (isNaN(n) || n < 0) { renderMealShop(); return; }
-  const p = mealPrices(); p[mealShopCur + i] = n; setData("meal_prices", p); renderMealShop();
+  const p = mealPrices(); p[list+i] = n; setData("meal_prices", p); renderMealShop();
 }
 function mealResetShop() {
-  if (!confirm("Clear every tick and every price you have typed in?")) return;
+  if (!confirm("Clear every tick on every shop, and every price you have typed in?")) return;
   setData("meal_checks", {}); setData("meal_prices", {}); renderMealShop();
 }
 
