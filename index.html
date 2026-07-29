@@ -636,6 +636,178 @@
   .card-title.collapsible { cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
   .card-title.collapsible:hover { color: var(--text); }
   .card-chevron { font-size: 11px; color: var(--text-dim); transition: transform 0.2s; margin-left: 8px; }
+
+  /* ══════════════════════════════════════
+     MEAL PLAN
+     ══════════════════════════════════════ */
+  .mc-bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:18px; }
+  .mc-datebox { display:flex; align-items:center; gap:8px; background:var(--surface2);
+    border:1px solid var(--border); border-radius:var(--radius-sm); padding:7px 12px; }
+  .mc-datebox label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--text-dim); }
+  .mc-datebox input { background:none; border:none; color:var(--accent); font-family:'DM Mono',monospace;
+    font-size:13px; outline:none; cursor:pointer; }
+  .mc-navbtn { background:var(--surface2); border:1px solid var(--border); color:var(--text-muted);
+    border-radius:var(--radius-sm); padding:7px 13px; cursor:pointer; font-size:13px; transition:all .15s; }
+  .mc-navbtn:hover { color:var(--accent); border-color:var(--accent-dim); }
+  .mc-monthlabel { font-family:'DM Serif Display',serif; font-size:19px; min-width:170px; text-align:center; }
+  .mc-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
+  .mc-stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; }
+  .mc-stat .lbl { font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--text-dim); margin-bottom:6px; }
+  .mc-stat .val { font-size:21px; font-weight:600; color:var(--text); line-height:1.1; }
+  .mc-stat .val.acc { color:var(--accent); }
+  .mc-stat .sub2 { font-size:11px; color:var(--text-muted); margin-top:3px; }
+  .mc-day { border-radius:8px; min-height:96px; padding:6px 5px; background:var(--surface);
+    border:1px solid var(--border); cursor:pointer; transition:all .12s; display:flex; flex-direction:column; gap:3px; }
+  .mc-day:hover { border-color:var(--accent-dim); background:var(--surface2); }
+  .mc-day.empty { opacity:0; pointer-events:none; border:none; background:none; }
+  .mc-day.off { opacity:.28; cursor:default; }
+  .mc-day.off:hover { border-color:var(--border); background:var(--surface); }
+  .mc-day.is-today { border-color:var(--accent) !important; }
+  .mc-day .num { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); line-height:1; }
+  .mc-day.is-today .num { color:var(--accent); font-weight:600; }
+  .mc-slot { font-size:9.5px; line-height:1.25; border-radius:4px; padding:3px 4px; background:var(--surface2);
+    color:var(--text-muted); border-left:2px solid var(--text-dim); overflow:hidden; }
+  .mc-slot b { font-family:'DM Mono',monospace; font-size:8.5px; opacity:.75; margin-right:3px; }
+  .mc-slot.lunch { border-left-color:var(--blue); }
+  .mc-slot.dinner { border-left-color:var(--accent-dim); }
+  .mc-slot.eaten { background:rgba(106,184,122,.14); color:var(--green); border-left-color:var(--green); }
+  .mc-slot.skip { background:rgba(200,180,104,.13); color:var(--yellow); border-left-color:var(--yellow);
+    text-decoration:line-through; }
+  .mc-day .noteflag { position:absolute; }
+  .mc-legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:14px; font-size:11px; color:var(--text-muted); }
+  .mc-legend span i { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; }
+  .mc-order { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:6px; }
+  .mc-order div label { display:block; font-family:'DM Mono',monospace; font-size:9.5px;
+    letter-spacing:.07em; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+  .mc-order select, .mc-sel { width:100%; background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); border-radius:var(--radius-sm); padding:7px 8px; font-family:'DM Sans',sans-serif;
+    font-size:12px; outline:none; cursor:pointer; }
+  /* modal internals */
+  .mm-sec { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:14px; margin-bottom:12px; }
+  .mm-sec h4 { font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--text-dim); margin-bottom:6px; font-weight:400; }
+  .mm-sec .nm { font-size:15px; font-weight:600; margin-bottom:8px; }
+  .mm-split { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+  .mm-split > div { background:var(--surface3); border-radius:6px; padding:10px; }
+  .mm-split .who { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:5px; }
+  .mm-split .por { font-size:11.5px; line-height:1.5; color:var(--text); }
+  .mm-split .mac { font-size:10px; color:var(--text-muted); margin-top:6px; font-family:'DM Mono',monospace; }
+  .mm-btns { display:flex; gap:7px; margin-top:10px; }
+  .mm-btns button { flex:1; padding:9px 4px; border-radius:var(--radius-sm); border:1px solid var(--border);
+    background:var(--surface3); color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:12px;
+    cursor:pointer; transition:all .15s; }
+  .mm-btns button:hover { color:var(--text); }
+  .mm-btns button.on-eat { background:rgba(106,184,122,.18); color:var(--green); border-color:var(--green); }
+  .mm-btns button.on-skip { background:rgba(200,180,104,.18); color:var(--yellow); border-color:var(--yellow); }
+  .mm-note { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm);
+    color:var(--text); padding:10px; font-family:'DM Sans',sans-serif; font-size:13px; resize:vertical;
+    min-height:62px; outline:none; }
+  .mm-note:focus { border-color:var(--accent-dim); }
+  .mm-trick { font-size:11.5px; color:var(--text-muted); line-height:1.5; margin-top:8px;
+    border-left:2px solid var(--blue); padding-left:9px; }
+  /* recipes */
+  .rc-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px; margin-bottom:14px; }
+  .rc-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; }
+  .rc-head h3 { font-family:'DM Serif Display',serif; font-size:19px; letter-spacing:-.3px; }
+  .rc-pills { margin-top:6px; }
+  .rc-pill { display:inline-block; background:var(--surface2); border:1px solid var(--border);
+    border-radius:20px; padding:3px 10px; font-size:10.5px; color:var(--text-muted); margin:0 5px 5px 0;
+    font-family:'DM Mono',monospace; }
+  .rc-pill.acc { background:var(--accent-glow); color:var(--accent); border-color:var(--accent-dim); }
+  .rc-cook { padding:9px 16px; background:var(--accent-glow); border:1px solid var(--accent-dim);
+    border-radius:var(--radius-sm); color:var(--accent); font-family:'DM Sans',sans-serif; font-size:13px;
+    cursor:pointer; white-space:nowrap; transition:all .15s; }
+  .rc-cook:hover { background:var(--accent); color:var(--bg); }
+  .rc-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:22px; margin-top:16px; }
+  .rc-grid h5 { font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--text-dim); margin-bottom:8px; font-weight:400; }
+  .rc-ings { list-style:none; }
+  .rc-ings li { font-size:12.5px; padding:4px 0 4px 14px; position:relative; color:var(--text); border-bottom:1px solid var(--border); }
+  .rc-ings li:last-child { border-bottom:none; }
+  .rc-ings li:before { content:''; position:absolute; left:0; top:11px; width:5px; height:5px;
+    border-radius:50%; background:var(--accent-dim); }
+  .rc-steps { list-style:none; counter-reset:s; }
+  .rc-steps li { counter-increment:s; font-size:13px; line-height:1.6; padding:8px 0 8px 30px;
+    position:relative; border-bottom:1px solid var(--border); }
+  .rc-steps li:last-child { border-bottom:none; }
+  .rc-steps li:before { content:counter(s); position:absolute; left:0; top:9px; width:20px; height:20px;
+    border-radius:50%; background:var(--surface3); color:var(--accent); font-family:'DM Mono',monospace;
+    font-size:10px; display:flex; align-items:center; justify-content:center; }
+  .rc-steps li.packstep:before { background:var(--blue); color:var(--bg); }
+  .rc-steps li.packstep { color:var(--blue); }
+  .rc-note { font-size:12px; color:var(--text-muted); font-style:italic; margin-top:14px;
+    border-left:2px solid var(--accent-dim); padding-left:10px; line-height:1.55; }
+  /* cook mode */
+  .ck-overlay { display:none; position:fixed; inset:0; background:var(--bg); z-index:400; flex-direction:column; }
+  .ck-overlay.open { display:flex; }
+  .ck-head { background:var(--surface); border-bottom:1px solid var(--border); padding:16px 22px;
+    display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .ck-head .t { font-family:'DM Serif Display',serif; font-size:18px; }
+  .ck-head .m { font-family:'DM Mono',monospace; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
+  .ck-body { flex:1; overflow-y:auto; padding:26px 22px; max-width:820px; margin:0 auto; width:100%; }
+  .ck-dots { display:flex; gap:5px; margin-bottom:20px; }
+  .ck-dots i { flex:1; height:4px; border-radius:2px; background:var(--surface3); }
+  .ck-dots i.done { background:var(--green); }
+  .ck-dots i.cur { background:var(--accent); }
+  .ck-step { font-size:23px; line-height:1.55; font-weight:500; }
+  .ck-step.pack { color:var(--blue); }
+  .ck-timer { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:22px; text-align:center; margin-top:24px; }
+  .ck-timer .t { font-family:'DM Mono',monospace; font-size:44px; font-weight:500; letter-spacing:-1px; }
+  .ck-timer.run .t { color:var(--accent); }
+  .ck-timer.done { border-color:var(--green); }
+  .ck-timer.done .t { color:var(--green); }
+  .ck-foot { padding:16px 22px 22px; display:flex; gap:12px; max-width:820px; margin:0 auto; width:100%; }
+  .ck-foot button { flex:1; padding:15px; border-radius:var(--radius-sm); font-family:'DM Sans',sans-serif;
+    font-size:15px; cursor:pointer; border:1px solid var(--border); }
+  .ck-foot .prev { background:var(--surface2); color:var(--text-muted); }
+  .ck-foot .next { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+  .ck-ing { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border);
+    cursor:pointer; font-size:15px; }
+  .ck-ing:last-child { border-bottom:none; }
+  .ck-ing.on { color:var(--text-dim); text-decoration:line-through; }
+  .ck-box { width:22px; height:22px; min-width:22px; border:1px solid var(--border); border-radius:5px;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:transparent; }
+  .ck-ing.on .ck-box { background:var(--green); border-color:var(--green); color:var(--bg); }
+  /* shopping */
+  .sh-tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .sh-tabs button { padding:9px 16px; background:var(--surface2); border:1px solid var(--border);
+    border-radius:var(--radius-sm); color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:12.5px;
+    cursor:pointer; transition:all .15s; }
+  .sh-tabs button.on { background:var(--accent-glow); color:var(--accent); border-color:var(--accent-dim); }
+  .sh-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .sh-row:last-of-type { border-bottom:none; }
+  .sh-row.on .nm { color:var(--text-dim); text-decoration:line-through; }
+  .sh-row .nm { flex:1; font-size:13px; }
+  .sh-row .nm small { display:block; font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); margin-top:2px; }
+  .sh-row .pi { width:82px; background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    border-radius:6px; padding:6px 8px; font-family:'DM Mono',monospace; font-size:12px; text-align:right; outline:none; }
+  .sh-row .pi:focus { border-color:var(--accent-dim); color:var(--accent); }
+  .sh-row .ln { width:88px; text-align:right; font-family:'DM Mono',monospace; font-size:12.5px; color:var(--text-muted); }
+  .sh-total { display:flex; justify-content:space-between; padding:14px 0 0; margin-top:6px;
+    border-top:1px solid var(--accent-dim); font-size:14px; font-weight:600; }
+  .sh-bar { height:12px; background:var(--surface3); border-radius:6px; overflow:hidden; margin:10px 0 6px; }
+  .sh-bar i { display:block; height:100%; background:var(--green); transition:width .3s; }
+  .sh-bar i.over { background:var(--red); }
+  .mp-warn { background:rgba(200,180,104,.09); border-left:3px solid var(--yellow); border-radius:6px;
+    padding:11px 14px; font-size:12.5px; color:var(--text-muted); line-height:1.55; margin-top:14px; }
+  .mp-tip { background:rgba(104,146,200,.09); border-left:3px solid var(--blue); border-radius:6px;
+    padding:11px 14px; font-size:12.5px; color:var(--text-muted); line-height:1.55; margin-top:14px; }
+  @media (max-width: 900px) {
+    .mc-stats { grid-template-columns:1fr 1fr; }
+    .rc-grid { grid-template-columns:1fr; gap:16px; }
+    .mc-order { grid-template-columns:1fr 1fr 1fr; }
+    .mc-day { min-height:74px; }
+    .mc-slot { font-size:8.5px; }
+    .ck-step { font-size:19px; }
+    .mm-split { grid-template-columns:1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -709,6 +881,20 @@
     <div class="section-items" id="section-tools">
       <div class="nav-item" onclick="nav('fuel')">
         <span class="icon">⛽</span> <span class="nav-label">Fuel Calculator</span>
+      </div>
+    </div>
+    <div class="sidebar-section collapsible-section" onclick="toggleSection(this)">
+      <span class="nav-label">Food</span><span class="section-chevron">▾</span>
+    </div>
+    <div class="section-items" id="section-food">
+      <div class="nav-item" onclick="nav('mealcal')">
+        <span class="icon">🍽️</span> <span class="nav-label">Meal Calendar</span>
+      </div>
+      <div class="nav-item" onclick="nav('recipes')">
+        <span class="icon">📖</span> <span class="nav-label">Recipes</span>
+      </div>
+      <div class="nav-item" onclick="nav('mealshop')">
+        <span class="icon">🛒</span> <span class="nav-label">Shopping</span>
       </div>
     </div>
     <div class="sidebar-section collapsible-section" onclick="toggleSection(this)">
@@ -1229,6 +1415,122 @@
       </div>
     </div><!-- end page-fuel -->
 
+
+    <!-- ══ MEAL CALENDAR ══ -->
+    <div class="page" id="page-mealcal">
+      <div class="page-header">
+        <div>
+          <h2>Meal Calendar</h2>
+          <p>Every lunch and every supper for the month. Tap a day to log it.</p>
+        </div>
+      </div>
+
+      <div class="mc-bar">
+        <div class="mc-datebox">
+          <label for="mc-start">Plan starts</label>
+          <input type="date" id="mc-start" onchange="mealSetStart(this.value)">
+        </div>
+        <button class="mc-navbtn" onclick="mealMonthShift(-1)">&#9664;</button>
+        <div class="mc-monthlabel" id="mc-monthlabel"></div>
+        <button class="mc-navbtn" onclick="mealMonthShift(1)">&#9654;</button>
+        <button class="mc-navbtn" onclick="mealMonthToday()">Today</button>
+      </div>
+
+      <div class="mp-warn" id="mc-startnote" style="display:none;margin-top:0;margin-bottom:18px;"></div>
+
+      <div class="mc-stats" id="mc-stats"></div>
+
+      <div class="card">
+        <div id="mc-grid"></div>
+        <div class="mc-legend">
+          <span><i style="background:var(--blue)"></i>Lunch</span>
+          <span><i style="background:var(--accent-dim)"></i>Supper</span>
+          <span><i style="background:var(--green)"></i>Eaten</span>
+          <span><i style="background:var(--yellow)"></i>Skipped or takeout</span>
+          <span style="color:var(--text-dim)">Lunch is always the night before's supper</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">Weeknight order</div>
+        <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;">
+          Sunday is locked to the batch cook, because the whole week depends on it. Everything else you can move.
+          Change a supper here and the following day's lunch changes with it.
+        </p>
+        <div class="mc-order" id="mc-order"></div>
+        <div class="mp-tip">
+          Braai rotates on a four week cycle counted from your start date: lamb, rump, braai chicken, braai chicken.
+          Pizza runs on weeks one and three. On the other two weeks that night becomes the toastie fallback.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ RECIPES ══ -->
+    <div class="page" id="page-recipes">
+      <div class="page-header">
+        <div>
+          <h2>Recipes</h2>
+          <p>Full method for every supper and every lunch. Cook mode walks you through one step at a time.</p>
+        </div>
+      </div>
+      <div class="sh-tabs">
+        <button class="on" id="rt-sup" onclick="mealRecipeTab('sup')">Suppers</button>
+        <button id="rt-lun" onclick="mealRecipeTab('lun')">Lunches</button>
+      </div>
+      <div id="rc-list"></div>
+    </div>
+
+    <!-- ══ MEAL SHOPPING ══ -->
+    <div class="page" id="page-mealshop">
+      <div class="page-header">
+        <div>
+          <h2>Shopping</h2>
+          <p>Meat from Woolworths, everything else from Checkers. Type in what the till actually said.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Monthly food budget</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-size:30px;font-weight:600;" id="sh-total">R0</span>
+          <span style="font-size:12px;color:var(--text-muted);">of R4 100</span>
+        </div>
+        <div class="sh-bar"><i id="sh-bar" style="width:0"></i></div>
+        <div style="font-size:12.5px;" id="sh-left"></div>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:10px;line-height:1.5;">
+          Prices are July 2026 estimates and will drift. Tap any price to correct it. Weekly fresh is counted at 4.35 weeks.
+        </p>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="mealResetShop()">Reset ticks and prices</button>
+        </div>
+      </div>
+
+      <div class="sh-tabs">
+        <button class="on" id="st-ww" onclick="mealShopTab('ww')">Woolworths meat</button>
+        <button id="st-ch" onclick="mealShopTab('ch')">Checkers bulk</button>
+        <button id="st-tu" onclick="mealShopTab('tu')">Weekly fresh</button>
+      </div>
+      <div class="card" id="sh-card"></div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">Targets this plan is built to</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <tr><td style="padding:7px 0;border-bottom:1px solid var(--border);color:var(--text-muted);">You, 88 to 82 kg over 2 months</td>
+              <td style="padding:7px 0;border-bottom:1px solid var(--border);text-align:right;font-family:'DM Mono',monospace;">2 120 kcal &middot; 150 g protein</td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid var(--border);color:var(--text-muted);">Her, 50 to 55 kg over 20 weeks</td>
+              <td style="padding:7px 0;border-bottom:1px solid var(--border);text-align:right;font-family:'DM Mono',monospace;">2 200 kcal &middot; 90 g protein</td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid var(--border);color:var(--text-muted);">Protein delivered per month</td>
+              <td style="padding:7px 0;border-bottom:1px solid var(--border);text-align:right;font-family:'DM Mono',monospace;">4 987 g against 4 864 needed</td></tr>
+          <tr><td style="padding:7px 0;color:var(--text-muted);">Shake, budgeted separately</td>
+              <td style="padding:7px 0;text-align:right;font-family:'DM Mono',monospace;">40 g each &middot; you water, her milk</td></tr>
+        </table>
+        <div class="mp-warn">
+          Sunflower oil is R6.06 per 1 000 kcal, olive oil R15.91, butter R22.22. That is why butter is for bread only
+          and there is no olive oil on the list. If you go over budget, the fastest single cut is the lamb, which is R184.
+        </div>
+      </div>
+    </div>
+
   </div><!-- end main -->
 </div><!-- end shell -->
 
@@ -1564,6 +1866,9 @@ function nav(page) {
   if (page === 'settings')   renderSettings();
   if (page === 'budget')     renderBudget();
   if (page === 'fuel')       calcFuel();
+  if (page === 'mealcal')    renderMealCal();
+  if (page === 'recipes')    renderRecipesPage();
+  if (page === 'mealshop')   { mealShopTab(mealShopCur); }
   // Close sidebar on mobile after navigation
   if (isMobile()) closeMobileSidebar();
   // Hide FAB when not on budget page
@@ -3506,6 +3811,576 @@ function calcFuel() {
   resultEl.style.display = 'block';
   emptyEl.style.display  = 'none';
 }
+
+// ══════════════════════════════════════════════════════════════
+// MEAL PLAN
+// ──────────────────────────────────────────────────────────────
+// EDIT ZONE. Everything between here and END EDIT ZONE is the
+// monthly plan: recipes, lunches, prices. Replace this block each
+// month after the review. Nothing below END EDIT ZONE needs to change.
+// Firebase keys used: meal_start, meal_order, meal_log, meal_checks,
+// meal_prices. Nothing else in the tracker is touched.
+// ══════════════════════════════════════════════════════════════
+
+const MEAL_R = {
+  "1": { name:"Lentil and beef meatballs in tomato sauce", short:"Meatballs", time:"45 min",
+    tag:"Sunday batch cook. Feeds Sunday supper, Monday lunch, one midweek supper and the lunch after it.",
+    him:"6 meatballs, 120 g dry pasta, 30 g cheddar", her:"3 meatballs, 110 g dry pasta, 40 g cheddar, 15 g butter through the pasta",
+    hk:"1 010 kcal, 63 g protein", rk:"985 kcal, 47 g protein",
+    ings:["450 g beef mince","250 g dry brown lentils","1 egg","2 onions","3 garlic cloves","1 carrot, grated","4 tins chopped tomato","2 sachets tomato paste","Pasta","Cheddar"],
+    steps:[
+      {t:"Boil 250 g of dry lentils. They need 25 minutes. Start them with kettle water, it is faster.",m:25},
+      {t:"While they boil: dice the onions fine, crush the garlic, grate the carrot. One knife session for the whole week.",m:0},
+      {t:"Drain the lentils and spread them flat on a tray. They must be completely cool before they touch the mince, or the mix turns to paste.",m:10},
+      {t:"Mix the mince, cooled lentils, egg, half a grated onion, salt and pepper. Roll into balls. Wet hands stop the sticking.",m:0},
+      {t:"Brown the meatballs hard in sunflower oil, in two batches. Do not crowd the pan and do not touch them for the first three minutes. This browning is where all the flavour comes from.",m:8},
+      {t:"Remove the balls. Same pan: onion and carrot for ten minutes until sweet and browned at the edges. Garlic one minute. Tomato paste one minute.",m:12},
+      {t:"Tinned tomatoes in, meatballs back in. Simmer with the lid off for 20 minutes. Boil the pasta in the last 10.",m:20},
+      {t:"PACK TOMORROW'S LUNCH NOW, before you sit down. You: 6 meatballs, 120 g dry pasta cooked, sauce over, 30 g cheddar in the container. Her: 3 meatballs, 110 g pasta, 40 g cheddar, 15 g butter through the pasta.",m:0},
+      {t:"Half the remaining batch into containers and into the freezer. That is your midweek supper and the lunch after it already done.",m:0}],
+    note:"The lentils are the budget engine of the whole plan. At 35 percent of the mix nobody detects them, and they carry the fibre that white pasta does not." },
+
+  "1R":{ name:"Meatballs from the freezer", short:"Meatballs", time:"15 min",
+    tag:"Pure reheat. Sunday already did the work.",
+    him:"6 meatballs, 120 g dry pasta, 30 g cheddar", her:"3 meatballs, 110 g dry pasta, 40 g cheddar, 15 g butter",
+    hk:"1 010 kcal, 63 g protein", rk:"985 kcal, 47 g protein",
+    ings:["1 frozen container of meatballs and sauce","Pasta","Cheddar","Butter for her portion"],
+    steps:[
+      {t:"The container should have come out of the freezer into the fridge last night. If it did not, sit it in a bowl of warm water while the pasta boils.",m:0},
+      {t:"Boil fresh pasta. Never freeze cooked pasta, it comes back grey and soft.",m:10},
+      {t:"Reheat the sauce gently in a pan, not the microwave. Ten minutes on low, lid off.",m:10},
+      {t:"PACK TOMORROW'S LUNCH NOW. Same portions as Sunday. Sauce generously over the pasta, cheddar into the container.",m:0}],
+    note:"This is the cheapest night of the week in both time and money, and it exists purely because you did the Sunday block." },
+
+  "2": { name:"Creamy chicken and spinach pasta", short:"Chicken pasta", time:"30 min",
+    tag:"The recipe that fixes dry chicken. Never freeze it, cream splits.",
+    him:"200 g chicken, 120 g dry pasta, 15 g butter through it", her:"130 g chicken, 110 g dry pasta, extra 30 ml cream, 40 g cheddar",
+    hk:"1 020 kcal, 63 g protein", rk:"950 kcal, 45 g protein",
+    ings:["2 large chicken breasts","1 onion","2 garlic cloves","250 ml cream","150 g baby spinach","Pasta","40 g cheddar","Knob of butter","Half a lemon"],
+    steps:[
+      {t:"Pasta water on first. Slice the breasts across into 1 cm strips before the pan even heats. Thin strips cook in three minutes and physically cannot dry out.",m:0},
+      {t:"Sear the strips in butter, 90 seconds a side. Take them out while still slightly underdone. They finish later in the sauce.",m:3},
+      {t:"Pasta into the boiling water now. Same pan as the chicken: onion six minutes, garlic one.",m:7},
+      {t:"Cream in, reduce three minutes. Chicken and spinach back in, lid on for two minutes.",m:5},
+      {t:"Cheddar in, then lemon juice off the heat. Toss through the drained pasta.",m:0},
+      {t:"PACK TOMORROW'S LUNCH NOW. You: 200 g of the chicken, 120 g dry pasta cooked, sauce, 15 g butter. Her: 130 g chicken, 110 g pasta, extra 30 ml cream, 40 g cheddar. A tablespoon of milk into each container before the lid goes on, or it reheats claggy.",m:0}],
+    note:"The breast finishes in liquid, so it cannot overcook the way a grilled breast does. This is the single most reliable chicken method in the plan." },
+
+  "3": { name:"Beef and lentil burgers with air fryer wedges", short:"Burgers", time:"30 min",
+    tag:"Patties made on Sunday, cooked from frozen. No thawing.",
+    him:"2 patties, 1 roll, 200 g wedges", her:"1 patty, 1 roll, cheddar slice, 150 g wedges",
+    hk:"1 000 kcal, 58 g protein", rk:"950 kcal, 32 g protein",
+    ings:["Frozen patties from Sunday","4 potatoes","Burger rolls","Cheddar slices","Mayonnaise","1 tomato, sliced","Sunflower oil"],
+    steps:[
+      {t:"Wedges first, skins on: cut, toss in sunflower oil and salt, air fryer 200 for 25 minutes. The skins are three times the fibre.",m:25},
+      {t:"Cook three extra patties, not two. One extra each is tomorrow's lunch, and the third covers the one that falls apart.",m:0},
+      {t:"Patties straight from the freezer into a hot dry pan. Four minutes a side. No oil, the mince carries its own fat.",m:8},
+      {t:"Cheddar on top for the last minute with the lid on. Build: roll, mayonnaise, patty, tomato.",m:1},
+      {t:"PACK TOMORROW'S LUNCH NOW. You: 2 patties in a roll, mayonnaise, 200 g wedges in the second container. Her: 1 patty, mayonnaise, cheddar slice, 150 g wedges. Tomato in a separate tub or the roll is wet by ten.",m:0}],
+    note:"Press Sunday's patties thin and wide, not thick. Thick patties from frozen burn on the outside before the middle is cooked." },
+
+  "4": { name:"Tray roast chicken, butternut and broccoli", short:"Tray roast", time:"40 min",
+    tag:"Mostly oven time. Two extra breasts here become the chicken mayo lunch.",
+    him:"1 large breast, 250 g butternut, broccoli", her:"1 breast, 200 g butternut, broccoli, extra feta and butter",
+    hk:"965 kcal, 58 g protein", rk:"950 kcal, 40 g protein",
+    ings:["4 chicken breasts, 2 for tonight and 2 for lunch","500 g butternut, cubed","Half a cauliflower","300 g broccoli","4 whole garlic cloves","Sunflower oil","Butter","50 g feta","Half a lemon"],
+    steps:[
+      {t:"Oven to 220. Butternut and cauliflower cubed, oiled, salted, onto the tray. In for 15 minutes on their own.",m:15},
+      {t:"Butterfly all four breasts flat. Two are for tonight, two are for tomorrow's sandwiches. Onto the tray with butter on each and the whole garlic cloves. Twelve minutes only. That is the entire trick.",m:12},
+      {t:"Broccoli onto the tray for the final 8 minutes, so it roasts rather than steams.",m:8},
+      {t:"Feta crumbled over, lemon squeezed over everything. Serve two breasts.",m:0},
+      {t:"The two spare breasts cool with the lid off. Do not skip the cooling. Warm chicken sealed in a box sweats and goes slimy by morning.",m:15},
+      {t:"PACK TOMORROW'S LUNCH NOW. Chop the chicken, do not slice it. Mix with mayonnaise in a bowl first. You: 180 g chicken, 30 g mayonnaise, 4 buttered slices. Her: 100 g chicken, 40 g mayonnaise, a cheddar slice, 4 buttered slices. Butter both faces of every slice.",m:0}],
+    note:"Twelve minutes for the breasts. Set the timer and trust it. Every minute past that is moisture leaving the meat." },
+
+  "5": { name:"Ham and bacon pizza", short:"Pizza", time:"25 min",
+    tag:"Twice a month. Cold pizza is the next day's lunch and needs nothing done to it.",
+    him:"Half a large pizza, 250 ml milk", her:"Half a large pizza, extra mozzarella",
+    hk:"990 kcal, 45 g protein", rk:"1 000 kcal, 40 g protein",
+    ings:["2 pizza bases","Tomato paste or passata","200 g grated mozzarella, fine from frozen","100 g shaved ham","100 g bacon","Half an onion","Handful of baby spinach"],
+    steps:[
+      {t:"Oven to 240, hottest shelf. It takes longer to heat than the topping takes to make, so switch it on before anything else.",m:0},
+      {t:"Bacon and onion into a dry pan together until the onion is soft and browned.",m:6},
+      {t:"Build: thin layer of passata. A spinach layer under the cheese, where it vanishes completely. Then mozzarella, ham, bacon, onion.",m:0},
+      {t:"Hottest shelf, 10 to 12 minutes, until the edges catch colour.",m:11},
+      {t:"PACK TOMORROW'S LUNCH NOW. Half a pizza each, about 5 slices, into a container as soon as it stops steaming. Baking paper between the layers or the cheese welds them together.",m:0}],
+    note:"Under sauce, not over. A wet base never crisps. This is also the lowest protein lunch of the week, so take the shake with it tomorrow rather than after training." },
+
+  "6": { name:"Braai night", short:"Braai", time:"50 min",
+    tag:"The meat rotates on a four week cycle. The sides never change.",
+    him:"250 g meat, 200 g wedges, salad", her:"150 g meat, 180 g wedges, salad with extra feta and oil",
+    hk:"1 010 kcal, 62 g protein", rk:"960 kcal, 38 g protein",
+    ings:["Braai meat for this week","4 potatoes for wedges","3 extra potatoes for tomorrow's salad","1 large tomato","Half an onion, sliced thin","50 g feta","2 baby marrows","Vinegar"],
+    steps:[
+      {t:"Light the coals. They need about 40 minutes to get right, so this happens before any prep.",m:40},
+      {t:"Chicken weeks only: brine first. Two tablespoons of salt in a litre of water, breasts in for 30 minutes, then pat completely dry. This is what stops braaied breast going dry.",m:30},
+      {t:"Boil 3 extra potatoes now for tomorrow's potato salad. Doing it tomorrow morning will not happen.",m:20},
+      {t:"Salad now, not later: sliced tomato, thin raw onion, feta, oil, vinegar, salt. It needs 20 minutes standing so the tomato releases its juice into the dressing.",m:0},
+      {t:"Wedges: skins on, oiled, salted, air fryer 200 for 25 minutes while the coals finish.",m:25},
+      {t:"Meat on. Lamb chops 4 minutes a side. Rump 4 a side then rest five minutes, and resting is not optional. Chicken 4 to 5 a side. Baby marrow halved lengthways on the grid alongside.",m:10},
+      {t:"PACK TOMORROW'S LUNCH NOW. Meat goes in whole, not sliced, you slice it in the morning. Potato salad: your 300 g of potato with 30 g mayonnaise, her 250 g with 45 g mayonnaise and feta through it. Leftover tomato salad into a small tub.",m:0}],
+    note:"Sliced cold meat dries out fast in a fridge. A whole chop or a whole rump does not. Slice at the last possible moment." },
+
+  "F": { name:"Cheese and ham toastie fallback", short:"Toasties", time:"10 min",
+    tag:"Planned laziness, and the no pizza week. Once a week at most.",
+    him:"4 slices, 60 g cheddar, 80 g ham, 250 ml milk", her:"4 slices, 60 g cheddar, 50 g ham, 400 ml milk, 150 g yoghurt with sugar",
+    hk:"950 kcal, 55 g protein", rk:"1 000 kcal, 45 g protein",
+    ings:["8 slices white bread","120 g cheddar","130 g ham","Butter","Milk","Yoghurt and sugar for her"],
+    steps:[
+      {t:"Butter the bread on both sides. Outside for the crunch, inside to waterproof it against the filling.",m:0},
+      {t:"Build with cheddar and ham. Air fryer 6 minutes at 200, flip once.",m:6},
+      {t:"You: a glass of milk. Her: a bigger glass plus yoghurt with sugar. That closes the gap a plain toastie leaves.",m:0},
+      {t:"NO LUNCH COMES OUT OF THIS NIGHT. Tomorrow is toasties again, built cold, or pull a meatball container from the freezer instead. Decide now, not in the morning.",m:0}],
+    note:"Two plain cheese sandwiches is 550 kcal and 22 g protein, well short of target. This version lands near 950 to 1 000 kcal each." }
+};
+
+const MEAL_L = {
+  "L1":{ name:"Meatball pasta", short:"Meatball pasta", mode:"Reheat 2 min",
+    him:"6 meatballs with sauce, 120 g dry pasta cooked, 30 g cheddar",
+    her:"3 meatballs with sauce, 110 g dry pasta cooked, 40 g cheddar, 15 g butter through the pasta",
+    hk:"1 010 kcal, 63 g protein", rk:"985 kcal, 47 g protein",
+    trick:"This lunch improves overnight. The sauce keeps the pasta from drying, which is exactly why plain pasta lunches fail and this one does not.",
+    pack:["Pack straight from the pot while you plate up","Sauce generously over the pasta, not beside it","Cheddar into the container now, it melts on reheating","Her butter goes through the pasta before the lid goes on"] },
+  "L2":{ name:"Creamy chicken and spinach pasta", short:"Chicken pasta", mode:"Reheat 2 min",
+    him:"200 g of the cooked chicken, 120 g dry pasta cooked, cream sauce, 15 g butter",
+    her:"130 g chicken, 110 g pasta, extra 30 ml cream stirred in, 40 g cheddar",
+    hk:"1 020 kcal, 63 g protein", rk:"950 kcal, 45 g protein",
+    trick:"A tablespoon of milk into each container before the lid goes on. A cream sauce tightens overnight and reheats claggy without it. That one step is the whole difference.",
+    pack:["Tablespoon of milk into each container, always","Let it stop steaming before you seal it or it sweats","Lemon already went in off the heat, do not add more"] },
+  "L3":{ name:"Burger patty roll and wedges", short:"Burger roll", mode:"Cold, wedges optional reheat",
+    him:"2 patties in one roll, mayonnaise, 200 g wedges",
+    her:"1 patty in one roll, mayonnaise and a cheddar slice, 150 g wedges",
+    hk:"1 000 kcal, 58 g protein", rk:"950 kcal, 32 g protein",
+    trick:"Tomato goes in a separate tub. Sliced tomato sitting in a roll overnight makes the bread wet by ten in the morning. Add it at your desk in four seconds.",
+    pack:["Cook one extra patty each the night before, that is what lunch is","Roll built cold, tomato held back","Wedges in the second container, fine cold","Never microwave the roll, only the wedges"] },
+  "L4":{ name:"Chicken mayo sandwiches", short:"Chicken mayo", mode:"Cold",
+    him:"4 slices white bread, 180 g cooked chicken chopped, 30 g mayonnaise, butter on all four slices",
+    her:"4 slices white bread, 100 g chicken chopped, 40 g mayonnaise, 1 cheddar slice, butter on all four slices",
+    hk:"960 kcal, 62 g protein", rk:"950 kcal, 38 g protein",
+    trick:"Butter both slices, every time. Butter waterproofs the bread against the mayonnaise. Skip it and you eat a damp sandwich at one o'clock.",
+    pack:["Chop the chicken, do not slice it. Chopped holds mayonnaise, sliced sheds it","Mix chicken and mayonnaise in a bowl first, then fill","Butter right to the crust, the edges go soggy first","Flat container, not a bag, or it arrives compressed"] },
+  "L5":{ name:"Cold pizza", short:"Cold pizza", mode:"Cold, no reheat",
+    him:"Half a large pizza, about 5 slices, plus 250 ml full cream milk",
+    her:"Half a large pizza, about 5 slices, plus 150 g yoghurt with sugar",
+    hk:"990 kcal, 45 g protein", rk:"1 000 kcal, 40 g protein",
+    trick:"Cold pizza is a legitimate lunch and needs nothing done to it. Stack the slices with a sheet of baking paper between layers so the cheese does not weld them together.",
+    pack:["Into the container the moment it cools, not after an hour on the board","Baking paper between the layers","Lowest protein lunch of the week. Take the shake with it, not after training"] },
+  "L6":{ name:"Cold braai meat and potato salad", short:"Cold braai", mode:"Cold",
+    him:"200 g cold braai meat sliced, potato salad from 300 g potato, 30 g mayonnaise, leftover tomato salad",
+    her:"120 g cold braai meat sliced, potato salad from 250 g potato, 45 g mayonnaise, feta through the potato",
+    hk:"1 000 kcal, 60 g protein", rk:"950 kcal, 35 g protein",
+    trick:"Slice the meat when you pack it in the morning, not the night before. Sliced cold meat dries out fast in a fridge, a whole chop does not.",
+    pack:["Boil the potatoes while the coals burn down, so the salad is made before you eat","Meat left whole in the container","Mayonnaise in with the potato, not on the side","Small tub for the tomato salad so it does not leak"] },
+  "LF":{ name:"Toasties again, or a freezer meatball", short:"Toasties", mode:"Cold or reheat",
+    him:"4 slices, 60 g cheddar, 80 g ham, or a meatball container from the freezer",
+    her:"4 slices, 60 g cheddar, 50 g ham, plus yoghurt, or a meatball container",
+    hk:"950 kcal, 55 g protein", rk:"1 000 kcal, 45 g protein",
+    trick:"A toastie night produces no real lunch. Decide the night before which way you are going, because at seven in the morning you will choose neither.",
+    pack:["Build the toasties cold and toast them at work if there is a machine","Otherwise pull a meatball container from the freezer the night before","Do not leave this decision to the morning"] }
+};
+
+const MEAL_LUNCH_OF = { "1":"L1", "1R":"L1", "2":"L2", "3":"L3", "4":"L4", "5":"L5", "6":"L6", "F":"LF" };
+const MEAL_BRAAI    = ["Lamb loin chops","Rump steak","Brined chicken breast","Brined chicken breast"];
+const MEAL_PIZZAWK  = [true,false,true,false];
+const MEAL_BUDGET   = 4100;
+const MEAL_DEFAULT_ORDER = ["2","3","4","1R","5","6"];   // Mon..Sat. Sunday is always "1".
+
+const MEAL_SHOP = {
+  ww:{ label:"Woolworths, meat for the freezer. One shop a month.", weekly:false, items:[
+    ["Chicken breast fillets","1 kg",3,139.99],["Beef mince, regular","1 kg",2.5,149.99],
+    ["Lamb loin chops","800 g",1,183.99],["Rump steak","500 g",1,129.99],
+    ["Bacon rashers","200 g",2,54.99],["Shaved ham","200 g",2,49.99]]},
+  ch:{ label:"Checkers, non perishables and freezer stock. One shop a month.", weekly:false, items:[
+    ["Brown lentils","500 g",6,32.99],["Basmati rice","2 kg",1,89.99],["Pasta","500 g",5,17.99],
+    ["Tinned chopped tomato","400 g",10,13.99],["Tomato paste","50 g",6,6.99],
+    ["Potatoes","2 kg",3,34.99],["Large eggs","18",2,54.99],["Sunflower oil","750 ml",2,39.99],
+    ["Mayonnaise","750 g",1,44.99],["White vinegar","750 ml",1,16.99],["Salt","500 g",1,9.99],
+    ["Peppercorn grinder","1",1,29.99],["White sugar","1 kg",1,22.99],["Garlic","3 pack",2,17.99],
+    ["Grated mozzarella","400 g",1,69.99],["Pizza bases","2 pack",2,32.99]]},
+  tu:{ label:"Checkers, fresh only. Every week. A quantity below 1 means the pack lasts longer than a week.", weekly:true, items:[
+    ["Full cream milk","2 L",1.5,33.99],["Cheddar","800 g",0.3,119.99],["Plain yoghurt","1 kg",1,36.99],
+    ["Fresh cream","250 ml",1,21.99],["Butter, bread only","500 g",0.25,79.99],
+    ["White bread","700 g",1.5,16.99],["Burger rolls","6 pack",0.5,24.99],["Feta","200 g",0.25,34.99],
+    ["Onions","2 kg",0.5,29.99],["Carrots","1 kg",0.5,17.99],["Tomatoes","1 kg",0.4,29.99],
+    ["Baby spinach","300 g",1,24.99],["Broccoli","400 g",0.5,27.99],["Cauliflower","500 g",0.5,27.99],
+    ["Butternut","1 kg",0.5,24.99],["Baby marrow","400 g",0.5,26.99]]}
+};
+
+// ══════════════════════════════════════════════════════════════
+// END EDIT ZONE
+// ══════════════════════════════════════════════════════════════
+
+let mealMonth   = new Date();
+let mealShopCur = "ww";
+let mealRecTab  = "sup";
+
+function mealStart()      { return getData("meal_start", null) || todayStr().slice(0,8) + "01"; }
+function mealSetStart(v)  { if (!v) return; setData("meal_start", v); renderMealCal(); }
+function mealOrder()      { const o = getData("meal_order", null); return (Array.isArray(o) && o.length === 6) ? o : MEAL_DEFAULT_ORDER.slice(); }
+function mealLog()        { return getData("meal_log", {}); }
+function mealSaveLog(l)   { setData("meal_log", l); }
+function mealDateStr(d)   { return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+function mealDaysSince(k) { return Math.floor((new Date(k+"T00:00:00") - new Date(mealStart()+"T00:00:00")) / 86400000); }
+function mealWeekIdx(k)   { const n = mealDaysSince(k); return n < 0 ? -1 : Math.floor(n/7) % 4; }
+function mealActive(k)    { return mealDaysSince(k) >= 0; }
+
+// The first Sunday on or after the start date. Before it, the freezer is empty.
+function mealFirstSunday() {
+  const d = new Date(mealStart()+"T00:00:00");
+  d.setDate(d.getDate() + ((7 - d.getDay()) % 7));
+  return mealDateStr(d);
+}
+// Which supper falls on a given date. Sunday is always the batch cook.
+function mealDinnerCode(key) {
+  if (!mealActive(key)) return null;
+  const dow = new Date(key+"T00:00:00").getDay();          // 0 Sun
+  let code = (dow === 0) ? "1" : mealOrder()[dow-1];
+  if (code === "5" && !MEAL_PIZZAWK[mealWeekIdx(key)]) code = "F";
+  // Before the first batch cook there is nothing in the freezer to reheat, so cook it fresh.
+  if (code === "1R" && key < mealFirstSunday()) code = "1";
+  return code;
+}
+// Lunch on a given date comes from the night before.
+function mealLunchCode(key) {
+  if (!mealActive(key)) return null;
+  const d = new Date(key+"T00:00:00"); d.setDate(d.getDate()-1);
+  const prevKey = mealDateStr(d);
+  if (!mealActive(prevKey)) return null;
+  const prev = mealDinnerCode(prevKey);
+  return prev ? MEAL_LUNCH_OF[prev] : null;
+}
+function mealDinnerName(key) {
+  const c = mealDinnerCode(key); if (!c) return "";
+  if (c === "6") return "Braai: " + MEAL_BRAAI[mealWeekIdx(key)].toLowerCase();
+  return MEAL_R[c].name;
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────
+function mealMonthShift(n) { mealMonth.setMonth(mealMonth.getMonth()+n); renderMealCal(); }
+function mealMonthToday()  { mealMonth = new Date(); renderMealCal(); }
+
+function renderMealCal() {
+  const si = document.getElementById("mc-start"); if (si) si.value = mealStart();
+  const year = mealMonth.getFullYear(), month = mealMonth.getMonth();
+  const MN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("mc-monthlabel").textContent = MN[month] + " " + year;
+
+  const log = mealLog(), today = todayStr();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const firstDow = new Date(year, month, 1).getDay();
+
+  let html = '<div class="cal-weekdays"><div class="cal-weekday weekend-label">Sun</div><div class="cal-weekday">Mon</div><div class="cal-weekday">Tue</div><div class="cal-weekday">Wed</div><div class="cal-weekday">Thu</div><div class="cal-weekday">Fri</div><div class="cal-weekday weekend-label">Sat</div></div><div class="cal-days">';
+  for (let i = 0; i < firstDow; i++) html += '<div class="mc-day empty"></div>';
+
+  let cooked = 0, skipped = 0, planned = 0, notes = 0;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = year + "-" + String(month+1).padStart(2,"0") + "-" + String(d).padStart(2,"0");
+    const isToday = key === today;
+    if (!mealActive(key)) {
+      html += '<div class="mc-day off ' + (isToday ? "is-today" : "") + '"><div class="num">' + d + '</div></div>';
+      continue;
+    }
+    const dc = mealDinnerCode(key), lc = mealLunchCode(key);
+    const e = log[key] || {};
+    if (dc) { planned++; if (e.d === "eaten") cooked++; if (e.d === "skip") skipped++; }
+    if (lc) { planned++; if (e.l === "eaten") cooked++; if (e.l === "skip") skipped++; }
+    if (e.note) notes++;
+
+    const lShort = lc ? (lc === "L6" ? "Cold braai" : MEAL_L[lc].short) : "";
+    const dShort = dc ? (dc === "6" ? "Braai " + MEAL_BRAAI[mealWeekIdx(key)].split(" ")[0].toLowerCase() : MEAL_R[dc].short) : "";
+    html += '<div class="mc-day ' + (isToday ? "is-today" : "") + '" onclick="mealOpenDay(\'' + key + '\')">' +
+      '<div class="num">' + d + (e.note ? ' <span style="color:var(--blue)">&bull;</span>' : "") + '</div>' +
+      (lc ? '<div class="mc-slot lunch ' + (e.l||"") + '"><b>L</b>' + lShort + '</div>' : "") +
+      (dc ? '<div class="mc-slot dinner ' + (e.d||"") + '"><b>S</b>' + dShort + '</div>' : "") +
+      '</div>';
+  }
+  html += "</div>";
+  document.getElementById("mc-grid").innerHTML = html;
+
+  const logged = cooked + skipped;
+  const pct = planned ? Math.round(cooked / planned * 100) : 0;
+  const wk = mealWeekIdx(today);
+  document.getElementById("mc-stats").innerHTML =
+    '<div class="mc-stat"><div class="lbl">Eaten as planned</div><div class="val acc">' + cooked + '</div><div class="sub2">of ' + planned + ' meals this month</div></div>' +
+    '<div class="mc-stat"><div class="lbl">Skipped or takeout</div><div class="val">' + skipped + '</div><div class="sub2">' + notes + ' day' + (notes===1?"":"s") + ' with a note</div></div>' +
+    '<div class="mc-stat"><div class="lbl">Adherence</div><div class="val">' + pct + '%</div><div class="sub2">' + logged + ' of ' + planned + ' logged</div></div>' +
+    '<div class="mc-stat"><div class="lbl">Braai this week</div><div class="val" style="font-size:15px;line-height:1.35;">' + (wk >= 0 ? MEAL_BRAAI[wk] : "Plan not started") + '</div><div class="sub2">' + (wk >= 0 ? ("Week " + (wk+1) + " of 4 &middot; " + (MEAL_PIZZAWK[wk] ? "pizza week" : "no pizza week")) : "Set a start date") + '</div></div>';
+
+  const startDow = new Date(mealStart()+"T00:00:00").getDay();
+  const banner = document.getElementById("mc-startnote");
+  if (banner) {
+    if (startDow !== 0) {
+      banner.style.display = "block";
+      banner.innerHTML = "Your plan starts on a " + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][startDow] +
+        ", so the first batch cook only lands on " + formatDate(mealFirstSunday()) + ". Until then there is nothing in the freezer, " +
+        "so any reheat night is shown as a full cook instead. From that Sunday the week runs normally.";
+    } else { banner.style.display = "none"; }
+  }
+
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat"], order = mealOrder();
+  const opts = ["1R","2","3","4","5","6","F"];
+  let oh = "";
+  for (let i = 0; i < 6; i++) {
+    oh += '<div><label>' + days[i] + '</label><select onchange="mealSetOrder(' + i + ',this.value)">';
+    for (const c of opts) oh += '<option value="' + c + '"' + (order[i]===c?" selected":"") + '>' + MEAL_R[c].short + '</option>';
+    oh += "</select></div>";
+  }
+  document.getElementById("mc-order").innerHTML = oh;
+}
+function mealSetOrder(i, code) { const o = mealOrder(); o[i] = code; setData("meal_order", o); renderMealCal(); }
+
+// ── DAY MODAL ────────────────────────────────────────────────
+let mealModalKey = null;
+function mealOpenDay(key) {
+  mealModalKey = key;
+  const log = mealLog(), e = log[key] || {};
+  const dc = mealDinnerCode(key), lc = mealLunchCode(key);
+  document.getElementById("meal-modal-title").textContent = formatDate(key);
+  const wk = mealWeekIdx(key);
+  document.getElementById("meal-modal-sub").textContent =
+    "Week " + (wk+1) + " of 4  ·  " + (MEAL_PIZZAWK[wk] ? "pizza week" : "no pizza week");
+
+  let h = "";
+  if (lc) {
+    const L = MEAL_L[lc];
+    h += '<div class="mm-sec"><h4>Lunch &middot; ' + L.mode + ' &middot; packed the night before</h4>' +
+      '<div class="nm">' + L.name + '</div>' +
+      '<div class="mm-split"><div><div class="who">You</div><div class="por">' + L.him + '</div><div class="mac">' + L.hk + '</div></div>' +
+      '<div><div class="who">Her</div><div class="por">' + L.her + '</div><div class="mac">' + L.rk + '</div></div></div>' +
+      '<div class="mm-trick">' + L.trick + '</div>' +
+      '<div class="mm-btns">' +
+      '<button class="' + (e.l==="eaten"?"on-eat":"") + '" onclick="mealMark(\'l\',\'eaten\')">Eaten</button>' +
+      '<button class="' + (e.l==="skip"?"on-skip":"") + '" onclick="mealMark(\'l\',\'skip\')">Skipped</button>' +
+      '<button onclick="mealMark(\'l\',null)">Clear</button></div></div>';
+  }
+  if (dc) {
+    const R = MEAL_R[dc];
+    const nm = (dc === "6") ? ("Braai: " + MEAL_BRAAI[wk].toLowerCase()) : R.name;
+    h += '<div class="mm-sec"><h4>Supper &middot; ' + R.time + '</h4>' +
+      '<div class="nm">' + nm + '</div>' +
+      '<div class="mm-split"><div><div class="who">You</div><div class="por">' + R.him + '</div><div class="mac">' + R.hk + '</div></div>' +
+      '<div><div class="who">Her</div><div class="por">' + R.her + '</div><div class="mac">' + R.rk + '</div></div></div>' +
+      '<div class="mm-btns">' +
+      '<button class="' + (e.d==="eaten"?"on-eat":"") + '" onclick="mealMark(\'d\',\'eaten\')">Cooked and eaten</button>' +
+      '<button class="' + (e.d==="skip"?"on-skip":"") + '" onclick="mealMark(\'d\',\'skip\')">Takeout or skipped</button>' +
+      '<button onclick="mealMark(\'d\',null)">Clear</button></div>' +
+      '<div class="btn-row" style="margin-top:12px;"><button class="rc-cook" onclick="mealCloseDay();mealCook(\'' + dc + '\')">Open cook mode</button></div></div>';
+  }
+  h += '<div class="mm-sec"><h4>Note</h4><textarea class="mm-note" id="meal-note" placeholder="Cooked at her place, doubled the batch, R240 on takeout...">' + (e.note || "") + '</textarea>' +
+       '<div class="mm-btns"><button onclick="mealSaveNote()">Save note</button></div></div>';
+  document.getElementById("meal-modal-body").innerHTML = h;
+  document.getElementById("meal-day-modal").classList.add("open");
+}
+function mealCloseDay() { document.getElementById("meal-day-modal").classList.remove("open"); }
+function mealMark(slot, val) {
+  const log = mealLog(); const e = log[mealModalKey] || {};
+  if (val === null) delete e[slot]; else e[slot] = val;
+  if (!e.d && !e.l && !e.note) delete log[mealModalKey]; else log[mealModalKey] = e;
+  mealSaveLog(log); mealOpenDay(mealModalKey); renderMealCal();
+}
+function mealSaveNote() {
+  const log = mealLog(); const e = log[mealModalKey] || {};
+  const v = document.getElementById("meal-note").value.trim();
+  if (v) e.note = v; else delete e.note;
+  if (!e.d && !e.l && !e.note) delete log[mealModalKey]; else log[mealModalKey] = e;
+  mealSaveLog(log); renderMealCal(); mealCloseDay();
+}
+
+// ── RECIPES ──────────────────────────────────────────────────
+function mealRecipeTab(t) {
+  mealRecTab = t;
+  document.getElementById("rt-sup").classList.toggle("on", t === "sup");
+  document.getElementById("rt-lun").classList.toggle("on", t === "lun");
+  renderRecipesPage();
+}
+function renderRecipesPage() {
+  let h = "";
+  if (mealRecTab === "sup") {
+    const order = ["1","2","3","4","5","6","1R","F"];
+    for (const id of order) {
+      const R = MEAL_R[id];
+      h += '<div class="rc-card"><div class="rc-head"><div style="flex:1;min-width:220px;">' +
+        "<h3>" + R.name + "</h3>" +
+        '<div class="rc-pills"><span class="rc-pill acc">' + R.time + "</span>" +
+        '<span class="rc-pill">' + R.ings.length + " ingredients</span>" +
+        '<span class="rc-pill">' + R.steps.length + " steps</span></div>" +
+        '<p style="font-size:12.5px;color:var(--text-muted);margin-top:6px;line-height:1.5;">' + R.tag + "</p></div>" +
+        '<button class="rc-cook" onclick="mealCook(\'' + id + '\')">Start cook mode</button></div>' +
+        '<div class="rc-grid"><div><h5>Ingredients</h5><ul class="rc-ings">' +
+        R.ings.map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ul>" +
+        '<h5 style="margin-top:16px;">Portions</h5>' +
+        '<div class="mm-split" style="margin:0;"><div><div class="who">You</div><div class="por">' + R.him + '</div><div class="mac">' + R.hk + '</div></div>' +
+        '<div><div class="who">Her</div><div class="por">' + R.her + '</div><div class="mac">' + R.rk + '</div></div></div></div>' +
+        "<div><h5>Method</h5><ol class=\"rc-steps\">" +
+        R.steps.map(function(s){ return '<li class="' + (s.t.indexOf("PACK")===0||s.t.indexOf("NO LUNCH")===0 ? "packstep" : "") + '">' + s.t + (s.m>0 ? ' <span style="color:var(--accent);font-family:\'DM Mono\',monospace;font-size:11px;">[' + s.m + ' min]</span>' : "") + "</li>"; }).join("") +
+        '</ol><div class="rc-note">' + R.note + "</div></div></div></div>";
+    }
+  } else {
+    for (const id of ["L1","L2","L3","L4","L5","L6","LF"]) {
+      const L = MEAL_L[id];
+      h += '<div class="rc-card"><div class="rc-head"><div style="flex:1;min-width:220px;">' +
+        "<h3>" + L.name + "</h3>" +
+        '<div class="rc-pills"><span class="rc-pill acc">' + L.mode + "</span></div></div></div>" +
+        '<div class="rc-grid"><div><h5>Portions</h5>' +
+        '<div class="mm-split" style="margin:0;"><div><div class="who">You</div><div class="por">' + L.him + '</div><div class="mac">' + L.hk + '</div></div>' +
+        '<div><div class="who">Her</div><div class="por">' + L.her + '</div><div class="mac">' + L.rk + '</div></div></div></div>' +
+        "<div><h5>How to pack it</h5><ol class=\"rc-steps\">" +
+        L.pack.map(function(x){ return "<li>" + x + "</li>"; }).join("") +
+        '</ol><div class="rc-note">' + L.trick + "</div></div></div></div>";
+    }
+  }
+  document.getElementById("rc-list").innerHTML = h;
+}
+
+// ── COOK MODE ────────────────────────────────────────────────
+let ckId = null, ckStep = -1, ckInt = null, ckLeft = 0;
+function mealCook(id) { ckId = id; ckStep = -1; document.getElementById("meal-cook").classList.add("open"); ckRender(); }
+function ckClose() { document.getElementById("meal-cook").classList.remove("open"); ckStop(); }
+function ckNext() { const R = MEAL_R[ckId]; if (ckStep < R.steps.length-1) { ckStep++; ckRender(); } else ckClose(); }
+function ckPrev() { if (ckStep > -1) { ckStep--; ckRender(); } }
+function ckFmt(s) { const m = Math.floor(s/60); const x = s%60; return m + ":" + (x<10?"0":"") + x; }
+function ckStop() { if (ckInt) { clearInterval(ckInt); ckInt = null; } }
+function ckRender() {
+  ckStop();
+  const R = MEAL_R[ckId];
+  document.getElementById("ck-title").textContent = R.name;
+  document.getElementById("ck-meta").textContent = R.time + (ckStep >= 0 ? ("  ·  step " + (ckStep+1) + " of " + R.steps.length) : "  ·  ingredients");
+  const body = document.getElementById("ck-body");
+  if (ckStep === -1) {
+    let h = '<h5 style="font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-dim);margin-bottom:14px;font-weight:400;">Get these out first</h5>';
+    h += '<div class="card">' + R.ings.map(function(x){
+      return '<div class="ck-ing" onclick="this.classList.toggle(\'on\')"><div class="ck-box">&#10003;</div><span>' + x + "</span></div>"; }).join("") + "</div>";
+    h += '<div class="rc-note" style="margin-top:18px;">' + R.note + "</div>";
+    body.innerHTML = h;
+    document.getElementById("ck-prev").style.visibility = "hidden";
+    document.getElementById("ck-next").textContent = "Start step 1";
+  } else {
+    const s = R.steps[ckStep];
+    const isPack = s.t.indexOf("PACK") === 0 || s.t.indexOf("NO LUNCH") === 0;
+    let h = '<div class="ck-dots">';
+    for (let i = 0; i < R.steps.length; i++) h += '<i class="' + (i<ckStep?"done":(i===ckStep?"cur":"")) + '"></i>';
+    h += "</div>";
+    if (isPack) h += '<div class="rc-pill" style="background:rgba(104,146,200,.18);color:var(--blue);border-color:var(--blue);margin-bottom:12px;">Tomorrow\'s lunch</div>';
+    h += '<div class="ck-step ' + (isPack?"pack":"") + '">' + s.t + "</div>";
+    if (s.m > 0) {
+      h += '<div class="ck-timer" id="ck-timer"><div class="t" id="ck-t">' + ckFmt(s.m*60) + "</div>" +
+           '<button class="rc-cook" id="ck-tbtn" style="margin-top:14px;" onclick="ckTimer(' + s.m + ')">Start ' + s.m + ' minute timer</button></div>';
+    }
+    if (ckStep === R.steps.length-1) h += '<div class="rc-note" style="margin-top:20px;">' + R.note + "</div>";
+    body.innerHTML = h;
+    document.getElementById("ck-prev").style.visibility = "visible";
+    document.getElementById("ck-next").textContent = (ckStep === R.steps.length-1) ? "Done, close" : "Next step";
+  }
+  body.scrollTop = 0;
+}
+function ckTimer(mins) {
+  const box = document.getElementById("ck-timer"), btn = document.getElementById("ck-tbtn");
+  if (ckInt) { ckStop(); box.classList.remove("run"); btn.textContent = "Resume"; return; }
+  if (ckLeft <= 0 || box.classList.contains("done")) { ckLeft = mins*60; box.classList.remove("done"); }
+  box.classList.add("run"); btn.textContent = "Pause";
+  ckInt = setInterval(function() {
+    ckLeft--;
+    const d = document.getElementById("ck-t");
+    if (!d) { ckStop(); return; }
+    d.textContent = ckFmt(Math.max(0, ckLeft));
+    if (ckLeft <= 0) {
+      ckStop(); ckBeep(); ckLeft = 0;
+      const b = document.getElementById("ck-timer");
+      if (b) { b.classList.add("done"); b.classList.remove("run"); }
+      const t = document.getElementById("ck-tbtn"); if (t) t.textContent = "Time is up";
+    }
+  }, 1000);
+}
+function ckBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)(), t0 = ctx.currentTime;
+    for (let i = 0; i < 4; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination); o.type = "sine"; o.frequency.value = 880;
+      g.gain.setValueAtTime(0.35, t0 + i*0.35);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + i*0.35 + 0.28);
+      o.start(t0 + i*0.35); o.stop(t0 + i*0.35 + 0.3);
+    }
+  } catch(e) {}
+  if (navigator.vibrate) navigator.vibrate([300,120,300,120,300]);
+}
+
+// ── SHOPPING ─────────────────────────────────────────────────
+function mealPrices() { return getData("meal_prices", {}); }
+function mealChecks() { return getData("meal_checks", {}); }
+function mealPrice(list, i) { const p = mealPrices()[list+i]; return (p !== undefined && p !== null) ? p : MEAL_SHOP[list].items[i][3]; }
+function mealSub(list) { let s = 0; const it = MEAL_SHOP[list].items; for (let i = 0; i < it.length; i++) s += it[i][2] * mealPrice(list, i); return s; }
+function mealMonthlyTotal() { return mealSub("ww") + mealSub("ch") + mealSub("tu") * 4.35; }
+function mealShopTab(l) {
+  mealShopCur = l;
+  ["ww","ch","tu"].forEach(function(x){ document.getElementById("st-"+x).classList.toggle("on", x === l); });
+  renderMealShop();
+}
+function renderMealShop() {
+  const data = MEAL_SHOP[mealShopCur], it = data.items, chk = mealChecks();
+  let rows = "", got = 0, n = 0;
+  for (let i = 0; i < it.length; i++) {
+    const k = mealShopCur + i, on = !!chk[k], p = mealPrice(mealShopCur, i), line = it[i][2] * p;
+    if (on) { got += line; n++; }
+    rows += '<div class="sh-row ' + (on?"on":"") + '">' +
+      '<div class="ck-box" style="cursor:pointer;' + (on?"background:var(--green);border-color:var(--green);color:var(--bg);":"") + '" onclick="mealTick(' + i + ')">&#10003;</div>' +
+      '<div class="nm" onclick="mealTick(' + i + ')" style="cursor:pointer;">' + it[i][0] + "<small>" + it[i][1] + " &times; " + it[i][2] + "</small></div>" +
+      '<input class="pi" type="number" step="0.01" inputmode="decimal" value="' + p.toFixed(2) + '" onchange="mealSetPrice(' + i + ',this.value)">' +
+      '<div class="ln">R' + line.toFixed(2) + "</div></div>";
+  }
+  const sub = mealSub(mealShopCur);
+  const extra = data.weekly ? (' <span style="color:var(--text-dim);font-weight:400;">&times; 4.35 = R' + (sub*4.35).toFixed(2) + " a month</span>") : "";
+  document.getElementById("sh-card").innerHTML =
+    '<div class="card-title">' + data.label + "</div>" +
+    '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">' + n + " of " + it.length + " in the trolley &middot; R" + got.toFixed(2) + " ticked</div>" +
+    rows + '<div class="sh-total"><span>Subtotal</span><span>R' + sub.toFixed(2) + extra + "</span></div>";
+  const t = mealMonthlyTotal();
+  document.getElementById("sh-total").textContent = "R" + t.toFixed(2);
+  const bar = document.getElementById("sh-bar");
+  bar.style.width = Math.min(100, t / MEAL_BUDGET * 100) + "%";
+  bar.classList.toggle("over", t > MEAL_BUDGET);
+  document.getElementById("sh-left").innerHTML = (t <= MEAL_BUDGET)
+    ? '<span style="color:var(--green);font-weight:600;">R' + (MEAL_BUDGET-t).toFixed(2) + " left over</span>"
+    : '<span style="color:var(--red);font-weight:600;">R' + (t-MEAL_BUDGET).toFixed(2) + " over budget.</span> Fastest fix is dropping the lamb, which is R184 back.";
+}
+function mealTick(i) { const c = mealChecks(); const k = mealShopCur + i; if (c[k]) delete c[k]; else c[k] = true; setData("meal_checks", c); renderMealShop(); }
+function mealSetPrice(i, v) {
+  const n = parseFloat(v);
+  if (isNaN(n) || n < 0) { renderMealShop(); return; }
+  const p = mealPrices(); p[mealShopCur + i] = n; setData("meal_prices", p); renderMealShop();
+}
+function mealResetShop() {
+  if (!confirm("Clear every tick and every price you have typed in?")) return;
+  setData("meal_checks", {}); setData("meal_prices", {}); renderMealShop();
+}
+
 </script>
+
+<!-- MEAL DAY MODAL -->
+<div class="modal-overlay" id="meal-day-modal">
+  <div class="modal" style="width:560px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+      <div>
+        <h3 id="meal-modal-title" style="margin-bottom:2px;"></h3>
+        <div id="meal-modal-sub" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);"></div>
+      </div>
+      <button onclick="mealCloseDay()" style="background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+    </div>
+    <div id="meal-modal-body"></div>
+  </div>
+</div>
+
+<!-- COOK MODE -->
+<div class="ck-overlay" id="meal-cook">
+  <div class="ck-head">
+    <div><div class="t" id="ck-title"></div><div class="m" id="ck-meta"></div></div>
+    <button class="btn-secondary" onclick="ckClose()">Close</button>
+  </div>
+  <div class="ck-body" id="ck-body"></div>
+  <div class="ck-foot">
+    <button class="prev" id="ck-prev" onclick="ckPrev()">Back</button>
+    <button class="next" id="ck-next" onclick="ckNext()">Next</button>
+  </div>
+</div>
 </body>
 </html>
