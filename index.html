@@ -936,6 +936,107 @@
     .mm-btns button { padding:11px; }
   }
 
+  /* running order */
+  .ro-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:12px; }
+  .ro-name { font-family:'DM Serif Display',serif; font-size:21px; letter-spacing:-.3px; }
+  .ro-meta { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); margin-top:3px; }
+  .ro-extra { background:rgba(200,169,110,.08); border-left:3px solid var(--accent-dim); border-radius:6px;
+    padding:10px 13px; font-size:12.5px; color:var(--text-muted); margin:12px 0; }
+  .ro-extra b { color:var(--accent); }
+  .ro-extra ul { list-style:none; margin-top:5px; }
+  .ro-extra li { padding:2px 0 2px 13px; position:relative; }
+  .ro-extra li:before { content:''; position:absolute; left:0; top:9px; width:4px; height:4px; border-radius:50%; background:var(--accent-dim); }
+  .ro-list { border-left:2px solid var(--border); margin-left:44px; padding-left:0; }
+  .ro-row { display:flex; gap:0; align-items:flex-start; padding:7px 0; position:relative; }
+  .ro-time { position:absolute; left:-44px; width:38px; text-align:right; font-family:'DM Mono',monospace;
+    font-size:10.5px; color:var(--text-dim); padding-top:2px; }
+  .ro-text { font-size:13.5px; line-height:1.45; padding-left:14px; position:relative; }
+  .ro-text:before { content:''; position:absolute; left:-5px; top:7px; width:8px; height:8px; border-radius:50%;
+    background:var(--surface3); border:2px solid var(--surface); }
+  .ro-row.cook .ro-text:before { background:var(--accent-dim); }
+  .ro-row.plate .ro-text:before { background:var(--accent); }
+  .ro-row.pack .ro-text:before { background:var(--blue); }
+  .ro-row.pack .ro-text { color:var(--blue); font-weight:600; }
+  .ro-row.bed .ro-text:before { background:var(--yellow); }
+  .ro-row.bed .ro-text { color:var(--yellow); }
+  .ro-row.prep .ro-text { color:var(--text-muted); }
+  .ro-row.eat { padding:9px 0; }
+  .ro-row.eat .ro-text { font-family:'DM Serif Display',serif; font-size:18px; color:var(--accent); letter-spacing:.06em; }
+  .ro-row.eat .ro-text:before { background:var(--accent); width:12px; height:12px; left:-7px; top:8px; }
+  .ro-row.eat .ro-time { color:var(--accent); font-size:12px; font-weight:600; }
+  .ro-dur { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); margin-left:5px; }
+  .ro-tmr { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); margin-left:5px; }
+  .ro-list.compact .ro-text { font-size:12.5px; }
+  /* recipe detail */
+  .rc-serves { font-size:12px; color:var(--accent); margin-top:8px; line-height:1.5; }
+  .rc-body { border-top:1px solid var(--border); margin-top:16px; padding-top:16px; }
+  .rc-tbl { width:100%; border-collapse:collapse; font-size:12.5px; }
+  .rc-tbl td { padding:5px 0; border-bottom:1px solid var(--border); vertical-align:top; }
+  .rc-tbl td.q { width:78px; font-family:'DM Mono',monospace; color:var(--accent); white-space:nowrap; padding-right:10px; }
+  .rc-steps li .st-t { font-weight:600; font-size:14px; margin-bottom:5px; }
+  .st-m { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-dim); font-weight:400; margin-left:6px; }
+  .st-tmr { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); font-weight:400; margin-left:4px; }
+  .st-b { list-style:none; margin:0 0 6px; }
+  .st-b li { font-size:12.5px; line-height:1.6; color:var(--text-muted); padding:2px 0 2px 14px; position:relative; }
+  .st-b li:before { content:''; position:absolute; left:2px; top:11px; width:4px; height:4px; border-radius:50%; background:var(--text-dim); }
+  .st-why { font-size:12px; color:var(--text-muted); background:var(--surface2); border-radius:6px;
+    padding:8px 11px; margin-top:6px; line-height:1.55; }
+  .st-why b { color:var(--accent); }
+  .rc-steps.simple li { padding-top:6px; padding-bottom:6px; font-size:12.5px; }
+  /* timeline */
+  .tl-wrap { --tl-lbl:150px; position:relative; margin-top:10px; padding-top:18px; }
+  .tl-axis { position:absolute; top:0; left:var(--tl-lbl); right:0; height:16px; }
+  .tl-axis span { position:absolute; font-family:'DM Mono',monospace; font-size:9px; color:var(--text-dim); transform:translateX(-50%); }
+  .tl-row { display:flex; align-items:center; gap:0; margin-bottom:3px; }
+  .tl-lbl { width:var(--tl-lbl); min-width:var(--tl-lbl); font-size:10.5px; color:var(--text-muted);
+    padding-right:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tl-track { flex:1; position:relative; height:17px; background:var(--surface2); border-radius:4px; }
+  .tl-bar { position:absolute; top:2px; height:13px; background:var(--accent-dim); border-radius:3px;
+    font-family:'DM Mono',monospace; font-size:8.5px; color:var(--bg); text-align:center; line-height:13px; overflow:hidden; }
+  .tl-bar.tmr { background:var(--accent); }
+  .tl-bar.pack { background:var(--blue); }
+  .tl-eat { position:absolute; top:16px; bottom:0; width:2px; background:var(--accent); opacity:.5; }
+  /* cook mode extras */
+  .ck-timers { display:none; gap:8px; padding:10px 22px; background:var(--surface2);
+    border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .ck-timers.on { display:flex; }
+  .ck-chip { display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border);
+    border-radius:20px; padding:6px 8px 6px 14px; }
+  .ck-chip .lbl { font-size:11.5px; color:var(--text-muted); }
+  .ck-chip .num { font-family:'DM Mono',monospace; font-size:15px; min-width:48px; }
+  .ck-chip.run .num { color:var(--accent); }
+  .ck-chip.paused { opacity:.6; }
+  .ck-chip.done { border-color:var(--green); }
+  .ck-chip.done .num { color:var(--green); }
+  .ck-chip button { background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:10px; padding:2px 4px; }
+  .ck-chip button:hover { color:var(--accent); }
+  .ck-serves { font-size:13px; color:var(--accent); line-height:1.55; margin-bottom:18px; }
+  .ck-h { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--text-dim); margin:18px 0 8px; font-weight:400; }
+  .ck-tag { display:inline-block; background:rgba(104,146,200,.18); color:var(--blue); border:1px solid var(--blue);
+    border-radius:20px; padding:3px 11px; font-size:10.5px; font-family:'DM Mono',monospace; margin-bottom:12px; }
+  .ck-start { display:block; width:100%; margin:16px 0; padding:14px; background:var(--accent-glow);
+    border:1px solid var(--accent-dim); border-radius:var(--radius-sm); color:var(--accent);
+    font-family:'DM Sans',sans-serif; font-size:15px; cursor:pointer; }
+  .ck-start:hover { background:var(--accent); color:var(--bg); }
+  .ck-b { margin:14px 0 0 0; padding-left:20px; }
+  .ck-b li { font-size:16px; line-height:1.6; margin-bottom:11px; color:var(--text); }
+  .ck-b li::marker { color:var(--accent); font-family:'DM Mono',monospace; font-size:13px; }
+  .ck-why { background:var(--surface); border-left:3px solid var(--accent-dim); border-radius:6px;
+    padding:13px 15px; margin-top:18px; font-size:13.5px; line-height:1.6; color:var(--text-muted); }
+  .ck-why b { color:var(--accent); }
+  @media (max-width: 600px) {
+    .ro-list { margin-left:40px; }
+    .ro-time { left:-40px; width:34px; font-size:9.5px; }
+    .ro-text { font-size:12.5px; }
+    .tl-wrap { --tl-lbl:96px; }
+    .tl-lbl { font-size:9px; }
+    .ck-b li { font-size:15px; }
+    .ck-timers { padding:9px 14px; gap:6px; }
+    .ck-chip { padding:5px 6px 5px 11px; }
+    .ck-chip .num { font-size:13px; min-width:42px; }
+  }
+
 </style>
 </head>
 <body>
@@ -1564,11 +1665,17 @@
         <div class="mc-monthlabel" id="mc-monthlabel"></div>
         <button class="mc-navbtn" onclick="mealMonthShift(1)">&#9654;</button>
         <button class="mc-navbtn" onclick="mealMonthToday()">Today</button>
+        <div class="mc-datebox">
+          <label for="mc-eat">Eat at</label>
+          <input type="time" id="mc-eat" onchange="mealSetEat(this.value)">
+        </div>
         <div class="mc-viewtoggle">
           <button id="mv-month" onclick="mealSetView('month')">Month</button>
           <button id="mv-agenda" onclick="mealSetView('agenda')">Agenda</button>
         </div>
       </div>
+
+      <div class="card" id="mc-tonight" style="margin-bottom:16px;"></div>
 
       <div class="mp-warn" id="mc-startnote" style="display:none;margin-top:0;margin-bottom:18px;"></div>
 
@@ -3973,168 +4080,565 @@ function calcFuel() {
 // ══════════════════════════════════════════════════════════════
 // MEAL PLAN
 // ──────────────────────────────────────────────────────────────
-// EDIT ZONE. Everything between here and END EDIT ZONE is the
-// monthly plan: recipes, lunches, prices. Replace this block each
-// month after the review. Nothing below END EDIT ZONE needs to change.
-// Firebase keys used: meal_start, meal_order, meal_log, meal_checks,
-// meal_prices. Nothing else in the tracker is touched.
+// EDIT ZONE. Recipes, lunches and prices. Replace this block each
+// month after the review. Nothing below END EDIT ZONE changes.
+//
+// Recipe fields:
+//   serves   what the batch actually feeds, suppers and packed lunches
+//   active   minutes you are hands on
+//   total    minutes from starting to sitting down
+//   equip    everything you need out before you start
+//   ings     every ingredient WITH a weight
+//   steps    at   = minutes from the start of the cook
+//            mins = how long that step takes
+//            b    = the actual instructions, one action each
+//            why  = why it matters, only where it changes the result
+//            tmr  = a named timer this step can start
+//   before   what to do the night before, shown on the previous day
+//   extra    things this cook must produce beyond tonight
+// Firebase keys: meal_start, meal_order, meal_log, meal_checks,
+// meal_prices, meal_view, meal_eat. Nothing else is touched.
 // ══════════════════════════════════════════════════════════════
 
 const MEAL_R = {
-  "1": { name:"Lentil and beef meatballs in tomato sauce", short:"Meatballs", time:"45 min",
-    tag:"Sunday batch cook. Feeds Sunday supper, Monday lunch, one midweek supper and the lunch after it.",
-    him:"6 meatballs, 120 g dry pasta, 30 g cheddar", her:"3 meatballs, 110 g dry pasta, 40 g cheddar, 15 g butter through the pasta",
-    hk:"1 010 kcal, 63 g protein", rk:"985 kcal, 47 g protein",
-    ings:["450 g beef mince","250 g dry brown lentils","1 egg","2 onions","3 garlic cloves","1 carrot, grated","4 tins chopped tomato","2 sachets tomato paste","Pasta","Cheddar"],
-    steps:[
-      {t:"Boil 250 g of dry lentils. They need 25 minutes. Start them with kettle water, it is faster.",m:25},
-      {t:"While they boil: dice the onions fine, crush the garlic, grate the carrot. One knife session for the whole week.",m:0},
-      {t:"Drain the lentils and spread them flat on a tray. They must be completely cool before they touch the mince, or the mix turns to paste.",m:10},
-      {t:"Mix the mince, cooled lentils, egg, half a grated onion, salt and pepper. Roll into balls. Wet hands stop the sticking.",m:0},
-      {t:"Brown the meatballs hard in sunflower oil, in two batches. Do not crowd the pan and do not touch them for the first three minutes. This browning is where all the flavour comes from.",m:8},
-      {t:"Remove the balls. Same pan: onion and carrot for ten minutes until sweet and browned at the edges. Garlic one minute. Tomato paste one minute.",m:12},
-      {t:"Tinned tomatoes in, meatballs back in. Simmer with the lid off for 20 minutes. Boil the pasta in the last 10.",m:20},
-      {t:"PACK TOMORROW'S LUNCH NOW, before you sit down. You: 6 meatballs, 120 g dry pasta cooked, sauce over, 30 g cheddar in the container. Her: 3 meatballs, 110 g pasta, 40 g cheddar, 15 g butter through the pasta.",m:0},
-      {t:"Half the remaining batch into containers and into the freezer. That is your midweek supper and the lunch after it already done.",m:0}],
-    note:"The lentils are the budget engine of the whole plan. At 35 percent of the mix nobody detects them, and they carry the fibre that white pasta does not." },
 
-  "1R":{ name:"Meatballs from the freezer", short:"Meatballs", time:"15 min",
-    tag:"Pure reheat. Sunday already did the work.",
-    him:"6 meatballs, 120 g dry pasta, 30 g cheddar", her:"3 meatballs, 110 g dry pasta, 40 g cheddar, 15 g butter",
-    hk:"1 010 kcal, 63 g protein", rk:"985 kcal, 47 g protein",
-    ings:["1 frozen container of meatballs and sauce","Pasta","Cheddar","Butter for her portion"],
-    steps:[
-      {t:"The container should have come out of the freezer into the fridge last night. If it did not, sit it in a bowl of warm water while the pasta boils.",m:0},
-      {t:"Boil fresh pasta. Never freeze cooked pasta, it comes back grey and soft.",m:10},
-      {t:"Reheat the sauce gently in a pan, not the microwave. Ten minutes on low, lid off.",m:10},
-      {t:"PACK TOMORROW'S LUNCH NOW. Same portions as Sunday. Sauce generously over the pasta, cheddar into the container.",m:0}],
-    note:"This is the cheapest night of the week in both time and money, and it exists purely because you did the Sunday block." },
+"1": {
+  name:"Lentil and beef meatballs in tomato sauce", short:"Meatballs", time:"90 min", active:"55 min", total:90,
+  tag:"The Sunday batch cook. This one session feeds four of the week's meals and makes the burger patties.",
+  serves:"Makes 40 meatballs, 8 servings. Tonight's supper for two, tomorrow's two lunches, the reheat night for two, and the two lunches after that. It also makes 6 burger patties for the burger night.",
+  equip:["Kitchen scale","Large pot for the lentils","Sieve or colander","Large deep pan with a lid, 28 cm or bigger","Second pot for the pasta","Baking tray","Sheet of baking paper","4 freezer containers, about 750 ml"],
+  ings:[
+    {q:"375 g", i:"beef mince"},
+    {q:"200 g", i:"beef mince, kept separate for the patties"},
+    {q:"300 g", i:"dry brown lentils, for the meatballs"},
+    {q:"100 g", i:"dry brown lentils, for the patties"},
+    {q:"2", i:"eggs"},
+    {q:"3", i:"onions"},
+    {q:"4 cloves", i:"garlic"},
+    {q:"1 large", i:"carrot"},
+    {q:"4 tins", i:"chopped tomato, 400 g each"},
+    {q:"2 sachets", i:"tomato paste"},
+    {q:"460 g", i:"dry pasta, for tonight and tomorrow's lunches"},
+    {q:"140 g", i:"cheddar"},
+    {q:"4 tbsp", i:"sunflower oil"},
+    {q:"30 g", i:"butter, for her portions"}],
+  steps:[
+    {at:0, mins:4, tmr:{label:"Lentils", mins:25}, t:"Get both lots of lentils boiling",
+     b:["Weigh 400 g of dry brown lentils in total. That is 300 g for the meatballs and 100 g for the patties, and they cook together.",
+        "Tip them into a sieve and rinse under a cold tap for 30 seconds.",
+        "Into the large pot. Cover with 1.2 litres of cold water, about 3 cm above the lentils.",
+        "Full heat until it boils, then drop to medium so it stays at a lazy bubble.",
+        "No salt and no lid. Start the 25 minute timer."],
+     why:"Salt at this stage toughens the skins and they never soften properly. The lid makes them boil over."},
+    {at:4, mins:9, t:"Do all the knife work now, while the lentils cook",
+     b:["Dice 2 onions as finely as you can manage. These are for the sauce.",
+        "Dice the third onion separately and set it aside. Half goes in the meatballs, half in the patties.",
+        "Crush or finely chop 4 cloves of garlic.",
+        "Peel and coarsely grate 1 large carrot.",
+        "Weigh out 375 g of mince into one bowl and 200 g into another. Put the 200 g bowl in the fridge for now."],
+     why:"One knife session covers the whole cook. Stopping to chop mid recipe is where timings fall apart."},
+    {at:13, mins:10, tmr:{label:"Onions", mins:10}, t:"Start the tomato sauce base",
+     b:["Large deep pan on medium high. 2 tablespoons of sunflower oil.",
+        "The 2 diced onions and all the grated carrot in.",
+        "A good pinch of salt now. It draws the water out and speeds up the browning.",
+        "Stir every couple of minutes for 10 minutes.",
+        "You want them soft, glossy and browning at the edges, not pale and wet."],
+     why:"Ten minutes, not two. With no herbs or spices in this plan, caramelised onion is doing most of the flavour work."},
+    {at:23, mins:2, t:"Bloom the garlic and the tomato paste",
+     b:["Garlic in. Stir constantly for 60 seconds. It must not colour past pale gold.",
+        "Both sachets of tomato paste in. Stir constantly for another 60 seconds.",
+        "The paste will darken from bright red to brick and start catching on the pan. That is what you want."],
+     why:"Frying the paste cooks out the raw tinny taste and roughly doubles the depth it adds."},
+    {at:25, mins:3, t:"Build the sauce and leave it",
+     b:["All 4 tins of chopped tomato in.",
+        "Fill one empty tin a quarter with water, swirl it and tip that in too.",
+        "1 teaspoon of salt, a good grind of pepper.",
+        "Bring to a simmer, then turn to low. Lid off.",
+        "Leave it alone now until the meatballs are ready to go in."],
+     why:"Lid off is deliberate. The sauce has to reduce and thicken or the pasta goes watery."},
+    {at:28, mins:12, t:"Drain the lentils and cool them fast",
+     b:["The 25 minute timer should be up. A lentil should squash easily between two fingers with no chalky centre.",
+        "Drain in the sieve. Do not rinse.",
+        "Spread them out flat on the baking tray in a single layer.",
+        "Leave them on the counter for 10 minutes. Put the tray outside or in front of a fan if you want them cooler faster.",
+        "They must be cool to the touch before they go anywhere near the mince."],
+     why:"This is the step that makes or breaks the recipe. Warm lentils turn the mince to paste and the balls fall apart in the pan."},
+    {at:40, mins:12, t:"Mix and roll the meatballs",
+     b:["In a big bowl: 375 g mince, 300 g of the cooled lentils, 1 egg, half the reserved diced onion.",
+        "1 teaspoon salt, plenty of black pepper.",
+        "Mix with your hands for about a minute, until you cannot see separate streaks of mince.",
+        "Wet your hands under the tap. Roll balls slightly smaller than a golf ball, about 30 g each.",
+        "You are aiming for roughly 40 balls. Line them up on a plate or board."],
+     why:"Wet hands stop the mix sticking to you, which is the difference between four minutes of rolling and fifteen."},
+    {at:52, mins:11, tmr:{label:"Browning", mins:10}, t:"Brown the meatballs in two batches",
+     b:["Second pan, or clear a space. Medium high, 2 tablespoons of sunflower oil, let it shimmer.",
+        "Half the balls in. Every ball must have a gap around it.",
+        "Do not touch them for 3 full minutes. No stirring, no shaking.",
+        "Turn each one once. Another 2 minutes.",
+        "Out onto a plate. They will still be raw inside, which is correct.",
+        "Repeat with the second half."],
+     why:"Crowding the pan drops the temperature and the balls steam grey instead of browning. Browning is where the flavour comes from in a plan with no spice rack."},
+    {at:63, mins:2, tmr:{label:"Simmer", mins:20}, t:"Meatballs into the sauce",
+     b:["Tip all the browned balls, and any juice on the plate, into the tomato sauce.",
+        "Gently push them under. Do not stir hard or they break.",
+        "Low heat, lid off, 20 minutes. Start the simmer timer.",
+        "That 20 minutes is what actually cooks them through."]},
+    {at:65, mins:10, t:"While it simmers, make the burger patties",
+     b:["Get the 200 g of mince out of the fridge.",
+        "Bowl: 200 g mince, 100 g of the cooled lentils, 1 egg, the other half of the reserved onion, salt and pepper.",
+        "Mix the same way.",
+        "Divide into 6 and press each one flat and wide, about 1 cm thick and wider than your burger rolls.",
+        "Onto the baking tray with baking paper between every layer.",
+        "Straight into the freezer, flat. Bag them tomorrow once they are solid."],
+     why:"Thin and wide is not optional. A thick patty cooked from frozen burns outside before the middle is done, and they shrink and dome as they cook."},
+    {at:75, mins:3, tmr:{label:"Pasta water", mins:9}, t:"Get the pasta water going",
+     b:["Second pot, 4 litres of water, full heat, lid on to boil faster.",
+        "When it boils, 1 heaped tablespoon of salt.",
+        "You need 460 g of dry pasta. Weigh it now so you are not guessing later.",
+        "That is 240 g for you across supper and lunch, and 220 g for her."]},
+    {at:84, mins:12, tmr:{label:"Pasta", mins:11}, t:"Cook the pasta",
+     b:["All 460 g in, stir once so it does not clump.",
+        "Cook 1 minute less than the packet says. Start the pasta timer.",
+        "Before you drain it, scoop out a mug of the cooking water.",
+        "Drain. Do not rinse.",
+        "If the sauce looks tight, loosen it with a splash of that pasta water."],
+     why:"The starch in the pasta water is what makes the sauce cling to the pasta instead of sliding off it."},
+    {at:96, mins:5, eat:true, t:"Plate up", pack:false,
+     b:["Yours: 6 meatballs, 120 g of the cooked pasta, sauce over, 30 g grated cheddar.",
+        "Hers: 4 meatballs, 110 g of pasta, sauce, 40 g cheddar and 15 g of butter stirred through the pasta first.",
+        "Sit down and eat before you do the next step."]},
+    {at:101, mins:8, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["Two containers, straight from the pans while everything is still out.",
+        "Yours: 6 meatballs, 120 g pasta, plenty of sauce, 30 g cheddar on top inside the container.",
+        "Hers: 4 meatballs, 110 g pasta, sauce, 40 g cheddar, 15 g butter through the pasta.",
+        "Sauce generously over the pasta, not next to it.",
+        "Let them stop steaming before the lids go on."],
+     why:"Cheddar goes in now, not tomorrow. It melts through when reheated. Sauce over the top is what stops the pasta drying out overnight."},
+    {at:109, mins:6, t:"Put the rest away",
+     b:["Split what is left of the meatballs and sauce between 2 containers, about 750 ml each.",
+        "That is the reheat night supper and the lunch after it.",
+        "Cool on the counter until they stop steaming, then into the freezer.",
+        "Do not freeze any cooked pasta. You boil that fresh on the night."]}],
+  him:"6 meatballs, 120 g dry pasta, 30 g cheddar", her:"4 meatballs, 110 g dry pasta, 40 g cheddar, 15 g butter through the pasta",
+  hk:"940 kcal, 46 g protein", rk:"965 kcal, 42 g protein",
+  before:["Nothing. This is the cook everything else depends on."],
+  extra:["6 burger patties for the burger night, into the freezer","2 containers of meatballs and sauce, into the freezer"],
+  note:"Two things make or break this one: the lentils must be completely cool before they meet the mince, and the meatballs must be browned in two batches with gaps between them." },
 
-  "2": { name:"Creamy chicken and spinach pasta", short:"Chicken pasta", time:"30 min",
-    tag:"The recipe that fixes dry chicken. Never freeze it, cream splits.",
-    him:"200 g chicken, 120 g dry pasta, 15 g butter through it", her:"130 g chicken, 110 g dry pasta, extra 30 ml cream, 40 g cheddar",
-    hk:"1 020 kcal, 63 g protein", rk:"950 kcal, 45 g protein",
-    ings:["2 large chicken breasts","1 onion","2 garlic cloves","250 ml cream","150 g baby spinach","Pasta","40 g cheddar","Knob of butter","Half a lemon"],
-    steps:[
-      {t:"Pasta water on first. Slice the breasts across into 1 cm strips before the pan even heats. Thin strips cook in three minutes and physically cannot dry out.",m:0},
-      {t:"Sear the strips in butter, 90 seconds a side. Take them out while still slightly underdone. They finish later in the sauce.",m:3},
-      {t:"Pasta into the boiling water now. Same pan as the chicken: onion six minutes, garlic one.",m:7},
-      {t:"Cream in, reduce three minutes. Chicken and spinach back in, lid on for two minutes.",m:5},
-      {t:"Cheddar in, then lemon juice off the heat. Toss through the drained pasta.",m:0},
-      {t:"PACK TOMORROW'S LUNCH NOW. You: 200 g of the chicken, 120 g dry pasta cooked, sauce, 15 g butter. Her: 130 g chicken, 110 g pasta, extra 30 ml cream, 40 g cheddar. A tablespoon of milk into each container before the lid goes on, or it reheats claggy.",m:0}],
-    note:"The breast finishes in liquid, so it cannot overcook the way a grilled breast does. This is the single most reliable chicken method in the plan." },
+"1R": {
+  name:"Meatballs from the freezer", short:"Meatballs", time:"25 min", active:"12 min", total:25,
+  tag:"Pure reheat. Sunday already did the work. The shortest cook of the week.",
+  serves:"4 servings. Supper for two tonight, two packed lunches tomorrow.",
+  equip:["Medium pot for the pasta","Pan with a lid","Kitchen scale"],
+  ings:[{q:"1 container", i:"frozen meatballs and sauce, about 750 ml"},
+        {q:"460 g", i:"dry pasta"},
+        {q:"140 g", i:"cheddar"},
+        {q:"30 g", i:"butter, for her portions"},
+        {q:"1 splash", i:"milk or water, to loosen the sauce"}],
+  steps:[
+    {at:0, mins:2, t:"Check the container",
+     b:["It should have moved from the freezer to the fridge last night.",
+        "If it is still solid, put the sealed container in a bowl of warm tap water while you boil the pasta. Twenty minutes will do it.",
+        "Never microwave it from frozen. The outside turns to mush before the middle thaws."]},
+    {at:2, mins:3, tmr:{label:"Pasta water", mins:9}, t:"Pasta water on",
+     b:["4 litres of water, full heat, lid on.",
+        "1 heaped tablespoon of salt once it boils.",
+        "Weigh 460 g of dry pasta now."]},
+    {at:5, mins:12, tmr:{label:"Reheat", mins:12}, t:"Reheat the sauce properly",
+     b:["Sauce into a pan on low. Not the microwave.",
+        "Lid on for the first 5 minutes to get it moving.",
+        "Lid off for the last 7 so it tightens back up.",
+        "Stir gently. Hard stirring shreds the meatballs.",
+        "If it looks thick, a splash of milk or water."],
+     why:"A pan on low reheats evenly and lets the sauce reduce again. The microwave overcooks the edges and leaves the middle cold."},
+    {at:14, mins:12, tmr:{label:"Pasta", mins:11}, t:"Cook the pasta",
+     b:["All 460 g in, stir once.","One minute less than the packet says.","Save a mug of the water before draining.","Drain, do not rinse."]},
+    {at:26, mins:4, eat:true, t:"Plate up",
+     b:["Yours: 6 meatballs, 120 g pasta, sauce, 30 g cheddar.",
+        "Hers: 4 meatballs, 110 g pasta, sauce, 40 g cheddar, 15 g butter through the pasta."]},
+    {at:30, mins:6, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["Same portions again, into two containers.","Sauce over the pasta.","Cheddar in now.","Lids on once they stop steaming."]}],
+  him:"6 meatballs, 120 g dry pasta, 30 g cheddar", her:"4 meatballs, 110 g dry pasta, 40 g cheddar, 15 g butter",
+  hk:"940 kcal, 46 g protein", rk:"965 kcal, 42 g protein",
+  before:["Move one container of meatballs and sauce from the freezer to the fridge."],
+  extra:[],
+  note:"This night costs you 25 minutes and exists purely because you did the Sunday block. If you skip Sunday, this night has nothing to reheat." },
 
-  "3": { name:"Beef and lentil burgers with air fryer wedges", short:"Burgers", time:"30 min",
-    tag:"Patties made on Sunday, cooked from frozen. No thawing.",
-    him:"2 patties, 1 roll, 200 g wedges", her:"1 patty, 1 roll, cheddar slice, 150 g wedges",
-    hk:"1 000 kcal, 58 g protein", rk:"950 kcal, 32 g protein",
-    ings:["Frozen patties from Sunday","4 potatoes","Burger rolls","Cheddar slices","Mayonnaise","1 tomato, sliced","Sunflower oil"],
-    steps:[
-      {t:"Wedges first, skins on: cut, toss in sunflower oil and salt, air fryer 200 for 25 minutes. The skins are three times the fibre.",m:25},
-      {t:"Cook three extra patties, not two. One extra each is tomorrow's lunch, and the third covers the one that falls apart.",m:0},
-      {t:"Patties straight from the freezer into a hot dry pan. Four minutes a side. No oil, the mince carries its own fat.",m:8},
-      {t:"Cheddar on top for the last minute with the lid on. Build: roll, mayonnaise, patty, tomato.",m:1},
-      {t:"PACK TOMORROW'S LUNCH NOW. You: 2 patties in a roll, mayonnaise, 200 g wedges in the second container. Her: 1 patty, mayonnaise, cheddar slice, 150 g wedges. Tomato in a separate tub or the roll is wet by ten.",m:0}],
-    note:"Press Sunday's patties thin and wide, not thick. Thick patties from frozen burn on the outside before the middle is cooked." },
+"2": {
+  name:"Creamy chicken and spinach pasta", short:"Chicken pasta", time:"35 min", active:"25 min", total:35,
+  tag:"The method that makes chicken breast impossible to dry out. Never freeze it, cream splits.",
+  serves:"4 servings. Supper for two tonight, two packed lunches tomorrow.",
+  equip:["Large pan, 28 cm, with a lid","Pot for the pasta","Kitchen scale","Sharp knife"],
+  ings:[{q:"330 g", i:"chicken breast, about 2 breasts"},
+        {q:"1", i:"onion"},
+        {q:"2 cloves", i:"garlic"},
+        {q:"250 ml", i:"cream"},
+        {q:"150 g", i:"baby spinach"},
+        {q:"460 g", i:"dry pasta"},
+        {q:"80 g", i:"cheddar"},
+        {q:"30 g", i:"butter"},
+        {q:"half", i:"lemon"},
+        {q:"30 ml", i:"extra cream, for her portions"},
+        {q:"2 tbsp", i:"milk, for the lunch containers"}],
+  steps:[
+    {at:0, mins:3, tmr:{label:"Pasta water", mins:9}, t:"Water on before anything else",
+     b:["4 litres, full heat, lid on.","1 heaped tablespoon of salt once it boils.","Weigh 460 g of dry pasta.","Dice the onion, crush 2 cloves of garlic."]},
+    {at:3, mins:5, t:"Slice the chicken thin, across the grain",
+     b:["Lay each breast flat and slice ACROSS it into strips about 1 cm thick.",
+        "Across, not along. The grain runs the length of the breast.",
+        "You should get 10 to 12 strips from each breast.",
+        "Salt them lightly now."],
+     why:"A 1 cm strip is cooked through in about three minutes. It is physically too thin to be overcooked in the time this recipe takes, which is the whole trick."},
+    {at:8, mins:4, t:"Sear the chicken and take it straight out",
+     b:["Large pan on medium high. 30 g butter, let it foam and settle.",
+        "Chicken in, in one layer, gaps between the strips.",
+        "90 seconds. Turn. 90 seconds.",
+        "Out onto a plate while the middles are still slightly underdone.",
+        "Leave every scrap of browned butter and juice in the pan."],
+     why:"It finishes cooking in the sauce later. Taking it out underdone is how it stays soft."},
+    {at:12, mins:7, tmr:{label:"Onions", mins:6}, t:"Onions in the same pan",
+     b:["Turn to medium. The diced onion straight into the chicken pan.",
+        "Pinch of salt. 6 minutes, stirring now and then.",
+        "Scrape the browned bits off the bottom as the onion releases its water.",
+        "Garlic in for the last 60 seconds."]},
+    {at:19, mins:4, tmr:{label:"Cream", mins:3}, t:"Cream in and reduce",
+     b:["250 ml cream into the pan.","Bring to a gentle bubble, not a rolling boil.","3 minutes. It should coat the back of a spoon.","Taste it and salt it properly now."],
+     why:"Cream that has not reduced makes a thin sauce that slides off the pasta and separates overnight in the lunchbox."},
+    {at:12, mins:12, tmr:{label:"Pasta", mins:11}, t:"Pasta goes in when the water boils",
+     b:["All 460 g in, stir once.","One minute less than the packet.","Save a mug of the water before draining."]},
+    {at:23, mins:3, t:"Chicken and spinach back in",
+     b:["All the chicken and the juice from the plate back into the sauce.",
+        "All 150 g of spinach on top. It looks like far too much. It is not.",
+        "Lid on. 2 minutes.",
+        "Lid off and stir. The spinach will have collapsed to almost nothing."]},
+    {at:26, mins:2, t:"Finish it off the heat",
+     b:["Pan off the heat.","80 g grated cheddar in, stir until it disappears.","Squeeze half a lemon in.","Taste. It will almost certainly need more salt."],
+     why:"Cheese added on the heat goes stringy and oily. Acid at the very end is what stops a cream sauce tasting flat."},
+    {at:28, mins:4, eat:true, t:"Combine and plate",
+     b:["Drained pasta into the pan, toss until every piece is coated.","Loosen with pasta water if it is tight.",
+        "Yours: 200 g of the chicken and 120 g of pasta.",
+        "Hers: 130 g chicken, 110 g pasta, plus 30 ml extra cream and a bit more cheddar stirred through."]},
+    {at:32, mins:6, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["Two containers.","Yours: 200 g chicken, 120 g pasta, sauce.","Hers: 130 g chicken, 110 g pasta, sauce, extra cream.",
+        "A TABLESPOON OF MILK into each container before the lid goes on.",
+        "Let them stop steaming before you seal them."],
+     why:"A cream sauce tightens overnight in the fridge and reheats claggy. That spoon of milk is the single thing that keeps this lunch good."}],
+  him:"200 g chicken, 120 g dry pasta, 15 g butter", her:"130 g chicken, 110 g dry pasta, 30 ml extra cream, 40 g cheddar",
+  hk:"1 010 kcal, 61 g protein", rk:"955 kcal, 44 g protein",
+  before:["Move tomorrow's chicken portion from the freezer to the fridge if it is not already thawed."],
+  extra:[],
+  note:"Never freeze this one. Cream splits on thawing and comes back grainy and separated." },
 
-  "4": { name:"Tray roast chicken, butternut and broccoli", short:"Tray roast", time:"40 min",
-    tag:"Mostly oven time. Two extra breasts here become the chicken mayo lunch.",
-    him:"1 large breast, 250 g butternut, broccoli", her:"1 breast, 200 g butternut, broccoli, extra feta and butter",
-    hk:"965 kcal, 58 g protein", rk:"950 kcal, 40 g protein",
-    ings:["4 chicken breasts, 2 for tonight and 2 for lunch","500 g butternut, cubed","Half a cauliflower","300 g broccoli","4 whole garlic cloves","Sunflower oil","Butter","50 g feta","Half a lemon"],
-    steps:[
-      {t:"Oven to 220. Butternut and cauliflower cubed, oiled, salted, onto the tray. In for 15 minutes on their own.",m:15},
-      {t:"Butterfly all four breasts flat. Two are for tonight, two are for tomorrow's sandwiches. Onto the tray with butter on each and the whole garlic cloves. Twelve minutes only. That is the entire trick.",m:12},
-      {t:"Broccoli onto the tray for the final 8 minutes, so it roasts rather than steams.",m:8},
-      {t:"Feta crumbled over, lemon squeezed over everything. Serve two breasts.",m:0},
-      {t:"The two spare breasts cool with the lid off. Do not skip the cooling. Warm chicken sealed in a box sweats and goes slimy by morning.",m:15},
-      {t:"PACK TOMORROW'S LUNCH NOW. Chop the chicken, do not slice it. Mix with mayonnaise in a bowl first. You: 180 g chicken, 30 g mayonnaise, 4 buttered slices. Her: 100 g chicken, 40 g mayonnaise, a cheddar slice, 4 buttered slices. Butter both faces of every slice.",m:0}],
-    note:"Twelve minutes for the breasts. Set the timer and trust it. Every minute past that is moisture leaving the meat." },
+"3": {
+  name:"Beef and lentil burgers with air fryer wedges", short:"Burgers", time:"35 min", active:"20 min", total:35,
+  tag:"Patties come out of the freezer and go straight into the pan. No thawing at all.",
+  serves:"4 servings. Supper for two tonight, two packed lunches tomorrow.",
+  equip:["Air fryer","Heavy pan, no oil needed","Kitchen scale"],
+  ings:[{q:"6", i:"frozen patties from the Sunday batch"},
+        {q:"1.4 kg", i:"potatoes, about 6 medium"},
+        {q:"4", i:"burger rolls"},
+        {q:"6 slices", i:"cheddar, about 90 g"},
+        {q:"60 g", i:"mayonnaise"},
+        {q:"1 large", i:"tomato"},
+        {q:"2 tbsp", i:"sunflower oil"}],
+  steps:[
+    {at:0, mins:7, t:"Cut the wedges, skins on",
+     b:["Wash the potatoes. Do not peel them.",
+        "Cut each one in half lengthways, then each half into 3 or 4 wedges.",
+        "Into a bowl, 2 tablespoons of sunflower oil, a heaped teaspoon of salt, toss with your hands until every wedge is coated."],
+     why:"The skins are roughly three times the fibre of the flesh and they crisp far better than peeled potato."},
+    {at:7, mins:26, tmr:{label:"Wedges", mins:25}, t:"Wedges into the air fryer",
+     b:["200 degrees, 25 minutes.","Do not fill the basket more than two thirds. Cook in two batches if you have to.","Shake the basket hard at 10 minutes and again at 18.","Start the wedge timer."],
+     why:"An overloaded basket steams instead of crisping. Two batches beats one bad one."},
+    {at:20, mins:4, t:"Prep the build while the wedges cook",
+     b:["Slice the tomato into 6 rounds and put them on a plate to one side.",
+        "Split the rolls.",
+        "Get the cheddar slices out."]},
+    {at:24, mins:10, tmr:{label:"Patties", mins:8}, t:"Cook the patties from frozen",
+     b:["Heavy pan on medium high. NO OIL. The mince carries enough fat.",
+        "All 6 patties straight from the freezer into the dry pan.",
+        "4 minutes. Do not press them and do not move them.",
+        "Flip once. 3 more minutes.",
+        "A slice of cheddar on each, lid on for the last 60 seconds to melt it."],
+     why:"Cooking 6 rather than 4 is deliberate. Two are tomorrow's lunch. Pressing a patty squeezes out the fat that keeps it moist."},
+    {at:34, mins:4, eat:true, t:"Build and plate",
+     b:["Roll, mayonnaise on both cut faces, patty, tomato on top.",
+        "Yours: 2 patties in one roll, 200 g of wedges.",
+        "Hers: 1 patty, an extra slice of cheddar, 150 g of wedges."]},
+    {at:38, mins:6, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["Yours: 2 patties in a roll with mayonnaise. Wedges in a second container.",
+        "Hers: 1 patty in a roll with mayonnaise and cheddar, 150 g of wedges.",
+        "TOMATO GOES IN A SEPARATE SMALL TUB. Do not put it in the roll.",
+        "Build the rolls cold. Do not reheat them tomorrow, only the wedges."],
+     why:"Sliced tomato sitting inside a roll overnight soaks the bread through by mid morning. It takes four seconds to add at your desk."}],
+  him:"2 patties, 1 roll, 200 g wedges", her:"1 patty, 1 roll, cheddar slice, 150 g wedges",
+  hk:"985 kcal, 47 g protein", rk:"940 kcal, 33 g protein",
+  before:["Nothing. The patties go in frozen."],
+  extra:["Two extra patties and their wedges are tomorrow's lunch. Cook 6, not 4."],
+  note:"If the patties fall apart in the pan they were too thick or the lentils were warm when you made them. Press them thinner next Sunday." },
 
-  "5": { name:"Ham and bacon pizza", short:"Pizza", time:"25 min",
-    tag:"Twice a month. Cold pizza is the next day's lunch and needs nothing done to it.",
-    him:"Half a large pizza, 250 ml milk", her:"Half a large pizza, extra mozzarella",
-    hk:"990 kcal, 45 g protein", rk:"1 000 kcal, 40 g protein",
-    ings:["2 pizza bases","Tomato paste or passata","200 g grated mozzarella, fine from frozen","100 g shaved ham","100 g bacon","Half an onion","Handful of baby spinach"],
-    steps:[
-      {t:"Oven to 240, hottest shelf. It takes longer to heat than the topping takes to make, so switch it on before anything else.",m:0},
-      {t:"Bacon and onion into a dry pan together until the onion is soft and browned.",m:6},
-      {t:"Build: thin layer of passata. A spinach layer under the cheese, where it vanishes completely. Then mozzarella, ham, bacon, onion.",m:0},
-      {t:"Hottest shelf, 10 to 12 minutes, until the edges catch colour.",m:11},
-      {t:"PACK TOMORROW'S LUNCH NOW. Half a pizza each, about 5 slices, into a container as soon as it stops steaming. Baking paper between the layers or the cheese welds them together.",m:0}],
-    note:"Under sauce, not over. A wet base never crisps. This is also the lowest protein lunch of the week, so take the shake with it tomorrow rather than after training." },
+"4": {
+  name:"Tray roast chicken, butternut and broccoli", short:"Tray roast", time:"50 min", active:"15 min", total:50,
+  tag:"Mostly oven time. Two extra breasts here become tomorrow's chicken mayo lunch.",
+  serves:"2 suppers tonight plus 2 packed lunches tomorrow, cooked in one tray.",
+  equip:["Large oven tray, or two","Sharp knife","Kitchen scale","Container for the spare chicken"],
+  ings:[{q:"640 g", i:"chicken breast, about 4 breasts, 2 for tonight and 2 for lunch"},
+        {q:"500 g", i:"butternut"},
+        {q:"250 g", i:"cauliflower"},
+        {q:"300 g", i:"broccoli"},
+        {q:"4 cloves", i:"garlic, left whole and unpeeled"},
+        {q:"3 tbsp", i:"sunflower oil"},
+        {q:"40 g", i:"butter"},
+        {q:"50 g", i:"feta"},
+        {q:"half", i:"lemon"},
+        {q:"70 g", i:"mayonnaise, for tomorrow's sandwiches"},
+        {q:"8 slices", i:"white bread, for tomorrow"}],
+  steps:[
+    {at:0, mins:3, t:"Oven on first",
+     b:["220 degrees, fan if you have it.","It takes about 12 minutes to get there, which is longer than the prep takes."]},
+    {at:3, mins:9, t:"Cube the hard vegetables",
+     b:["Peel the butternut and cut it into 2 cm cubes. Even sizes matter more than exact size.",
+        "Break the cauliflower into florets roughly the same size.",
+        "Both onto the tray with 3 tablespoons of oil and a heaped teaspoon of salt.",
+        "Toss with your hands and spread them into ONE layer. Use two trays if they are piled up.",
+        "4 whole unpeeled garlic cloves scattered in."],
+     why:"Piled vegetables steam and go soft. A single layer is what gets you browned edges."},
+    {at:12, mins:16, tmr:{label:"Veg", mins:15}, t:"Butternut and cauliflower in alone",
+     b:["Into the oven for 15 minutes on their own.","Start the veg timer.","They need a head start. The chicken cooks in less than half the time they do."]},
+    {at:14, mins:8, t:"Butterfly all four breasts",
+     b:["Hand flat on top of a breast. Knife parallel to the board, cut it almost in half through the side.",
+        "Open it out like a book so it lies flat and is about 1.5 cm thick everywhere.",
+        "Do all four. Two are for tonight, two are for tomorrow's sandwiches.",
+        "Salt and pepper both sides."],
+     why:"A whole breast is thick at one end and thin at the other, so one end is dry before the other is done. Butterflied, it is one even thickness and cooks in twelve minutes."},
+    {at:28, mins:13, tmr:{label:"Chicken", mins:12}, t:"Chicken onto the tray, 12 minutes exactly",
+     b:["Tray out. Push the vegetables to the sides.",
+        "All 4 butterflied breasts into the middle, not overlapping.",
+        "A 10 g knob of butter on top of each one.",
+        "Back in. TWELVE MINUTES. Set the timer and trust it."],
+     why:"Every minute past twelve is moisture leaving the meat. This is the single most common way this recipe gets ruined."},
+    {at:33, mins:9, tmr:{label:"Broccoli", mins:8}, t:"Broccoli in for the last 8 minutes",
+     b:["Cut the broccoli into florets.","Toss in a little oil and salt.","Onto the tray around the chicken for the final 8 minutes."],
+     why:"Broccoli only needs eight minutes. Putting it in at the start is how it ends up grey and sulphurous."},
+    {at:41, mins:4, eat:true, t:"Finish and serve two breasts",
+     b:["Tray out. Crumble 50 g of feta over everything.",
+        "Squeeze half a lemon over the whole tray.",
+        "Squeeze the roasted garlic out of its skins and mash it into the vegetables.",
+        "Serve 2 breasts. Yours with 250 g of vegetables, hers with 200 g plus a bit more feta and butter."]},
+    {at:45, mins:16, t:"Cool the two spare breasts properly",
+     b:["The other 2 breasts onto a plate, NOT into a sealed container.",
+        "Leave them uncovered on the counter for 15 minutes until they stop steaming.",
+        "Then into a container in the fridge."],
+     why:"Warm chicken sealed in a box makes its own steam, and by morning it is slimy. Fifteen minutes uncovered prevents that completely."},
+    {at:61, mins:8, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["CHOP the cooled chicken into 1 cm pieces. Do not slice it.",
+        "In a bowl, mix the chopped chicken with 70 g of mayonnaise, salt and pepper. Mix it BEFORE it goes near the bread.",
+        "Butter all 8 slices of bread on both faces, right to the crust.",
+        "Yours: 180 g of the chicken mix across 4 slices.",
+        "Hers: 100 g of the mix, a slice of cheddar, across 4 slices.",
+        "Into a flat container, not a bag."],
+     why:"Chopped chicken holds mayonnaise, sliced chicken sheds it. Butter on both faces waterproofs the bread, and the crust edge is where it goes soggy first."}],
+  him:"1 large butterflied breast, 250 g roast vegetables", her:"1 breast, 200 g vegetables, extra feta and butter",
+  hk:"960 kcal, 57 g protein", rk:"945 kcal, 41 g protein",
+  before:["Nothing, as long as the chicken thawed in the fridge."],
+  extra:["Cook 4 breasts, not 2. Two are tomorrow's chicken mayo sandwiches."],
+  note:"Twelve minutes for the chicken. Set the timer, walk away, trust it." },
 
-  "6": { name:"Braai night", short:"Braai", time:"50 min",
-    tag:"The meat rotates on a four week cycle. The sides never change.",
-    him:"250 g meat, 200 g wedges, salad", her:"150 g meat, 180 g wedges, salad with extra feta and oil",
-    hk:"1 010 kcal, 62 g protein", rk:"960 kcal, 38 g protein",
-    ings:["Braai meat for this week","4 potatoes for wedges","3 extra potatoes for tomorrow's salad","1 large tomato","Half an onion, sliced thin","50 g feta","2 baby marrows","Vinegar"],
-    steps:[
-      {t:"Light the coals. They need about 40 minutes to get right, so this happens before any prep.",m:40},
-      {t:"Chicken weeks only: brine first. Two tablespoons of salt in a litre of water, breasts in for 30 minutes, then pat completely dry. This is what stops braaied breast going dry.",m:30},
-      {t:"Boil 3 extra potatoes now for tomorrow's potato salad. Doing it tomorrow morning will not happen.",m:20},
-      {t:"Salad now, not later: sliced tomato, thin raw onion, feta, oil, vinegar, salt. It needs 20 minutes standing so the tomato releases its juice into the dressing.",m:0},
-      {t:"Wedges: skins on, oiled, salted, air fryer 200 for 25 minutes while the coals finish.",m:25},
-      {t:"Meat on. Lamb chops 4 minutes a side. Rump 4 a side then rest five minutes, and resting is not optional. Chicken 4 to 5 a side. Baby marrow halved lengthways on the grid alongside.",m:10},
-      {t:"PACK TOMORROW'S LUNCH NOW. Meat goes in whole, not sliced, you slice it in the morning. Potato salad: your 300 g of potato with 30 g mayonnaise, her 250 g with 45 g mayonnaise and feta through it. Leftover tomato salad into a small tub.",m:0}],
-    note:"Sliced cold meat dries out fast in a fridge. A whole chop or a whole rump does not. Slice at the last possible moment." },
+"5": {
+  name:"Ham and bacon pizza", short:"Pizza", time:"30 min", active:"12 min", total:30,
+  tag:"Twice a month. Tomorrow's lunch is cold pizza and needs nothing done to it.",
+  serves:"2 large pizzas. Half each tonight, half each in tomorrow's lunchbox.",
+  equip:["Oven tray or pizza stone","Pan for the bacon","Grater"],
+  ings:[{q:"2", i:"pizza bases"},
+        {q:"6 tbsp", i:"tomato paste or passata"},
+        {q:"200 g", i:"grated mozzarella, fine straight from frozen"},
+        {q:"100 g", i:"shaved ham"},
+        {q:"100 g", i:"bacon"},
+        {q:"1", i:"onion"},
+        {q:"60 g", i:"baby spinach"},
+        {q:"250 ml", i:"full cream milk, yours"},
+        {q:"150 g", i:"yoghurt, hers"}],
+  steps:[
+    {at:0, mins:2, t:"Oven to maximum, right now",
+     b:["240 degrees, or as high as it goes.","Shelf near the top.","If you have a pizza stone or a heavy tray, put it in now to heat up with the oven.",
+        "The oven takes longer to get hot than the topping takes to make."],
+     why:"A hot base is the whole difference between crisp and floppy."},
+    {at:2, mins:8, tmr:{label:"Bacon", mins:7}, t:"Bacon and onion in a dry pan",
+     b:["Slice the onion thin. Cut the bacon into 2 cm pieces.",
+        "Both into a cold dry pan together, then turn on medium.",
+        "7 minutes. The bacon fat renders out and fries the onion in it.",
+        "Done when the onion is soft and browning at the edges.",
+        "Tip onto kitchen paper to drain."],
+     why:"Starting in a cold pan renders the fat out slowly instead of burning the outside of the bacon."},
+    {at:10, mins:5, t:"Build both pizzas",
+     b:["3 tablespoons of passata per base, spread THIN, leave a 2 cm rim.",
+        "A layer of spinach directly on the sauce. It disappears completely under the cheese.",
+        "100 g of mozzarella per base, straight from frozen.",
+        "Then the ham, then the bacon and onion.",
+        "Do not add more sauce or more cheese than this."],
+     why:"Too much sauce is the number one reason a home pizza base stays wet. Under the cheese, never on top."},
+    {at:15, mins:12, tmr:{label:"Pizza", mins:11}, t:"Hottest shelf, 11 minutes",
+     b:["Both in, or one at a time if your oven is small.","11 to 12 minutes.","Done when the crust edge has real colour and the cheese is bubbling and blistered in places."]},
+    {at:27, mins:4, eat:true, t:"Rest before you cut",
+     b:["Out of the oven, 3 minutes on a board before cutting.","Cut each into 10 slices.","Half a pizza each tonight, about 5 slices.",
+        "Yours with 250 ml of milk. Hers with 150 g of yoghurt and a spoon of sugar."],
+     why:"Cutting straight away lets the molten cheese slide off the slice."},
+    {at:31, mins:5, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["The other half of each pizza, about 5 slices each.",
+        "Into containers as soon as they stop steaming, not after an hour on the board.",
+        "BAKING PAPER BETWEEN THE LAYERS or the cheese welds the slices into a brick.",
+        "No reheating tomorrow. Cold pizza is the point."],
+     why:"This is the lowest protein lunch of the week at 45 g for you. Take your shake with it tomorrow rather than after training."}],
+  him:"Half a large pizza, about 5 slices, plus 250 ml milk", her:"Half a large pizza, plus yoghurt with sugar",
+  hk:"985 kcal, 45 g protein", rk:"1 000 kcal, 40 g protein",
+  before:["Move the mozzarella and a pizza base from the freezer to the fridge if you want, though both work from frozen."],
+  extra:[],
+  note:"Under sauce, not over. A wet base never crisps, no matter how hot the oven is." },
 
-  "F": { name:"Cheese and ham toastie fallback", short:"Toasties", time:"10 min",
-    tag:"Planned laziness, and the no pizza week. Once a week at most.",
-    him:"4 slices, 60 g cheddar, 80 g ham, 250 ml milk", her:"4 slices, 60 g cheddar, 50 g ham, 400 ml milk, 150 g yoghurt with sugar",
-    hk:"950 kcal, 55 g protein", rk:"1 000 kcal, 45 g protein",
-    ings:["8 slices white bread","120 g cheddar","130 g ham","Butter","Milk","Yoghurt and sugar for her"],
-    steps:[
-      {t:"Butter the bread on both sides. Outside for the crunch, inside to waterproof it against the filling.",m:0},
-      {t:"Build with cheddar and ham. Air fryer 6 minutes at 200, flip once.",m:6},
-      {t:"You: a glass of milk. Her: a bigger glass plus yoghurt with sugar. That closes the gap a plain toastie leaves.",m:0},
-      {t:"NO LUNCH COMES OUT OF THIS NIGHT. Tomorrow is toasties again, built cold, or pull a meatball container from the freezer instead. Decide now, not in the morning.",m:0}],
-    note:"Two plain cheese sandwiches is 550 kcal and 22 g protein, well short of target. This version lands near 950 to 1 000 kcal each." }
+"6": {
+  name:"Braai night", short:"Braai", time:"75 min", active:"30 min", total:75,
+  tag:"The meat rotates on a four week cycle. The sides never change.",
+  serves:"2 suppers tonight, plus cold meat and potato salad for two lunches tomorrow.",
+  equip:["Braai and coals","Air fryer","Pot for the salad potatoes","Tongs","Kitchen scale"],
+  ings:[{q:"see the app", i:"braai meat for this week"},
+        {q:"900 g", i:"potatoes for wedges, about 4"},
+        {q:"700 g", i:"potatoes for tomorrow's salad, about 3"},
+        {q:"1 large", i:"tomato"},
+        {q:"half", i:"onion"},
+        {q:"50 g", i:"feta"},
+        {q:"2", i:"baby marrows"},
+        {q:"3 tbsp", i:"vinegar"},
+        {q:"4 tbsp", i:"sunflower oil"},
+        {q:"75 g", i:"mayonnaise, for tomorrow's potato salad"}],
+  steps:[
+    {at:0, mins:5, tmr:{label:"Coals", mins:40}, t:"Light the coals first, before anything else",
+     b:["Light them now. They need about 40 minutes to be ready.",
+        "Ready means covered in grey ash with no black left and no flames.",
+        "You should be able to hold your hand 15 cm above the grid for 3 seconds, no longer."],
+     why:"Cooking over flames chars the outside and leaves the middle raw. Grey ash is the only signal that matters."},
+    {at:5, mins:5, tmr:{label:"Brine", mins:30}, t:"CHICKEN WEEKS ONLY: brine the breasts",
+     b:["Skip this step entirely if this week's meat is lamb or steak.",
+        "2 heaped tablespoons of salt dissolved in 1 litre of cold water.",
+        "Chicken breasts in, fully submerged, 30 minutes. No longer.",
+        "Lift out and pat completely dry with kitchen paper before they go near the coals."],
+     why:"Brining is the only reliable way to stop braaied chicken breast going dry. Patting dry afterwards is what lets it colour."},
+    {at:10, mins:22, tmr:{label:"Salad potatoes", mins:20}, t:"Boil tomorrow's salad potatoes NOW",
+     b:["700 g of potatoes, cut into 3 cm chunks, skins on.",
+        "Cold salted water, bring to the boil, then 20 minutes at a simmer.",
+        "Done when a knife slides in with no resistance.",
+        "Drain and leave them to cool right down."],
+     why:"Doing this tomorrow morning will not happen. Twenty minutes now buys you tomorrow's lunch."},
+    {at:15, mins:6, t:"Make the salad early and leave it",
+     b:["Slice the tomato thick and the half onion as thin as you can.",
+        "Into a bowl with 50 g crumbled feta.",
+        "3 tablespoons vinegar, 4 tablespoons sunflower oil, a good pinch of salt.",
+        "Toss and leave it on the counter for at least 20 minutes."],
+     why:"Twenty minutes standing lets the salt pull juice out of the tomato, and that juice becomes the dressing. Made at the last second it tastes of nothing."},
+    {at:25, mins:28, tmr:{label:"Wedges", mins:25}, t:"Wedges into the air fryer",
+     b:["900 g of potatoes cut into wedges, skins on.","2 tablespoons oil, heaped teaspoon of salt, tossed.","Air fryer 200 degrees, 25 minutes.","Shake at 10 minutes and again at 18."]},
+    {at:45, mins:3, t:"Baby marrow onto the grid",
+     b:["Halve the baby marrows lengthways.","Brush the cut faces with oil, salt them.","Cut side down on the grid for about 4 minutes a side."]},
+    {at:48, mins:14, tmr:{label:"Meat", mins:10}, t:"Meat on",
+     b:["LAMB CHOPS: 4 minutes a side over direct heat. Rest 5 minutes.",
+        "RUMP STEAK: 4 minutes a side, then rest 5 minutes. The rest is not optional.",
+        "BRINED CHICKEN BREAST: 5 minutes a side, moved to the cooler edge if it colours too fast.",
+        "One turn only. Do not keep flipping."],
+     why:"Resting lets the juice redistribute. Cut a rump straight off the coals and it all runs out onto the board."},
+    {at:62, mins:6, eat:true, t:"Rest, then plate",
+     b:["Meat off, loosely covered, 5 minutes.","Yours: 250 g of meat, 200 g of wedges, salad.","Hers: 150 g of meat, 180 g of wedges, salad with extra feta and oil."]},
+    {at:68, mins:8, pack:true, t:"PACK TOMORROW'S LUNCH",
+     b:["The leftover meat goes into a container WHOLE. Do not slice it tonight.",
+        "Potato salad: chop the cooled boiled potatoes, mix yours with 30 g mayonnaise, hers with 45 g mayonnaise and feta through it.",
+        "Any leftover tomato salad into a small separate tub, it leaks.",
+        "Tomorrow morning, slice the meat straight into the box."],
+     why:"Sliced cold meat dries out fast in a fridge. A whole chop or a whole rump does not. Slice at the last possible moment."}],
+  him:"250 g meat, 200 g wedges, salad", her:"150 g meat, 180 g wedges, salad with extra feta and oil",
+  hk:"1 005 kcal, 58 g protein", rk:"950 kcal, 36 g protein",
+  before:["Take this week's braai meat out of the fridge 40 minutes before it goes on the coals, so it is not fridge cold."],
+  extra:["Boil 700 g of extra potatoes for tomorrow's potato salad."],
+  note:"Everything except the meat can be done before the coals are ready. Work backwards from grey ash." },
+
+"F": {
+  name:"Cheese and bacon toastie night", short:"Toasties", time:"15 min", active:"10 min", total:15,
+  tag:"Planned laziness, and the no pizza week. Once a week at most.",
+  serves:"2 suppers. This night produces no lunch, so read the last step.",
+  equip:["Air fryer or a pan","Butter knife"],
+  ings:[{q:"8 slices", i:"white bread"},
+        {q:"120 g", i:"cheddar"},
+        {q:"100 g", i:"ham"},
+        {q:"100 g", i:"bacon"},
+        {q:"40 g", i:"butter"},
+        {q:"650 ml", i:"full cream milk, 250 yours and 400 hers"},
+        {q:"150 g", i:"yoghurt and a spoon of sugar, hers"}],
+  steps:[
+    {at:0, mins:6, tmr:{label:"Bacon", mins:6}, t:"Bacon first",
+     b:["Bacon into a cold dry pan, then turn on medium.","6 minutes until crisp.","Onto kitchen paper."]},
+    {at:6, mins:4, t:"Butter both faces of every slice",
+     b:["All 8 slices, buttered on BOTH sides, right to the crust.",
+        "Outside butter is what makes it crisp. Inside butter waterproofs the bread against the filling."],
+     why:"Skipping the inside butter is why a toastie goes soggy in the middle."},
+    {at:10, mins:2, t:"Build them",
+     b:["Yours: 60 g cheddar, 50 g ham, half the bacon across 4 slices.","Hers: 60 g cheddar, 50 g ham, the rest of the bacon."]},
+    {at:12, mins:7, tmr:{label:"Toasties", mins:6}, t:"Air fryer, 6 minutes",
+     b:["200 degrees, 6 minutes, flip once at 3.","Or a pan on medium, 3 minutes a side, pressed down with a spatula."]},
+    {at:19, mins:3, eat:true, t:"Serve with the liquid calories",
+     b:["Yours: 250 ml of milk alongside.","Hers: 400 ml of milk plus 150 g of yoghurt with a spoon of sugar.",
+        "Two plain toasties on their own is only about 550 kcal, which is 400 short of your target."]},
+    {at:22, mins:2, pack:true, t:"THIS NIGHT MAKES NO LUNCH. Decide now.",
+     b:["Option 1: build two more toasties cold now and toast them at work tomorrow.",
+        "Option 2: pull a meatball container out of the freezer tonight for tomorrow.",
+        "Pick one before you go to bed. At seven in the morning you will pick neither."]}],
+  him:"4 slices, 60 g cheddar, 50 g ham, bacon, 250 ml milk", her:"4 slices, 60 g cheddar, 50 g ham, bacon, 400 ml milk, yoghurt",
+  hk:"965 kcal, 52 g protein", rk:"1 010 kcal, 46 g protein",
+  before:["Nothing."],
+  extra:["This night produces no lunch. Sort tomorrow out tonight."],
+  note:"Once a week at most. Twice and your weekly protein drops below target." }
 };
+
 
 const MEAL_L = {
   "L1":{ name:"Meatball pasta", short:"Meatball pasta", mode:"Reheat 2 min",
     him:"6 meatballs with sauce, 120 g dry pasta cooked, 30 g cheddar",
-    her:"3 meatballs with sauce, 110 g dry pasta cooked, 40 g cheddar, 15 g butter through the pasta",
-    hk:"1 010 kcal, 63 g protein", rk:"985 kcal, 47 g protein",
-    trick:"This lunch improves overnight. The sauce keeps the pasta from drying, which is exactly why plain pasta lunches fail and this one does not.",
-    pack:["Pack straight from the pot while you plate up","Sauce generously over the pasta, not beside it","Cheddar into the container now, it melts on reheating","Her butter goes through the pasta before the lid goes on"] },
+    her:"4 meatballs with sauce, 110 g dry pasta cooked, 40 g cheddar, 15 g butter through the pasta",
+    hk:"940 kcal, 46 g protein", rk:"965 kcal, 42 g protein",
+    trick:"This one improves overnight. The sauce keeps the pasta from drying, which is why plain pasta lunches fail and this one does not.",
+    pack:["Pack straight from the pans while you plate up","Sauce generously over the pasta, not beside it","Cheddar into the container now, it melts on reheating","Her butter goes through the pasta before the lid goes on"] },
   "L2":{ name:"Creamy chicken and spinach pasta", short:"Chicken pasta", mode:"Reheat 2 min",
-    him:"200 g of the cooked chicken, 120 g dry pasta cooked, cream sauce, 15 g butter",
-    her:"130 g chicken, 110 g pasta, extra 30 ml cream stirred in, 40 g cheddar",
-    hk:"1 020 kcal, 63 g protein", rk:"950 kcal, 45 g protein",
-    trick:"A tablespoon of milk into each container before the lid goes on. A cream sauce tightens overnight and reheats claggy without it. That one step is the whole difference.",
-    pack:["Tablespoon of milk into each container, always","Let it stop steaming before you seal it or it sweats","Lemon already went in off the heat, do not add more"] },
-  "L3":{ name:"Burger patty roll and wedges", short:"Burger roll", mode:"Cold, wedges optional reheat",
+    him:"200 g chicken, 120 g dry pasta cooked, cream sauce",
+    her:"130 g chicken, 110 g pasta, extra 30 ml cream, 40 g cheddar",
+    hk:"1 010 kcal, 61 g protein", rk:"955 kcal, 44 g protein",
+    trick:"A tablespoon of milk into each container before the lid goes on. A cream sauce tightens overnight and reheats claggy without it.",
+    pack:["Tablespoon of milk into each container, always","Let it stop steaming before you seal it","Lemon already went in off the heat, do not add more"] },
+  "L3":{ name:"Burger patty roll and wedges", short:"Burger roll", mode:"Cold, wedges reheat",
     him:"2 patties in one roll, mayonnaise, 200 g wedges",
-    her:"1 patty in one roll, mayonnaise and a cheddar slice, 150 g wedges",
-    hk:"1 000 kcal, 58 g protein", rk:"950 kcal, 32 g protein",
-    trick:"Tomato goes in a separate tub. Sliced tomato sitting in a roll overnight makes the bread wet by ten in the morning. Add it at your desk in four seconds.",
-    pack:["Cook one extra patty each the night before, that is what lunch is","Roll built cold, tomato held back","Wedges in the second container, fine cold","Never microwave the roll, only the wedges"] },
+    her:"1 patty in one roll, mayonnaise and cheddar, 150 g wedges",
+    hk:"985 kcal, 47 g protein", rk:"940 kcal, 33 g protein",
+    trick:"Tomato in a separate tub. Sliced tomato in a roll overnight soaks the bread through by mid morning.",
+    pack:["Cook 6 patties the night before, not 4","Roll built cold, tomato held back","Wedges in the second container","Never microwave the roll, only the wedges"] },
   "L4":{ name:"Chicken mayo sandwiches", short:"Chicken mayo", mode:"Cold",
-    him:"4 slices white bread, 180 g cooked chicken chopped, 30 g mayonnaise, butter on all four slices",
-    her:"4 slices white bread, 100 g chicken chopped, 40 g mayonnaise, 1 cheddar slice, butter on all four slices",
-    hk:"960 kcal, 62 g protein", rk:"950 kcal, 38 g protein",
-    trick:"Butter both slices, every time. Butter waterproofs the bread against the mayonnaise. Skip it and you eat a damp sandwich at one o'clock.",
-    pack:["Chop the chicken, do not slice it. Chopped holds mayonnaise, sliced sheds it","Mix chicken and mayonnaise in a bowl first, then fill","Butter right to the crust, the edges go soggy first","Flat container, not a bag, or it arrives compressed"] },
+    him:"4 slices white bread, 180 g chopped chicken, 30 g mayonnaise, butter on all four slices",
+    her:"4 slices, 100 g chopped chicken, 40 g mayonnaise, cheddar slice, butter on all four slices",
+    hk:"960 kcal, 57 g protein", rk:"945 kcal, 41 g protein",
+    trick:"Butter both faces of every slice. Butter waterproofs the bread against the mayonnaise.",
+    pack:["Chop the chicken, do not slice it","Mix chicken and mayonnaise in a bowl first, then fill","Butter right to the crust","Flat container, not a bag"] },
   "L5":{ name:"Cold pizza", short:"Cold pizza", mode:"Cold, no reheat",
-    him:"Half a large pizza, about 5 slices, plus 250 ml full cream milk",
-    her:"Half a large pizza, about 5 slices, plus 150 g yoghurt with sugar",
-    hk:"990 kcal, 45 g protein", rk:"1 000 kcal, 40 g protein",
-    trick:"Cold pizza is a legitimate lunch and needs nothing done to it. Stack the slices with a sheet of baking paper between layers so the cheese does not weld them together.",
-    pack:["Into the container the moment it cools, not after an hour on the board","Baking paper between the layers","Lowest protein lunch of the week. Take the shake with it, not after training"] },
+    him:"Half a large pizza, about 5 slices, plus 250 ml milk",
+    her:"Half a large pizza, plus 150 g yoghurt with sugar",
+    hk:"985 kcal, 45 g protein", rk:"1 000 kcal, 40 g protein",
+    trick:"Baking paper between the layers or the cheese welds the slices into a brick.",
+    pack:["Into the container as soon as it stops steaming","Baking paper between layers","Lowest protein lunch of the week. Take the shake with it"] },
   "L6":{ name:"Cold braai meat and potato salad", short:"Cold braai", mode:"Cold",
-    him:"200 g cold braai meat sliced, potato salad from 300 g potato, 30 g mayonnaise, leftover tomato salad",
-    her:"120 g cold braai meat sliced, potato salad from 250 g potato, 45 g mayonnaise, feta through the potato",
-    hk:"1 000 kcal, 60 g protein", rk:"950 kcal, 35 g protein",
-    trick:"Slice the meat when you pack it in the morning, not the night before. Sliced cold meat dries out fast in a fridge, a whole chop does not.",
-    pack:["Boil the potatoes while the coals burn down, so the salad is made before you eat","Meat left whole in the container","Mayonnaise in with the potato, not on the side","Small tub for the tomato salad so it does not leak"] },
+    him:"250 g cold braai meat, potato salad from 350 g potato and 30 g mayonnaise",
+    her:"150 g cold braai meat, potato salad from 350 g potato, 45 g mayonnaise and feta",
+    hk:"1 005 kcal, 58 g protein", rk:"950 kcal, 36 g protein",
+    trick:"Slice the meat in the morning, not the night before. Sliced cold meat dries out fast, a whole chop does not.",
+    pack:["Boil the salad potatoes while the coals burn down","Meat goes in whole","Mayonnaise mixed into the potato, not on the side","Small tub for the tomato salad, it leaks"] },
   "LF":{ name:"Toasties again, or a freezer meatball", short:"Toasties", mode:"Cold or reheat",
-    him:"4 slices, 60 g cheddar, 80 g ham, or a meatball container from the freezer",
-    her:"4 slices, 60 g cheddar, 50 g ham, plus yoghurt, or a meatball container",
-    hk:"950 kcal, 55 g protein", rk:"1 000 kcal, 45 g protein",
-    trick:"A toastie night produces no real lunch. Decide the night before which way you are going, because at seven in the morning you will choose neither.",
-    pack:["Build the toasties cold and toast them at work if there is a machine","Otherwise pull a meatball container from the freezer the night before","Do not leave this decision to the morning"] }
+    him:"4 slices, 60 g cheddar, 50 g ham and bacon, or a meatball container",
+    her:"4 slices, 60 g cheddar, 50 g ham and bacon, plus yoghurt, or a meatball container",
+    hk:"965 kcal, 52 g protein", rk:"1 010 kcal, 46 g protein",
+    trick:"A toastie night produces no real lunch. Decide the night before, because at seven in the morning you will choose neither.",
+    pack:["Build them cold and toast at work if there is a machine","Otherwise pull a meatball container out tonight","Do not leave this to the morning"] }
 };
 
 const MEAL_LUNCH_OF = { "1":"L1", "1R":"L1", "2":"L2", "3":"L3", "4":"L4", "5":"L5", "6":"L6", "F":"LF" };
@@ -4149,17 +4653,17 @@ const MEAL_SHOP = {
     ["Lamb loin chops","800 g",1,183.99],["Rump steak","500 g",1,129.99],
     ["Bacon rashers","200 g",2,54.99],["Shaved ham","200 g",2,49.99]]},
   ch:{ label:"Checkers, non perishables and freezer stock. One shop a month.", weekly:false, items:[
-    ["Brown lentils","500 g",6,32.99],["Basmati rice","2 kg",1,89.99],["Pasta","500 g",5,17.99],
+    ["Brown lentils","500 g",4,32.99],["Pasta","500 g",12,17.99],
     ["Tinned chopped tomato","400 g",10,13.99],["Tomato paste","50 g",6,6.99],
-    ["Potatoes","2 kg",3,34.99],["Large eggs","18",2,54.99],["Sunflower oil","750 ml",2,39.99],
+    ["Potatoes","2 kg",5,34.99],["Large eggs","18",2,54.99],["Sunflower oil","750 ml",2,39.99],
     ["Mayonnaise","750 g",1,44.99],["White vinegar","750 ml",1,16.99],["Salt","500 g",1,9.99],
     ["Peppercorn grinder","1",1,29.99],["White sugar","1 kg",1,22.99],["Garlic","3 pack",2,17.99],
     ["Grated mozzarella","400 g",1,69.99],["Pizza bases","2 pack",2,32.99]]},
   tu:{ label:"Checkers, fresh only. Every week. A quantity below 1 means the pack lasts longer than a week.", weekly:true, items:[
-    ["Full cream milk","2 L",1.5,33.99],["Cheddar","800 g",0.3,119.99],["Plain yoghurt","1 kg",1,36.99],
-    ["Fresh cream","250 ml",1,21.99],["Butter, bread only","500 g",0.25,79.99],
-    ["White bread","700 g",1.5,16.99],["Burger rolls","6 pack",0.5,24.99],["Feta","200 g",0.25,34.99],
-    ["Onions","2 kg",0.5,29.99],["Carrots","1 kg",0.5,17.99],["Tomatoes","1 kg",0.4,29.99],
+    ["Full cream milk","2 L",1.5,33.99],["Cheddar","800 g",0.5,119.99],["Plain yoghurt","1 kg",1,36.99],
+    ["Fresh cream","250 ml",1,21.99],["Butter","500 g",0.4,79.99],
+    ["White bread","700 g",1.5,16.99],["Burger rolls","6 pack",0.7,24.99],["Feta","200 g",0.5,34.99],
+    ["Onions","2 kg",0.7,29.99],["Carrots","1 kg",0.5,17.99],["Tomatoes","1 kg",0.5,29.99],
     ["Baby spinach","300 g",1,24.99],["Broccoli","400 g",0.5,27.99],["Cauliflower","500 g",0.5,27.99],
     ["Butternut","1 kg",0.5,24.99],["Baby marrow","400 g",0.5,26.99]]}
 };
@@ -4168,36 +4672,34 @@ const MEAL_SHOP = {
 // END EDIT ZONE
 // ══════════════════════════════════════════════════════════════
 
-let mealMonth   = new Date();
-let mealRecTab  = "sup";
+let mealMonth     = new Date();
+let mealShopMonth = new Date();
+let mealOpenTrip  = null;
+let mealShopInit  = false;
+let mealRecTab    = "sup";
+let mealOpenRec   = null;
 
 function mealStart()      { return getData("meal_start", null) || todayStr().slice(0,8) + "01"; }
 function mealSetStart(v)  { if (!v) return; setData("meal_start", v); renderMealCal(); }
 function mealOrder()      { const o = getData("meal_order", null); return (Array.isArray(o) && o.length === 6) ? o : MEAL_DEFAULT_ORDER.slice(); }
 function mealLog()        { return getData("meal_log", {}); }
 function mealSaveLog(l)   { setData("meal_log", l); }
+function mealEat()        { return getData("meal_eat", "18:30"); }
+function mealSetEat(v)    { if (v) { setData("meal_eat", v); renderMealCal(); } }
 function mealDateStr(d)   { return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
 function mealDaysSince(k) { return Math.floor((new Date(k+"T00:00:00") - new Date(mealStart()+"T00:00:00")) / 86400000); }
 function mealWeekIdx(k)   { const n = mealDaysSince(k); return n < 0 ? -1 : Math.floor(n/7) % 4; }
 function mealActive(k)    { return mealDaysSince(k) >= 0; }
+function mealFirstSunday(){ const d = new Date(mealStart()+"T00:00:00"); d.setDate(d.getDate() + ((7 - d.getDay()) % 7)); return mealDateStr(d); }
 
-// The first Sunday on or after the start date. Before it, the freezer is empty.
-function mealFirstSunday() {
-  const d = new Date(mealStart()+"T00:00:00");
-  d.setDate(d.getDate() + ((7 - d.getDay()) % 7));
-  return mealDateStr(d);
-}
-// Which supper falls on a given date. Sunday is always the batch cook.
 function mealDinnerCode(key) {
   if (!mealActive(key)) return null;
-  const dow = new Date(key+"T00:00:00").getDay();          // 0 Sun
+  const dow = new Date(key+"T00:00:00").getDay();
   let code = (dow === 0) ? "1" : mealOrder()[dow-1];
   if (code === "5" && !MEAL_PIZZAWK[mealWeekIdx(key)]) code = "F";
-  // Before the first batch cook there is nothing in the freezer to reheat, so cook it fresh.
   if (code === "1R" && key < mealFirstSunday()) code = "1";
   return code;
 }
-// Lunch on a given date comes from the night before.
 function mealLunchCode(key) {
   if (!mealActive(key)) return null;
   const d = new Date(key+"T00:00:00"); d.setDate(d.getDate()-1);
@@ -4211,12 +4713,47 @@ function mealDinnerName(key) {
   if (c === "6") return "Braai: " + MEAL_BRAAI[mealWeekIdx(key)].toLowerCase();
   return MEAL_R[c].name;
 }
+function mealNextKey(key) { const d = new Date(key+"T00:00:00"); d.setDate(d.getDate()+1); return mealDateStr(d); }
+
+// ── RUNNING ORDER ────────────────────────────────────────────
+// Everything is positioned off one number: what time you want to eat.
+// Each step carries an "at" offset in minutes from the start of the cook,
+// so overlapping tasks stay in the right place instead of being flattened
+// into a false sequence.
+function mealClock(mins) {
+  const base = mealEat().split(":");
+  const t = new Date(2000,0,1, parseInt(base[0],10), parseInt(base[1],10));
+  t.setMinutes(t.getMinutes() + mins);
+  return String(t.getHours()).padStart(2,"0") + ":" + String(t.getMinutes()).padStart(2,"0");
+}
+function mealEatOffset(R) {
+  for (let i = 0; i < R.steps.length; i++) if (R.steps[i].eat) return R.steps[i].at;
+  const p = R.steps.filter(function(s){ return s.pack; })[0];
+  return p ? p.at : R.total;
+}
+function mealRunOrder(key) {
+  const code = mealDinnerCode(key); if (!code) return null;
+  const R = MEAL_R[code], eatAt = mealEatOffset(R);
+  const rows = [];
+  const tomCode = mealDinnerCode(mealNextKey(key));
+  const tomR = tomCode ? MEAL_R[tomCode] : null;
+
+  rows.push({ t: mealClock(-eatAt - 5), k:"prep", x:"Get everything out. Read the ingredient list and weigh what you can now." });
+  R.steps.forEach(function(s){
+    rows.push({ t: mealClock(s.at - eatAt), k: s.pack ? "pack" : (s.eat ? "plate" : (s.at > eatAt ? "after" : "cook")),
+                x: s.t, d: s.mins, tmr: s.tmr ? (s.tmr.label + " " + s.tmr.mins + " min") : null });
+  });
+  const idx = rows.findIndex(function(r){ return r.t === mealClock(0); });
+  rows.splice(idx >= 0 ? idx+1 : rows.length, 0, { t: mealEat(), k:"eat", x:"EAT" });
+  if (tomR && tomR.before && tomR.before.length && tomR.before[0].indexOf("Nothing") !== 0) {
+    tomR.before.forEach(function(b){ rows.push({ t:"Before bed", k:"bed", x:b }); });
+  }
+  return { code:code, R:R, rows:rows, start: mealClock(-eatAt - 5) };
+}
 
 // ── CALENDAR ─────────────────────────────────────────────────
 function mealMonthShift(n) { mealMonth.setMonth(mealMonth.getMonth()+n); renderMealCal(); }
 function mealMonthToday()  { mealMonth = new Date(); renderMealCal(); }
-// Month grid on a desktop, agenda list on a phone. Seven columns of text
-// chips is unreadable at 390px wide. Saved once you pick, so it stays put.
 function mealView() {
   const v = getData("meal_view", null);
   if (v === "month" || v === "agenda") return v;
@@ -4226,18 +4763,19 @@ function mealSetView(v) { setData("meal_view", v); renderMealCal(); }
 
 function renderMealCal() {
   const si = document.getElementById("mc-start"); if (si) si.value = mealStart();
+  const ei = document.getElementById("mc-eat");   if (ei) ei.value = mealEat();
   const year = mealMonth.getFullYear(), month = mealMonth.getMonth();
   const MN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   document.getElementById("mc-monthlabel").textContent = MN[month] + " " + year;
 
+  renderMealTonight();
+
   const log = mealLog(), today = todayStr();
   const daysInMonth = new Date(year, month+1, 0).getDate();
   const firstDow = new Date(year, month, 1).getDay();
-
-  const view = mealView();
-  document.getElementById("mv-month").classList.toggle("on", view === "month");
-  document.getElementById("mv-agenda").classList.toggle("on", view === "agenda");
-  const agenda = (view === "agenda");
+  const view = mealView(), agenda = (view === "agenda");
+  document.getElementById("mv-month").classList.toggle("on", !agenda);
+  document.getElementById("mv-agenda").classList.toggle("on", agenda);
 
   let html = agenda ? "" :
     '<div class="cal-weekdays"><div class="cal-weekday weekend-label">Sun</div><div class="cal-weekday">Mon</div><div class="cal-weekday">Tue</div><div class="cal-weekday">Wed</div><div class="cal-weekday">Thu</div><div class="cal-weekday">Fri</div><div class="cal-weekday weekend-label">Sat</div></div><div class="cal-days">';
@@ -4256,46 +4794,36 @@ function renderMealCal() {
         : '<div class="mc-day off ' + (isToday ? "is-today" : "") + '"><div class="num">' + d + '</div></div>';
       continue;
     }
-    const dc = mealDinnerCode(key), lc = mealLunchCode(key);
-    const e = log[key] || {};
+    const dc = mealDinnerCode(key), lc = mealLunchCode(key), e = log[key] || {};
     if (dc) { planned++; if (e.d === "eaten") cooked++; if (e.d === "skip") skipped++; }
     if (lc) { planned++; if (e.l === "eaten") cooked++; if (e.l === "skip") skipped++; }
     if (e.note) notes++;
-
-    const lShort = lc ? (lc === "L6" ? "Cold braai" : MEAL_L[lc].short) : "";
+    const lShort = lc ? MEAL_L[lc].short : "";
     const dShort = dc ? (dc === "6" ? "Braai " + MEAL_BRAAI[mealWeekIdx(key)].split(" ")[0].toLowerCase() : MEAL_R[dc].short) : "";
     if (agenda) {
-      const lFull = lc ? MEAL_L[lc].name : "No lunch, the plan had not started the night before";
-      const dFull = dc ? mealDinnerName(key) : "";
       html += '<div class="mc-ag-day ' + (isToday ? "is-today" : "") + '" onclick="mealOpenDay(\'' + key + '\')">' +
-        '<div class="mc-ag-date"><b>' + d + '</b><span>' + dowName + '</span></div>' +
-        '<div class="mc-ag-meals">' +
-        '<div class="mc-ag-line ' + (e.l||"") + '"><b>L</b><span>' + lFull + '</span></div>' +
-        (dc ? '<div class="mc-ag-line ' + (e.d||"") + '"><b>S</b><span>' + dFull + '</span></div>' : "") +
-        ((shopDays[key] || e.note) ? '<div class="mc-ag-tags">' +
-          (shopDays[key] ? '<span class="mc-ag-tag shop">&#128722; shop day</span>' : "") +
-          (e.note ? '<span class="mc-ag-tag note">note</span>' : "") + '</div>' : "") +
-        '</div></div>';
+        '<div class="mc-ag-date"><b>' + d + '</b><span>' + dowName + '</span></div><div class="mc-ag-meals">' +
+        '<div class="mc-ag-line ' + (e.l||"") + '"><b>L</b><span>' + (lc ? MEAL_L[lc].name : "No lunch") + '</span></div>' +
+        (dc ? '<div class="mc-ag-line ' + (e.d||"") + '"><b>S</b><span>' + mealDinnerName(key) + '</span></div>' : "") +
+        ((shopDays[key] || e.note) ? '<div class="mc-ag-tags">' + (shopDays[key] ? '<span class="mc-ag-tag shop">&#128722; shop day</span>' : "") +
+          (e.note ? '<span class="mc-ag-tag note">note</span>' : "") + '</div>' : "") + '</div></div>';
     } else {
       html += '<div class="mc-day ' + (isToday ? "is-today" : "") + '" onclick="mealOpenDay(\'' + key + '\')">' +
-        (shopDays[key] ? '<span class="mc-cart" title="Shop day">&#128722;</span>' : "") +
+        (shopDays[key] ? '<span class="mc-cart">&#128722;</span>' : "") +
         '<div class="num">' + d + (e.note ? ' <span style="color:var(--blue)">&bull;</span>' : "") + '</div>' +
         (lc ? '<div class="mc-slot lunch ' + (e.l||"") + '"><b>L</b>' + lShort + '</div>' : "") +
-        (dc ? '<div class="mc-slot dinner ' + (e.d||"") + '"><b>S</b>' + dShort + '</div>' : "") +
-        '</div>';
+        (dc ? '<div class="mc-slot dinner ' + (e.d||"") + '"><b>S</b>' + dShort + '</div>' : "") + '</div>';
     }
   }
   if (!agenda) html += "</div>";
   document.getElementById("mc-grid").innerHTML = html;
 
-  const logged = cooked + skipped;
-  const pct = planned ? Math.round(cooked / planned * 100) : 0;
-  const wk = mealWeekIdx(today);
+  const pct = planned ? Math.round(cooked / planned * 100) : 0, wk = mealWeekIdx(today);
   document.getElementById("mc-stats").innerHTML =
-    '<div class="mc-stat"><div class="lbl">Eaten as planned</div><div class="val acc">' + cooked + '</div><div class="sub2">of ' + planned + ' meals this month</div></div>' +
-    '<div class="mc-stat"><div class="lbl">Skipped or takeout</div><div class="val">' + skipped + '</div><div class="sub2">' + notes + ' day' + (notes===1?"":"s") + ' with a note</div></div>' +
-    '<div class="mc-stat"><div class="lbl">Adherence</div><div class="val">' + pct + '%</div><div class="sub2">' + logged + ' of ' + planned + ' logged</div></div>' +
-    '<div class="mc-stat"><div class="lbl">Braai this week</div><div class="val" style="font-size:15px;line-height:1.35;">' + (wk >= 0 ? MEAL_BRAAI[wk] : "Plan not started") + '</div><div class="sub2">' + (wk >= 0 ? ("Week " + (wk+1) + " of 4 &middot; " + (MEAL_PIZZAWK[wk] ? "pizza week" : "no pizza week")) : "Set a start date") + '</div></div>';
+    '<div class="mc-stat"><div class="lbl">Eaten as planned</div><div class="val acc">' + cooked + '</div><div class="sub2">of ' + planned + ' meals</div></div>' +
+    '<div class="mc-stat"><div class="lbl">Skipped or takeout</div><div class="val">' + skipped + '</div><div class="sub2">' + notes + ' with a note</div></div>' +
+    '<div class="mc-stat"><div class="lbl">Adherence</div><div class="val">' + pct + '%</div><div class="sub2">' + (cooked+skipped) + ' of ' + planned + ' logged</div></div>' +
+    '<div class="mc-stat"><div class="lbl">Braai this week</div><div class="val" style="font-size:15px;line-height:1.35;">' + (wk>=0 ? MEAL_BRAAI[wk] : "Not started") + '</div><div class="sub2">' + (wk>=0 ? ("Week " + (wk+1) + " of 4") : "Set a start date") + '</div></div>';
 
   const startDow = new Date(mealStart()+"T00:00:00").getDay();
   const banner = document.getElementById("mc-startnote");
@@ -4303,13 +4831,10 @@ function renderMealCal() {
     if (startDow !== 0) {
       banner.style.display = "block";
       banner.innerHTML = "Your plan starts on a " + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][startDow] +
-        ", so the first batch cook only lands on " + formatDate(mealFirstSunday()) + ". Until then there is nothing in the freezer, " +
-        "so any reheat night is shown as a full cook instead. From that Sunday the week runs normally.";
-    } else { banner.style.display = "none"; }
+        ", so the first batch cook only lands on " + formatDate(mealFirstSunday()) + ". Until then any reheat night becomes a full cook.";
+    } else banner.style.display = "none";
   }
-
-  const days = ["Mon","Tue","Wed","Thu","Fri","Sat"], order = mealOrder();
-  const opts = ["1R","2","3","4","5","6","F"];
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat"], order = mealOrder(), opts = ["1R","2","3","4","5","6","F"];
   let oh = "";
   for (let i = 0; i < 6; i++) {
     oh += '<div><label>' + days[i] + '</label><select onchange="mealSetOrder(' + i + ',this.value)">';
@@ -4320,38 +4845,62 @@ function renderMealCal() {
 }
 function mealSetOrder(i, code) { const o = mealOrder(); o[i] = code; setData("meal_order", o); renderMealCal(); }
 
+// ── TONIGHT CARD ─────────────────────────────────────────────
+function renderMealTonight() {
+  const el = document.getElementById("mc-tonight"); if (!el) return;
+  const key = todayStr(), ro = mealRunOrder(key);
+  if (!ro) { el.innerHTML = '<div class="card-title">Tonight</div><p class="sub">The plan has not started yet. Set a start date above.</p>'; return; }
+  const R = ro.R, lc = mealLunchCode(mealNextKey(key));
+  let h = '<div class="card-title">Tonight, ' + new Date(key+"T00:00:00").toLocaleDateString("en-ZA",{weekday:"long"}) + '</div>' +
+    '<div class="ro-head"><div><div class="ro-name">' + mealDinnerName(key) + '</div>' +
+    '<div class="ro-meta">Start ' + ro.start + ' &middot; eat ' + mealEat() + ' &middot; ' + R.active + ' hands on of ' + R.time + '</div></div>' +
+    '<button class="rc-cook" onclick="mealCook(\'' + ro.code + '\')">Cook mode</button></div>';
+  if (R.extra && R.extra.length) {
+    h += '<div class="ro-extra"><b>This cook must also produce:</b><ul>' + R.extra.map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
+  }
+  h += '<div class="ro-list">';
+  ro.rows.forEach(function(r){
+    h += '<div class="ro-row ' + r.k + '"><div class="ro-time">' + r.t + '</div>' +
+      '<div class="ro-text">' + r.x + (r.d ? ' <span class="ro-dur">' + r.d + ' min</span>' : "") +
+      (r.tmr ? ' <span class="ro-tmr">&#9201; ' + r.tmr + '</span>' : "") + '</div></div>';
+  });
+  h += "</div>";
+  if (lc) h += '<div class="mp-tip"><b>Tomorrow\'s lunch is ' + MEAL_L[lc].name + '.</b> Yours: ' + MEAL_L[lc].him + '. Hers: ' + MEAL_L[lc].her + '.</div>';
+  el.innerHTML = h;
+}
+
 // ── DAY MODAL ────────────────────────────────────────────────
 let mealModalKey = null;
 function mealOpenDay(key) {
   mealModalKey = key;
   const log = mealLog(), e = log[key] || {};
-  const dc = mealDinnerCode(key), lc = mealLunchCode(key);
+  const dc = mealDinnerCode(key), lc = mealLunchCode(key), wk = mealWeekIdx(key);
   document.getElementById("meal-modal-title").textContent = formatDate(key);
-  const wk = mealWeekIdx(key);
-  document.getElementById("meal-modal-sub").textContent =
-    "Week " + (wk+1) + " of 4  ·  " + (MEAL_PIZZAWK[wk] ? "pizza week" : "no pizza week");
-
+  document.getElementById("meal-modal-sub").textContent = "Week " + (wk+1) + " of 4  ·  " + (MEAL_PIZZAWK[wk] ? "pizza week" : "no pizza week");
   let h = "";
   if (lc) {
     const L = MEAL_L[lc];
-    h += '<div class="mm-sec"><h4>Lunch &middot; ' + L.mode + ' &middot; packed the night before</h4>' +
-      '<div class="nm">' + L.name + '</div>' +
+    h += '<div class="mm-sec"><h4>Lunch &middot; ' + L.mode + ' &middot; packed last night</h4><div class="nm">' + L.name + '</div>' +
       '<div class="mm-split"><div><div class="who">You</div><div class="por">' + L.him + '</div><div class="mac">' + L.hk + '</div></div>' +
       '<div><div class="who">Her</div><div class="por">' + L.her + '</div><div class="mac">' + L.rk + '</div></div></div>' +
-      '<div class="mm-trick">' + L.trick + '</div>' +
-      '<div class="mm-btns">' +
+      '<div class="mm-trick">' + L.trick + '</div><div class="mm-btns">' +
       '<button class="' + (e.l==="eaten"?"on-eat":"") + '" onclick="mealMark(\'l\',\'eaten\')">Eaten</button>' +
       '<button class="' + (e.l==="skip"?"on-skip":"") + '" onclick="mealMark(\'l\',\'skip\')">Skipped</button>' +
       '<button onclick="mealMark(\'l\',null)">Clear</button></div></div>';
   }
   if (dc) {
-    const R = MEAL_R[dc];
-    const nm = (dc === "6") ? ("Braai: " + MEAL_BRAAI[wk].toLowerCase()) : R.name;
-    h += '<div class="mm-sec"><h4>Supper &middot; ' + R.time + '</h4>' +
-      '<div class="nm">' + nm + '</div>' +
+    const R = MEAL_R[dc], ro = mealRunOrder(key);
+    h += '<div class="mm-sec"><h4>Supper &middot; start ' + ro.start + ' &middot; eat ' + mealEat() + '</h4>' +
+      '<div class="nm">' + mealDinnerName(key) + '</div>' +
       '<div class="mm-split"><div><div class="who">You</div><div class="por">' + R.him + '</div><div class="mac">' + R.hk + '</div></div>' +
-      '<div><div class="who">Her</div><div class="por">' + R.her + '</div><div class="mac">' + R.rk + '</div></div></div>' +
-      '<div class="mm-btns">' +
+      '<div><div class="who">Her</div><div class="por">' + R.her + '</div><div class="mac">' + R.rk + '</div></div></div>';
+    if (R.extra && R.extra.length) h += '<div class="ro-extra"><b>Must also produce:</b><ul>' + R.extra.map(function(x){return "<li>"+x+"</li>";}).join("") + '</ul></div>';
+    h += '<div class="ro-list compact">';
+    ro.rows.forEach(function(r){
+      h += '<div class="ro-row ' + r.k + '"><div class="ro-time">' + r.t + '</div><div class="ro-text">' + r.x +
+        (r.d ? ' <span class="ro-dur">' + r.d + ' min</span>' : "") + '</div></div>';
+    });
+    h += '</div><div class="mm-btns">' +
       '<button class="' + (e.d==="eaten"?"on-eat":"") + '" onclick="mealMark(\'d\',\'eaten\')">Cooked and eaten</button>' +
       '<button class="' + (e.d==="skip"?"on-skip":"") + '" onclick="mealMark(\'d\',\'skip\')">Takeout or skipped</button>' +
       '<button onclick="mealMark(\'d\',null)">Clear</button></div>' +
@@ -4377,115 +4926,170 @@ function mealSaveNote() {
   mealSaveLog(log); renderMealCal(); mealCloseDay();
 }
 
-// ── RECIPES ──────────────────────────────────────────────────
+// ── RECIPES PAGE ─────────────────────────────────────────────
 function mealRecipeTab(t) {
   mealRecTab = t;
   document.getElementById("rt-sup").classList.toggle("on", t === "sup");
   document.getElementById("rt-lun").classList.toggle("on", t === "lun");
   renderRecipesPage();
 }
+function mealToggleRec(id) { mealOpenRec = (mealOpenRec === id) ? null : id; renderRecipesPage(); }
+
+function mealTimelineHTML(R) {
+  const span = Math.max.apply(null, R.steps.map(function(s){ return s.at + s.mins; }));
+  const eatAt = mealEatOffset(R);
+  let h = '<div class="tl-wrap"><div class="tl-axis">';
+  for (let m = 0; m <= span; m += 15) h += '<span style="left:' + (m/span*100) + '%">' + mealClock(m - eatAt) + '</span>';
+  h += '</div>';
+  R.steps.forEach(function(s){
+    const w = Math.max(s.mins / span * 100, 1.5);
+    h += '<div class="tl-row"><div class="tl-lbl">' + s.t + '</div><div class="tl-track">' +
+      '<div class="tl-bar' + (s.pack ? " pack" : "") + (s.tmr ? " tmr" : "") + '" style="left:' + (s.at/span*100) + '%;width:' + w + '%">' +
+      (s.mins >= 8 ? (s.mins + " min") : "") + '</div></div></div>';
+  });
+  h += '<div class="tl-eat" style="left:calc(var(--tl-lbl) + (100% - var(--tl-lbl)) * ' + (eatAt/span) + ')"></div></div>';
+  return h;
+}
+
 function renderRecipesPage() {
   let h = "";
   if (mealRecTab === "sup") {
-    const order = ["1","2","3","4","5","6","1R","F"];
-    for (const id of order) {
-      const R = MEAL_R[id];
+    ["1","2","3","4","5","6","1R","F"].forEach(function(id){
+      const R = MEAL_R[id], open = (mealOpenRec === id);
       h += '<div class="rc-card"><div class="rc-head"><div style="flex:1;min-width:220px;">' +
         "<h3>" + R.name + "</h3>" +
-        '<div class="rc-pills"><span class="rc-pill acc">' + R.time + "</span>" +
-        '<span class="rc-pill">' + R.ings.length + " ingredients</span>" +
-        '<span class="rc-pill">' + R.steps.length + " steps</span></div>" +
+        '<div class="rc-pills"><span class="rc-pill acc">' + R.time + " total</span>" +
+        '<span class="rc-pill">' + R.active + " hands on</span>" +
+        '<span class="rc-pill">' + R.steps.length + " steps</span>" +
+        '<span class="rc-pill">' + R.ings.length + " ingredients</span></div>" +
+        '<p class="rc-serves">' + R.serves + '</p>' +
         '<p style="font-size:12.5px;color:var(--text-muted);margin-top:6px;line-height:1.5;">' + R.tag + "</p></div>" +
-        '<button class="rc-cook" onclick="mealCook(\'' + id + '\')">Start cook mode</button></div>' +
-        '<div class="rc-grid"><div><h5>Ingredients</h5><ul class="rc-ings">' +
-        R.ings.map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ul>" +
-        '<h5 style="margin-top:16px;">Portions</h5>' +
-        '<div class="mm-split" style="margin:0;"><div><div class="who">You</div><div class="por">' + R.him + '</div><div class="mac">' + R.hk + '</div></div>' +
-        '<div><div class="who">Her</div><div class="por">' + R.her + '</div><div class="mac">' + R.rk + '</div></div></div></div>' +
-        "<div><h5>Method</h5><ol class=\"rc-steps\">" +
-        R.steps.map(function(s){ return '<li class="' + (s.t.indexOf("PACK")===0||s.t.indexOf("NO LUNCH")===0 ? "packstep" : "") + '">' + s.t + (s.m>0 ? ' <span style="color:var(--accent);font-family:\'DM Mono\',monospace;font-size:11px;">[' + s.m + ' min]</span>' : "") + "</li>"; }).join("") +
-        '</ol><div class="rc-note">' + R.note + "</div></div></div></div>";
-    }
+        '<div style="display:flex;flex-direction:column;gap:8px;">' +
+        '<button class="rc-cook" onclick="mealCook(\'' + id + '\')">Cook mode</button>' +
+        '<button class="btn-secondary" onclick="mealToggleRec(\'' + id + '\')">' + (open ? "Hide the recipe" : "Read the recipe") + '</button></div></div>';
+      if (open) {
+        h += '<div class="rc-body"><div class="rc-grid">' +
+          '<div><h5>Equipment</h5><ul class="rc-ings">' + R.equip.map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ul>" +
+          '<h5 style="margin-top:16px;">Ingredients</h5><table class="rc-tbl">' +
+          R.ings.map(function(x){ return "<tr><td class=q>" + x.q + "</td><td>" + x.i + "</td></tr>"; }).join("") + "</table>" +
+          '<h5 style="margin-top:16px;">Portions</h5>' +
+          '<div class="mm-split" style="margin:0;"><div><div class="who">You</div><div class="por">' + R.him + '</div><div class="mac">' + R.hk + '</div></div>' +
+          '<div><div class="who">Her</div><div class="por">' + R.her + '</div><div class="mac">' + R.rk + '</div></div></div></div>' +
+          '<div><h5>Method</h5><ol class="rc-steps">' +
+          R.steps.map(function(s){
+            return '<li class="' + (s.pack ? "packstep" : "") + '"><div class="st-t">' + s.t +
+              (s.mins ? ' <span class="st-m">' + s.mins + ' min</span>' : "") +
+              (s.tmr ? ' <span class="st-tmr">&#9201; ' + s.tmr.label + ' ' + s.tmr.mins + '</span>' : "") + '</div>' +
+              '<ul class="st-b">' + s.b.map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ul>" +
+              (s.why ? '<div class="st-why"><b>Why.</b> ' + s.why + '</div>' : "") + "</li>";
+          }).join("") + "</ol>" +
+          '<h5 style="margin-top:18px;">Timeline</h5>' + mealTimelineHTML(R) +
+          '<div class="rc-note">' + R.note + "</div></div></div></div>";
+      }
+      h += "</div>";
+    });
   } else {
-    for (const id of ["L1","L2","L3","L4","L5","L6","LF"]) {
+    ["L1","L2","L3","L4","L5","L6","LF"].forEach(function(id){
       const L = MEAL_L[id];
-      h += '<div class="rc-card"><div class="rc-head"><div style="flex:1;min-width:220px;">' +
-        "<h3>" + L.name + "</h3>" +
+      h += '<div class="rc-card"><div class="rc-head"><div style="flex:1;min-width:220px;"><h3>' + L.name + "</h3>" +
         '<div class="rc-pills"><span class="rc-pill acc">' + L.mode + "</span></div></div></div>" +
         '<div class="rc-grid"><div><h5>Portions</h5>' +
         '<div class="mm-split" style="margin:0;"><div><div class="who">You</div><div class="por">' + L.him + '</div><div class="mac">' + L.hk + '</div></div>' +
         '<div><div class="who">Her</div><div class="por">' + L.her + '</div><div class="mac">' + L.rk + '</div></div></div></div>' +
-        "<div><h5>How to pack it</h5><ol class=\"rc-steps\">" +
-        L.pack.map(function(x){ return "<li>" + x + "</li>"; }).join("") +
+        '<div><h5>How to pack it</h5><ol class="rc-steps simple">' + L.pack.map(function(x){ return "<li>" + x + "</li>"; }).join("") +
         '</ol><div class="rc-note">' + L.trick + "</div></div></div></div>";
-    }
+    });
   }
   document.getElementById("rc-list").innerHTML = h;
 }
 
-// ── COOK MODE ────────────────────────────────────────────────
-let ckId = null, ckStep = -1, ckInt = null, ckLeft = 0;
-function mealCook(id) { ckId = id; ckStep = -1; document.getElementById("meal-cook").classList.add("open"); ckRender(); }
-function ckClose() { document.getElementById("meal-cook").classList.remove("open"); ckStop(); }
+// ── COOK MODE, WITH PARALLEL TIMERS ──────────────────────────
+let ckId = null, ckStep = -1, ckTick = null, ckT = [];
+function mealCook(id) {
+  ckId = id; ckStep = -1; ckT = [];
+  document.getElementById("meal-cook").classList.add("open");
+  if (!ckTick) ckTick = setInterval(ckPulse, 1000);
+  ckRender();
+}
+function ckClose() {
+  document.getElementById("meal-cook").classList.remove("open");
+  if (ckTick) { clearInterval(ckTick); ckTick = null; }
+  ckT = [];
+}
 function ckNext() { const R = MEAL_R[ckId]; if (ckStep < R.steps.length-1) { ckStep++; ckRender(); } else ckClose(); }
 function ckPrev() { if (ckStep > -1) { ckStep--; ckRender(); } }
-function ckFmt(s) { const m = Math.floor(s/60); const x = s%60; return m + ":" + (x<10?"0":"") + x; }
-function ckStop() { if (ckInt) { clearInterval(ckInt); ckInt = null; } }
+function ckFmt(s) { const m = Math.floor(Math.abs(s)/60), x = Math.abs(s)%60; return (s<0?"-":"") + m + ":" + (x<10?"0":"") + x; }
+
+function ckAdd(label, mins) {
+  const ex = ckT.filter(function(t){ return t.label === label; })[0];
+  if (ex) { ex.left = mins*60; ex.run = true; ex.done = false; }
+  else ckT.push({ label:label, left:mins*60, total:mins*60, run:true, done:false });
+  ckBar(); ckRender();
+}
+function ckToggle(i) { ckT[i].run = !ckT[i].run; ckBar(); }
+function ckDrop(i) { ckT.splice(i,1); ckBar(); ckRender(); }
+function ckPulse() {
+  let changed = false;
+  ckT.forEach(function(t){
+    if (!t.run) return;
+    t.left--;
+    if (t.left <= 0 && !t.done) { t.done = true; t.run = false; t.left = 0; ckBeep(); changed = true; }
+  });
+  ckBar();
+  if (changed) ckRender();
+}
+function ckBar() {
+  const el = document.getElementById("ck-timers"); if (!el) return;
+  if (!ckT.length) { el.innerHTML = ""; el.classList.remove("on"); return; }
+  el.classList.add("on");
+  el.innerHTML = ckT.map(function(t,i){
+    return '<div class="ck-chip' + (t.done ? " done" : (t.run ? " run" : " paused")) + '">' +
+      '<span class="lbl">' + t.label + '</span><span class="num">' + (t.done ? "done" : ckFmt(t.left)) + '</span>' +
+      '<button onclick="ckToggle(' + i + ')" title="Pause or resume">' + (t.run ? "&#10073;&#10073;" : "&#9654;") + '</button>' +
+      '<button onclick="ckDrop(' + i + ')" title="Clear">&#10005;</button></div>';
+  }).join("");
+}
 function ckRender() {
-  ckStop();
   const R = MEAL_R[ckId];
   document.getElementById("ck-title").textContent = R.name;
-  document.getElementById("ck-meta").textContent = R.time + (ckStep >= 0 ? ("  ·  step " + (ckStep+1) + " of " + R.steps.length) : "  ·  ingredients");
+  document.getElementById("ck-meta").textContent = R.time + " total  ·  " + (ckStep >= 0 ? ("step " + (ckStep+1) + " of " + R.steps.length) : "before you start");
   const body = document.getElementById("ck-body");
   if (ckStep === -1) {
-    let h = '<h5 style="font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-dim);margin-bottom:14px;font-weight:400;">Get these out first</h5>';
-    h += '<div class="card">' + R.ings.map(function(x){
-      return '<div class="ck-ing" onclick="this.classList.toggle(\'on\')"><div class="ck-box">&#10003;</div><span>' + x + "</span></div>"; }).join("") + "</div>";
-    h += '<div class="rc-note" style="margin-top:18px;">' + R.note + "</div>";
+    let h = '<div class="ck-serves">' + R.serves + '</div>' +
+      '<h5 class="ck-h">Equipment</h5><div class="card">' +
+      R.equip.map(function(x){ return '<div class="ck-ing" onclick="this.classList.toggle(\'on\')"><div class="ck-box">&#10003;</div><span>' + x + "</span></div>"; }).join("") + "</div>" +
+      '<h5 class="ck-h">Ingredients, weighed</h5><div class="card">' +
+      R.ings.map(function(x){ return '<div class="ck-ing" onclick="this.classList.toggle(\'on\')"><div class="ck-box">&#10003;</div><span><b>' + x.q + '</b> ' + x.i + "</span></div>"; }).join("") + "</div>";
+    if (R.extra && R.extra.length) h += '<div class="ro-extra"><b>This cook must also produce:</b><ul>' + R.extra.map(function(x){return "<li>"+x+"</li>";}).join("") + "</ul></div>";
+    h += '<div class="rc-note">' + R.note + "</div>";
     body.innerHTML = h;
     document.getElementById("ck-prev").style.visibility = "hidden";
     document.getElementById("ck-next").textContent = "Start step 1";
   } else {
     const s = R.steps[ckStep];
-    const isPack = s.t.indexOf("PACK") === 0 || s.t.indexOf("NO LUNCH") === 0;
     let h = '<div class="ck-dots">';
     for (let i = 0; i < R.steps.length; i++) h += '<i class="' + (i<ckStep?"done":(i===ckStep?"cur":"")) + '"></i>';
     h += "</div>";
-    if (isPack) h += '<div class="rc-pill" style="background:rgba(104,146,200,.18);color:var(--blue);border-color:var(--blue);margin-bottom:12px;">Tomorrow\'s lunch</div>';
-    h += '<div class="ck-step ' + (isPack?"pack":"") + '">' + s.t + "</div>";
-    if (s.m > 0) {
-      h += '<div class="ck-timer" id="ck-timer"><div class="t" id="ck-t">' + ckFmt(s.m*60) + "</div>" +
-           '<button class="rc-cook" id="ck-tbtn" style="margin-top:14px;" onclick="ckTimer(' + s.m + ')">Start ' + s.m + ' minute timer</button></div>';
+    if (s.pack) h += '<div class="ck-tag">Tomorrow\'s lunch</div>';
+    h += '<div class="ck-step' + (s.pack ? " pack" : "") + '">' + s.t + '</div>';
+    if (s.tmr) {
+      const live = ckT.filter(function(t){ return t.label === s.tmr.label; })[0];
+      h += '<button class="ck-start" onclick="ckAdd(\'' + s.tmr.label + '\',' + s.tmr.mins + ')">' +
+        (live ? "Restart" : "Start") + ' the ' + s.tmr.label.toLowerCase() + ' timer, ' + s.tmr.mins + ' min</button>';
     }
-    if (ckStep === R.steps.length-1) h += '<div class="rc-note" style="margin-top:20px;">' + R.note + "</div>";
+    h += '<ol class="ck-b">' + s.b.map(function(x){ return "<li>" + x + "</li>"; }).join("") + "</ol>";
+    if (s.why) h += '<div class="ck-why"><b>Why this matters.</b> ' + s.why + '</div>';
     body.innerHTML = h;
     document.getElementById("ck-prev").style.visibility = "visible";
     document.getElementById("ck-next").textContent = (ckStep === R.steps.length-1) ? "Done, close" : "Next step";
   }
+  ckBar();
   body.scrollTop = 0;
-}
-function ckTimer(mins) {
-  const box = document.getElementById("ck-timer"), btn = document.getElementById("ck-tbtn");
-  if (ckInt) { ckStop(); box.classList.remove("run"); btn.textContent = "Resume"; return; }
-  if (ckLeft <= 0 || box.classList.contains("done")) { ckLeft = mins*60; box.classList.remove("done"); }
-  box.classList.add("run"); btn.textContent = "Pause";
-  ckInt = setInterval(function() {
-    ckLeft--;
-    const d = document.getElementById("ck-t");
-    if (!d) { ckStop(); return; }
-    d.textContent = ckFmt(Math.max(0, ckLeft));
-    if (ckLeft <= 0) {
-      ckStop(); ckBeep(); ckLeft = 0;
-      const b = document.getElementById("ck-timer");
-      if (b) { b.classList.add("done"); b.classList.remove("run"); }
-      const t = document.getElementById("ck-tbtn"); if (t) t.textContent = "Time is up";
-    }
-  }, 1000);
 }
 function ckBeep() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)(), t0 = ctx.currentTime;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       const o = ctx.createOscillator(), g = ctx.createGain();
       o.connect(g); g.connect(ctx.destination); o.type = "sine"; o.frequency.value = 880;
       g.gain.setValueAtTime(0.35, t0 + i*0.35);
@@ -4500,9 +5104,6 @@ function ckBeep() {
 // Trips are generated from your start date. Weekly fresh every 7 days,
 // both bulk shops every 28 days, which is the same 4 week cycle the
 // braai rotation runs on. So the schedule always lines up with the plan.
-let mealShopMonth = new Date();
-let mealOpenTrip  = null;
-let mealShopInit  = false;
 
 function mealPrices() { return getData("meal_prices", {}); }
 function mealChecks() { return getData("meal_checks", {}); }
@@ -4729,6 +5330,7 @@ function mealResetShop() {
     <div><div class="t" id="ck-title"></div><div class="m" id="ck-meta"></div></div>
     <button class="btn-secondary" onclick="ckClose()">Close</button>
   </div>
+  <div class="ck-timers" id="ck-timers"></div>
   <div class="ck-body" id="ck-body"></div>
   <div class="ck-foot">
     <button class="prev" id="ck-prev" onclick="ckPrev()">Back</button>
